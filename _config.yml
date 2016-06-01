@@ -6,7 +6,7 @@ baseurl:      "/Front-end-learning"
 # About/contact
 author:
   name:       panyifei
-  url:        http://yourhomepage.com
+  url:        https://github.com/panyifei
 
 #Others
 markdown: kramdown
