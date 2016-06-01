@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  
+  <head>
+  <meta charset="UTF-8">
+  <title>Front-end-learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+</head>
+
+  <body>
+    <section class="page-header">
+  <h1 class="project-name">Front-end-learning</h1>
+  <h2 class="project-tagline">一个前端工程狮的打怪日常，主要是javascript</h2>
+  <a href="#" class="btn">View on GitHub</a>
+  <a href="#" class="btn">Download .zip</a>
+  <a href="#" class="btn">Download .tar.gz</a>
+</section>
+
+
+    <section class="main-content">
+      
+      <h1 id="section">小问题总结</h1>
+
+<h2 id="unicode">￥的unicode是怎么找到的</h2>
+<p>直接<a href="http://unicode-table.com/en/">unicode-table</a></p>
+
+<h2 id="input">input输入时，金额前加上实时<code class="highlighter-rouge">￥</code></h2>
+<p>就是提前画好并隐藏。输入了数字时，拿到input的<code class="highlighter-rouge">font-size</code>和value，新建一份添加进页面，算好宽度后删掉。</p>
+
+<p>这个时候得到了文本内容的宽度，就可以给<code class="highlighter-rouge">￥</code>元素添加上right属性来定位。</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">$</span><span class="p">(</span><span class="s1">'span'</span><span class="p">).</span><span class="nx">css</span><span class="p">({</span>
+    <span class="na">right</span><span class="p">:</span> <span class="nx">dim</span><span class="p">.</span><span class="nx">inputTextSize</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">width</span>
+<span class="p">}).</span><span class="nx">show</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p>dim的代码：</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'zepto'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">div</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">'&lt;div&gt;'</span><span class="p">);</span>
+<span class="nx">div</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span>
+    <span class="na">width</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="na">height</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="na">overflow</span><span class="p">:</span> <span class="s1">'hidden'</span><span class="p">,</span>
+    <span class="na">position</span><span class="p">:</span> <span class="s1">'absolute'</span><span class="p">,</span>
+    <span class="na">right</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="na">bottom</span><span class="p">:</span> <span class="mi">0</span>
+<span class="p">});</span>
+<span class="kd">var</span> <span class="nx">span</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">'&lt;span&gt;'</span><span class="p">);</span>
+<span class="nx">span</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span>
+    <span class="na">visibility</span><span class="p">:</span> <span class="s1">'hidden'</span>
+<span class="p">});</span>
+<span class="nx">div</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">span</span><span class="p">);</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="na">textSize</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">fontSize</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">fontSize</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">span</span><span class="p">.</span><span class="nx">css</span><span class="p">({</span>
+                <span class="na">fontSize</span><span class="p">:</span> <span class="nx">fontSize</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+        <span class="nx">span</span><span class="p">.</span><span class="nx">text</span><span class="p">(</span><span class="nx">text</span><span class="p">);</span>
+        <span class="nx">div</span><span class="p">.</span><span class="nx">appendTo</span><span class="p">(</span><span class="s1">'body'</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="na">width</span><span class="p">:</span> <span class="nx">span</span><span class="p">.</span><span class="nx">width</span><span class="p">(),</span>
+            <span class="na">height</span><span class="p">:</span> <span class="nx">span</span><span class="p">.</span><span class="nx">height</span><span class="p">()</span>
+        <span class="p">};</span>
+        <span class="nx">div</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="na">inputTextSize</span><span class="p">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">inputElement</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">inputElement</span><span class="p">);</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">textSize</span><span class="p">(</span><span class="nx">input</span><span class="p">.</span><span class="nx">val</span><span class="p">(),</span> <span class="nx">input</span><span class="p">.</span><span class="nx">css</span><span class="p">(</span><span class="s1">'font-size'</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+</div>
+
+<h2 id="domcontnetloadedaddeventlistener">为什么DOMcontnetLoaded只能用addEventListener来绑定？</h2>
+<p>有些事件，比如说click可以用<code class="highlighter-rouge">onclick</code>来绑定，但是<code class="highlighter-rouge">DOMcontnetLoaded</code>只能使用<code class="highlighter-rouge">addEventListener</code>来绑定</p>
+
+<p>因为<code class="highlighter-rouge">DOMcontnetLoaded</code>是DOM2级才加入的事件</p>
+
+<h2 id="section-1">手机号掩码的小问题</h2>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code>    <span class="k">if</span><span class="p">(</span><span class="nx">mobileNo</span><span class="p">.</span><span class="nx">length</span><span class="o">&gt;</span><span class="mi">10</span><span class="p">){</span>
+         <span class="nx">mobileNo</span> <span class="o">=</span> <span class="nx">mobileNo</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">mobileNo</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="s2">"****"</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>这里12323231111就会出错，因为replace可能会从前面开始匹配</p>
+
+<p>解决方法：</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code>    <span class="kd">var</span> <span class="nx">arr</span> <span class="o">=</span> <span class="nx">mobileNo</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">''</span><span class="p">);</span>
+    <span class="nx">arr</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="s1">'****'</span><span class="p">);</span>
+    <span class="nx">arr</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s1">''</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<h2 id="textareajson">想在textarea里面友好的显示json</h2>
+<p>想再textarea里面比较友好的显示json的，以为需要使用插件，结果JSON.stringify第三个参数已经可以搞定了，好吧~</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">prettyPrint</span><span class="p">()</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">ugly</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'myTextArea'</span><span class="p">).</span><span class="nx">value</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">ugly</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">pretty</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="kc">undefined</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'myTextArea'</span><span class="p">).</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">pretty</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<h2 id="lts">LTS版本是什么意思？</h2>
+<p>LTS版本的意思就是long time support。意思是长期支持的版本，就可以理解为比较稳定的版本。</p>
+
+<h2 id="section-2">开发的页面不想让用户可以选择</h2>
+
+<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">user-select</span><span class="nd">:none</span><span class="o">;</span>
+<span class="nt">-webkit-user-select</span><span class="nd">:none</span><span class="o">;</span>
+</code></pre>
+</div>
+
+<p>这两个属性可以控制</p>
+
+<h2 id="displayinline">display:inline的元素不对齐</h2>
+<p>display:inline的元素会因为手机浏览器的问题对齐不好，</p>
+
+<p>这个问题的解决是设置为display:inline-block的，</p>
+
+<p>然后vertical-align:top然后来将强制定位，这样子比较靠谱一点，基本都能够适配</p>
+
+<h2 id="installhttp">install的时候想看到发出的http请求的状态</h2>
+<p>npm config set loglevel=http</p>
+
+<p>这一句命令就可以搞定</p>
+
+<h2 id="webstormsublime">想要在命令行中打开webstorm或者sublime</h2>
+<p>webstorm非常智能，直接到tools里面，create-command-line-lancher就行了。</p>
+
+<p>sublime需要输入一条命令<code class="highlighter-rouge">sudo ln -s /Applications/Sublime\ Text.app/Contents/SharedSupport/bin/subl /usr/bin/subl</code>来提个权并且加个软链接</p>
+
+<h2 id="underscorethrottledebounce">underscore的throttle和debounce</h2>
+<p>都是用来控制那种密集触发方法的。是两种不同的处理策略。</p>
+
+<ul>
+  <li>throttle是控制多长时间之内只能执行一次，比如scroll不停地在触发，极其消耗性能，给了250ms的延迟，会不断的执行。有最小时间间隔。</li>
+  <li>debounce是某个状态多少毫秒才会进行执行，比如用户输入了，停顿了多久了才会发送一次ajax请求。</li>
+</ul>
+
+<h2 id="iframe">iframe相互操作必须遵守同源</h2>
+<p>ifram父元素和子元素之间想要相互调用的话，必须遵守同源策略！！</p>
+
+<p>在beta环境的子页面中调本地的父页面的的一个全局的方法的时候访问window.parent页面崩溃了，因为没有遵守同源</p>
+
+<h2 id="iframe-1">iframe让子页面的高度自适应的做法</h2>
+<p>现在父页面中申明一个改变的方法
+<code class="highlighter-rouge">javascript
+window.changeFrameHeight = function (ext) {
+            //改变iframe的高度
+            var height = 0;
+            for (var i in ext) {
+                height += ext[i];
+            }
+            $("#payFrame").attr("height", height); //设置iframe的高度
+        };
+</code></p>
+
+<p>然后再每个改变的地方调用父页面的这个方法，注意父子页面必须是同源的！！！</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="k">try</span> <span class="p">{</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">parent</span><span class="p">.</span><span class="nx">changeFrameHeight</span><span class="p">(</span><span class="nx">a</span><span class="p">)</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">d</span><span class="p">)</span> <span class="p">{}</span>
+</code></pre>
+</div>
+
+<h3 id="padding">padding的妙用</h3>
+<p>padding的百分比都是继承width的，不会去找高度的百分比！！</p>
+
+<p>这个还是有点实用的定位技巧</p>
+
+<h3 id="section-3">图片压缩</h3>
+<p><a href="https://tinypng.com/">tinypng</a>这个网站提供很出色的图片压缩~~</p>
+
+<h3 id="bug">遇到一个页面撑不开的bug</h3>
+<p>页面太小，没有撑开页面，而且又不是fixed的，而是absolute的布局，想要让他自动的撑开，又要跟在文档流的底部，光靠css是不行的。因为要么在文档流里，要么不在，只能有一个选择。</p>
+
+<h3 id="jsformmethodtargetiframejs">在js中给页面上的form设置method和target好像是无效的，而iframe在js上动态设置却是可以的</h3>
+
+<h3 id="functionprototypecallbind">Function.prototype.call.bind</h3>
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">call</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">forEach</span><span class="p">)(</span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">'.klasses'</span><span class="p">),</span><span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">call</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">forEach</span><span class="p">,</span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">'.klasses'</span><span class="p">),</span><span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">forEach</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s1">'.klasses'</span><span class="p">),</span><span class="kd">function</span><span class="p">(</span><span class="nx">el</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">el</span><span class="p">);</span>
+<span class="p">})</span>
+<span class="c1">//上面的3个是慢慢转化的</span>
+<span class="c1">//结果就像是下面的</span>
+<span class="kd">var</span>  <span class="nx">forEach</span> <span class="o">=</span> <span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">call</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">forEach</span><span class="p">);</span>
+<span class="kd">var</span>  <span class="nx">forEach</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">forEach</span><span class="p">.</span><span class="nx">call</span><span class="p">;</span>
+<span class="c1">//但是这里看样子是对的，但是其实执行的话是不对的，因为直接执行的时候，call里面的this是windows</span>
+<span class="c1">//所以说上面那么绕其实就是想将call方法bind到foreach上面，这里之所以想这样是因为想要让这个arrayLike的数组也使用这个东西</span>
+<span class="c1">//最好的方法是直接[].slice.call(document.querySelectorAll('.klasses'))，然后再调用foreach</span>
+</code></pre>
+</div>
+
+<h3 id="post">针对发送的post请求的编码问题</h3>
+<p>这个问题如果传的是中文的话，后端拿到的可能是乱码，可以通过前端在contentType里面设置一下<code class="highlighter-rouge">application/x-www-form-urlencoded; charset=UTF-8</code></p>
+
+<p>但是因为ajax这种基础库肯定是要包装一下的，从组件的角度看不适合把contentType写死，也许可以给个编辑的入口，但是这样还不如让后端的拦截器来做这个功能，这样前端就不用管了，而且后端肯定来处理这个更适合些的。</p>
+
+<h3 id="section-4">离开页面是进行弹窗判断</h3>
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nb">window</span><span class="p">.</span><span class="nx">onbeforeunload</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="s2">"您还有东西未保存，确定要离开页面吗？"</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre>
+</div>
+
+<h3 id="css">为什么CSS没有选择上一个同级元素的选择器</h3>
+<p>因为页面的渲染一般是拿到多少，渲染多少，所以后面的元素一般是根据前面的元素的属性进行渲染，如果后面的元素的渲染影响到了前面的元素的话，那么就会造成<code class="highlighter-rouge">回溯</code>，就可能会导致整个页面的重绘，非常影响性能。可以参见知乎的<a href="https://www.zhihu.com/question/21508830#">一篇文章</a>。</p>
+
+<p>如果强行想选择前一个元素，要么前后位置对调，使用float:right，然后用相邻选择器来模拟，或者使用flex的flex-direction:column-reverse来从下往上布局，不过这样的话，html的元素就是反过来的了。或者就得用js来做了。</p>
+
+<h3 id="section-5">页面重构的一些使用心得</h3>
+<ul>
+  <li>
+    <p>css的性能很重要，尽力减少层级关系</p>
+  </li>
+  <li>
+    <p>所有的基本写法一定要写在最下面，遵循由旧到新、由不标准到标准的顺序。</p>
+  </li>
+  <li>
+    <p>渐变颜色比较多的图片最好使用jpeg来存储，那种颜色单一的只需要存png</p>
+  </li>
+  <li>
+    <p>font基本上设置在全局的，尽量设置在body上</p>
+  </li>
+</ul>
+
+<h3 id="section-6">长度超长，又不想有滚动条</h3>
+<p>设置父级元素overflow:hidden</p>
+
+<h3 id="section-7">图片的浏览器兼容性问题</h3>
+<p>background-size在IE下的支持性不好，可以用img替代，或者用PS先压缩到需要的长宽。</p>
+
+<p>一般定位我们除了px，还可以用background-position来做，就设置right center，就可以右对齐，垂直居中了。</p>
+
+<h3 id="section-8">做设计</h3>
+<p>尽量单线影响，不要既让服务器渲染又让客户端渲染，尽量单项的流程，不要同时去影响两个地方。</p>
+
+<h3 id="data-uris">data-URIs</h3>
+<p>就是允许将小文件进行编码后嵌入到另一个文件。这样css里面里面可以直接写入这个小图片的所有信息，就不需要再发送一个http请求了。</p>
+
+<ul>
+  <li>格式:<code class="highlighter-rouge">data:[&lt;mediatype&gt;][;base64],&lt;data&gt;</code>(mediatype就是数据的类型，比如”image/jpeg”，然后base64申明是这种编码的，然后data里面就是具体的数据了。)</li>
+  <li>转化
+其实可以随意找个网站转化或者直接linux下敲命令<code class="highlighter-rouge">uuencode -m infile remotename</code>,命令得到的就是我们需要的数据了。</li>
+  <li>兼容性(IE8之后支持css里面使用data uri的形式)</li>
+</ul>
+
+<h3 id="gitignore">.gitignore</h3>
+<p>因为构建工具的原因，本地的css不想推上去，但是css里面的img文件夹希望推上去。于是.gitignore里面可以这么写css/<em>*/</em>.css，这样子所有的css文件就都会被忽略了，我们加了gitignore之后，git status还是会显示，是因为缓存的原因，我们可以<code class="highlighter-rouge">git rm -r --cashd .</code>这样清掉缓存就好了。</p>
+
+
+      <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">Front-end-learning</a> is maintained by <a href="http://yourhomepage.com">panyifei</a>.</span>
+  <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/pietromenna/jekyll-cayman-theme">Cayman theme</a> by <a href="http://github.com/jasonlong">Jason Long</a>.</span>
+</footer>
+
+
+    </section>
+
+  </body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  
+  <head>
+  <meta charset="UTF-8">
+  <title>Front-end-learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+</head>
+
+  <body>
+    <section class="page-header">
+  <h1 class="project-name">Front-end-learning</h1>
+  <h2 class="project-tagline">一个前端工程狮的打怪日常，主要是javascript</h2>
+  <a href="#" class="btn">View on GitHub</a>
+  <a href="#" class="btn">Download .zip</a>
+  <a href="#" class="btn">Download .tar.gz</a>
+</section>
+
+
+    <section class="main-content">
+      
+      <h2 id="settimeout">setTimeout</h2>
+<p>setTimeout作为一个定时器函数，比较简单，主要是他的一些细节进行总结。</p>
+
+<h3 id="section">主要是两种传参</h3>
+<p>一种是传入func，这种可以通过传第三个参数，第四个…来给传入的function传参数(但是得在IE9往后才支持)，例如：</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">);</span>
+<span class="p">},</span><span class="mi">1000</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>一种是传入code，这种内部实现其实是调用了eval方法，并不推荐，而且不支持传入多个参数，例如：</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">setTimeout</span><span class="p">(</span><span class="s1">'console(1)'</span><span class="p">,</span><span class="mi">1000</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<h3 id="section-1">第一种传参也有些问题</h3>
+<p>#### 函数绑定的问题
+就是有传入一个匿名函数还是传入一个函数指针的问题。首先是函数绑定的问题：</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">User</span><span class="p">(){</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="s1">'1'</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">user</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">User</span><span class="p">();</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">y</span><span class="p">,</span><span class="mi">1000</span><span class="p">);</span>
+<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="nx">user</span><span class="p">.</span><span class="nx">y</span><span class="p">();</span>
+<span class="p">},</span><span class="mi">1000</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>这个时候的调用的user.y实际上是在全局调用的，就会返回undefined，下面的匿名函数才可以拿到正确的值。</p>
+
+<h4 id="section-2">作用域的问题</h4>
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">time</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">){</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">)}</span>
+<span class="kd">function</span> <span class="nx">aa</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">13</span><span class="p">;</span>
+  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">){</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">a</span><span class="p">)},</span><span class="mi">100</span><span class="p">,</span><span class="mi">12</span><span class="p">);</span>
+  <span class="nx">setTimeout</span><span class="p">(</span><span class="nx">time</span><span class="p">,</span><span class="mi">100</span><span class="p">,</span><span class="mi">12</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">aa</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p>这不是setTimeout的问题，这个是变量提升的问题，就是说函数的作用域只在他是在那里定义的，与在那里调用无关。</p>
+
+<h4 id="section-3">性能问题</h4>
+<p>先申明再调用比直接匿名函数的性能要好，毕竟先声明的话，在预编译阶段就开始执行了，会有性能的提升。</p>
+
+<h2 id="setinterval">与setInterval的比较</h2>
+<p>我们经常会用setTimeout来代替setInterval，原因是setTimeout我们可以保证两次执行的间隔肯定是长于我们设置的值的。但是setInterval不能保证，可能会短于我们设置的时间</p>
+
+<p>因为setInterval会每个一段时间尝试执行一次回调，但是如果现在队列中有存在的未执行的事件，本次尝试的调用就会被抛弃。也就是说如果UI队列已经存在同一个setInterval创建的任务，那么后续任务不会被添加到UI队列中。</p>
+
+
+      <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">Front-end-learning</a> is maintained by <a href="http://yourhomepage.com">panyifei</a>.</span>
+  <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/pietromenna/jekyll-cayman-theme">Cayman theme</a> by <a href="http://github.com/jasonlong">Jason Long</a>.</span>
+</footer>
+
+
+    </section>
+
+  </body>
+</html>

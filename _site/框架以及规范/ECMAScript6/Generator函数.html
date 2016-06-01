@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  
+  <head>
+  <meta charset="UTF-8">
+  <title>Front-end-learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+</head>
+
+  <body>
+    <section class="page-header">
+  <h1 class="project-name">Front-end-learning</h1>
+  <h2 class="project-tagline">一个前端工程狮的打怪日常，主要是javascript</h2>
+  <a href="#" class="btn">View on GitHub</a>
+  <a href="#" class="btn">Download .zip</a>
+  <a href="#" class="btn">Download .tar.gz</a>
+</section>
+
+
+    <section class="main-content">
+      
+      <h1 id="generator">Generator函数</h1>
+<p>Generator是一个状态机，封装了多个内部状态。</p>
+
+<p>执行这个函数会返回一个遍历器对象，可以一次遍历Generator函数内部的每一个状态。</p>
+
+<h2 id="section">形式：</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">function</code>与函数名之间有一个星号</li>
+  <li>函数内部使用<code class="highlighter-rouge">yield</code>语句，定义不同的内部状态</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span><span class="o">*</span> <span class="nx">helloWorldGenerator</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">yield</span> <span class="s1">'hello'</span><span class="p">;</span>
+  <span class="k">yield</span> <span class="s1">'world'</span><span class="p">;</span>
+  <span class="k">return</span> <span class="s1">'ending'</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">hw</span> <span class="o">=</span> <span class="nx">helloWorldGenerator</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p>这个函数有三个状态，hello,world和return语句</p>
+
+<h3 id="next">调用：next方法</h3>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">hw</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>
+<span class="c1">// { value: 'hello', done: false }</span>
+<span class="nx">hw</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>
+<span class="c1">// { value: 'world', done: false }</span>
+<span class="nx">hw</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>
+<span class="c1">// { value: 'ending', done: true }</span>
+<span class="nx">hw</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>
+<span class="c1">// { value: undefined, done: true }</span>
+</code></pre>
+</div>
+
+<p>每调用一次<code class="highlighter-rouge">next</code>，就会从头部或者上一次停下来的地方开始执行，直到下一个yield或者return。</p>
+
+<p>value代表了yield语句的值，done属性代表是否结束，可以一直的运行，最后的结果会一直是{ value: undefined, done: true }。</p>
+
+<p><code class="highlighter-rouge">yield</code>语句比<code class="highlighter-rouge">return</code>多了个记忆的过程，每次遇到都会暂停执行，下次再从该位置继续向后执行。</p>
+
+<ul>
+  <li>可以没有<code class="highlighter-rouge">yield</code>，就会简单地当做一个延时的函数</li>
+  <li>普通函数不能使用<code class="highlighter-rouge">yield</code></li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">arr</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">[[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">]];</span>
+<span class="kd">var</span> <span class="nx">flat</span> <span class="o">=</span> <span class="kd">function</span><span class="o">*</span> <span class="p">(</span><span class="nx">a</span><span class="p">){</span>
+  <span class="nx">a</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">item</span> <span class="o">!==</span> <span class="s1">'number'</span><span class="p">){</span>
+      <span class="k">yield</span><span class="o">*</span> <span class="nx">flat</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">yield</span> <span class="nx">item</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">f</span> <span class="nx">of</span> <span class="nx">flat</span><span class="p">(</span><span class="nx">arr</span><span class="p">)){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">f</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>这样子使用也是不行的，这样子也是在普通函数中</p>
+
+<ul>
+  <li><code class="highlighter-rouge">yield</code>语句如果在表达式当中，必须放在圆括号里面</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Hello'</span> <span class="o">+</span> <span class="p">(</span><span class="k">yield</span><span class="p">));</span> <span class="c1">// OK</span>
+</code></pre>
+</div>
+
+<h4 id="next-1">next方法的参数</h4>
+<p>yield句本来没有返回值。我们可以通过给next方法带上一个参数，这个参数就会是上一个yield语句的返回值。</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span><span class="o">*</span> <span class="nx">f</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="kc">true</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">reset</span> <span class="o">=</span> <span class="k">yield</span> <span class="nx">i</span><span class="p">;</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">reset</span><span class="p">)</span> <span class="p">{</span> <span class="nx">i</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">g</span> <span class="o">=</span> <span class="nx">f</span><span class="p">();</span>
+<span class="nx">g</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span> <span class="c1">// { value: 0, done: false }</span>
+<span class="nx">g</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span> <span class="c1">// { value: 1, done: false }</span>
+<span class="nx">g</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="c1">// { value: 0, done: false }</span>
+</code></pre>
+</div>
+
+<p>前两次都是undefined，第三次调用使得reset变成了true。</p>
+
+<ul>
+  <li>在函数运行之后，继续向函数内部注入值，可以在函数运行的不同阶段，从外部注入不同的值，从而调整函数行为。</li>
+  <li>next方法传入的是上一个yield的返回值，于是在第一次使用next方法是，不能带有参数.V8引擎会直接忽略第一次的参数。如果想要第一次的话，就写个函数包装一下</li>
+</ul>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">wrapper</span><span class="p">(</span><span class="nx">generatorFunction</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="kd">function</span> <span class="p">(...</span><span class="nx">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nx">generatorObject</span> <span class="o">=</span> <span class="nx">generatorFunction</span><span class="p">(...</span><span class="nx">args</span><span class="p">);</span>
+    <span class="nx">generatorObject</span><span class="p">.</span><span class="nx">next</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nx">generatorObject</span><span class="p">;</span>
+  <span class="p">};</span>
+<span class="p">}</span>
+<span class="kr">const</span> <span class="nx">wrapped</span> <span class="o">=</span> <span class="nx">wrapper</span><span class="p">(</span><span class="kd">function</span><span class="o">*</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="err">`</span><span class="nx">First</span> <span class="nx">input</span><span class="err">:</span> <span class="nx">$</span><span class="p">{</span><span class="k">yield</span><span class="p">}</span><span class="err">`</span><span class="p">);</span>
+  <span class="k">return</span> <span class="s1">'DONE'</span><span class="p">;</span>
+<span class="p">});</span>
+<span class="nx">wrapped</span><span class="p">().</span><span class="nx">next</span><span class="p">(</span><span class="s1">'hello!'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h4 id="forof">for..of循环</h4>
+<p>for…of可以自动遍历Generator函数</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>如果next方法返回的done属性为true，则for...of终止，且不包含该返回对象。
+</code></pre>
+</div>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="o">*</span><span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">yield</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="k">yield</span> <span class="mi">2</span><span class="p">;</span>
+  <span class="k">yield</span> <span class="mi">3</span><span class="p">;</span>
+  <span class="k">yield</span> <span class="mi">4</span><span class="p">;</span>
+  <span class="k">yield</span> <span class="mi">5</span><span class="p">;</span>
+  <span class="k">return</span> <span class="mi">6</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">v</span> <span class="nx">of</span> <span class="nx">foo</span><span class="p">())</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">v</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">// 1 2 3 4 5</span>
+</code></pre>
+</div>
+
+<p>这里承接了前面的章节，for..of,扩展运算符…,结构赋值和Array.from都是可以调用遍历器接口的，于是就可以像下面这样。</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span><span class="o">*</span> <span class="nx">numbers</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">yield</span> <span class="mi">1</span>
+  <span class="k">yield</span> <span class="mi">2</span>
+  <span class="k">return</span> <span class="mi">3</span>
+  <span class="k">yield</span> <span class="mi">4</span>
+<span class="p">}</span>
+<span class="p">[...</span><span class="nx">numbers</span><span class="p">()]</span> <span class="c1">// [1, 2]</span>
+<span class="nb">Array</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="nx">numbers</span><span class="p">())</span> <span class="c1">// [1, 2]</span>
+<span class="kd">let</span> <span class="p">[</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">]</span> <span class="o">=</span> <span class="nx">numbers</span><span class="p">();</span>
+<span class="nx">x</span> <span class="c1">// 1</span>
+<span class="nx">y</span> <span class="c1">// 2</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">n</span> <span class="nx">of</span> <span class="nx">numbers</span><span class="p">())</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span>
+<span class="p">}</span>
+<span class="c1">// 1</span>
+<span class="c1">// 2</span>
+</code></pre>
+</div>
+
+<p>这里还可以给原生的js对象遍历的接口</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span><span class="o">*</span> <span class="nx">objectEntries</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">propKeys</span> <span class="o">=</span> <span class="nx">Reflect</span><span class="p">.</span><span class="nx">ownKeys</span><span class="p">(</span><span class="nx">obj</span><span class="p">);</span>
+  <span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">propKey</span> <span class="nx">of</span> <span class="nx">propKeys</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">yield</span> <span class="p">[</span><span class="nx">propKey</span><span class="p">,</span> <span class="nx">obj</span><span class="p">[</span><span class="nx">propKey</span><span class="p">]];</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">let</span> <span class="nx">jane</span> <span class="o">=</span> <span class="p">{</span> <span class="na">first</span><span class="p">:</span> <span class="s1">'Jane'</span><span class="p">,</span> <span class="na">last</span><span class="p">:</span> <span class="s1">'Doe'</span> <span class="p">};</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="p">[</span><span class="nx">key</span><span class="p">,</span><span class="nx">value</span><span class="p">]</span> <span class="nx">of</span> <span class="nx">objectEntries</span><span class="p">(</span><span class="nx">jane</span><span class="p">))</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="err">`</span><span class="nx">$</span><span class="p">{</span><span class="nx">key</span><span class="p">}</span><span class="err">:</span> <span class="nx">$</span><span class="p">{</span><span class="nx">value</span><span class="p">}</span><span class="err">`</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">// first: Jane</span>
+<span class="c1">// last: Doe</span>
+</code></pre>
+</div>
+
+<h4 id="generatorprototypethrow">Generator.prototype.throw()</h4>
+<p>这个可以在函数体外抛出错误，然后再函数体内捕获</p>
+
+<h4 id="generatorprototypereturn">Generator.prototype.return()</h4>
+<p>这个方法可以返回给定的值，并且终止遍历</p>
+
+<p>如果不提供参数，那么返回的value属性为undefined</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span><span class="o">*</span> <span class="nx">gen</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">yield</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="k">yield</span> <span class="mi">2</span><span class="p">;</span>
+  <span class="k">yield</span> <span class="mi">3</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">g</span> <span class="o">=</span> <span class="nx">gen</span><span class="p">();</span>
+<span class="nx">g</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>        <span class="c1">// { value: 1, done: false }</span>
+<span class="nx">g</span><span class="p">.</span><span class="k">return</span><span class="p">()</span> <span class="c1">// { value: undefined, done: true }</span>
+</code></pre>
+</div>
+
+<p>如果里面有finally方法，那么调用return就会直接执行finally里面，执行完了finally就会再执行return。</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span><span class="o">*</span> <span class="nx">numbers</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">yield</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="k">yield</span> <span class="mi">2</span><span class="p">;</span>
+    <span class="k">yield</span> <span class="mi">3</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">finally</span> <span class="p">{</span>
+    <span class="k">yield</span> <span class="mi">4</span><span class="p">;</span>
+    <span class="k">yield</span> <span class="mi">5</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">yield</span> <span class="mi">6</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">g</span> <span class="o">=</span> <span class="nx">numbers</span><span class="p">()</span>
+<span class="nx">g</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span> <span class="c1">// { done: false, value: 1 }</span>
+<span class="nx">g</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span> <span class="c1">// { done: false, value: 2 }</span>
+<span class="nx">g</span><span class="p">.</span><span class="k">return</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span> <span class="c1">// { done: false, value: 4 }</span>
+<span class="nx">g</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span> <span class="c1">// { done: false, value: 5 }</span>
+<span class="nx">g</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span> <span class="c1">// { done: true, value: 7 }</span>
+</code></pre>
+</div>
+
+<h4 id="yield">yield*语句</h4>
+<p>在Generator内部，遍历调用另一个Generator函数。可以使用yield语句，等同于在函数内部多部署了一个for…of循环</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span><span class="o">*</span> <span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">yield</span> <span class="s1">'a'</span><span class="p">;</span>
+  <span class="k">yield</span> <span class="s1">'b'</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span><span class="o">*</span> <span class="nx">bar</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">yield</span> <span class="s1">'x'</span><span class="p">;</span>
+  <span class="k">yield</span><span class="o">*</span> <span class="nx">foo</span><span class="p">();</span>
+  <span class="k">yield</span> <span class="s1">'y'</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">let</span> <span class="nx">v</span> <span class="nx">of</span> <span class="nx">bar</span><span class="p">()){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">v</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">// "x"</span>
+<span class="c1">// "a"</span>
+<span class="c1">// "b"</span>
+<span class="c1">// "y"</span>
+</code></pre>
+</div>
+
+<p>被代理的generator函数有return语句的话，就可以向代理的函数返回数据:</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="o">*</span><span class="nx">foo</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">yield</span> <span class="mi">2</span><span class="p">;</span>
+  <span class="k">yield</span> <span class="mi">3</span><span class="p">;</span>
+  <span class="k">return</span> <span class="s2">"foo"</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="o">*</span><span class="nx">bar</span><span class="p">()</span> <span class="p">{</span>
+  <span class="k">yield</span> <span class="mi">1</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">v</span> <span class="o">=</span> <span class="k">yield</span> <span class="o">*</span><span class="nx">foo</span><span class="p">();</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s2">"v: "</span> <span class="o">+</span> <span class="nx">v</span> <span class="p">);</span>
+  <span class="k">yield</span> <span class="mi">4</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">it</span> <span class="o">=</span> <span class="nx">bar</span><span class="p">();</span>
+<span class="nx">it</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>
+<span class="c1">// {value: 1, done: false}</span>
+<span class="nx">it</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>
+<span class="c1">// {value: 2, done: false}</span>
+<span class="nx">it</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>
+<span class="c1">// {value: 3, done: false}</span>
+<span class="nx">it</span><span class="p">.</span><span class="nx">next</span><span class="p">();</span>
+<span class="c1">// "v: foo"</span>
+<span class="c1">// {value: 4, done: false}</span>
+<span class="nx">it</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>
+<span class="c1">// {value: undefined, done: true}</span>
+</code></pre>
+</div>
+
+<h4 id="generator-1">对象属性的generator函数</h4>
+<p>就是在作为对象的属性时，可以简写，以下的两种写法等价</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">let</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="o">*</span> <span class="nx">myGeneratorMethod</span><span class="p">()</span> <span class="p">{</span>
+    <span class="err">···</span>
+  <span class="p">}</span><span class="err">，</span>
+  <span class="nl">myFunction</span><span class="p">:</span> <span class="nx">funciton</span><span class="o">*</span> <span class="p">(){</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+</div>
+
+<h4 id="generator-2">generator与状态机</h4>
+<p>generator是实现状态机的最佳结构，不依赖任何变量，无公害，写法优雅</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">clock</span> <span class="o">=</span> <span class="kd">function</span><span class="o">*</span><span class="p">(</span><span class="nx">_</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">while</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">yield</span> <span class="nx">_</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Tick!'</span><span class="p">);</span>
+    <span class="k">yield</span> <span class="nx">_</span><span class="p">;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Tock!'</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">};</span>
+</code></pre>
+</div>
+
+<h4 id="generator-3">generator与协程</h4>
+<p>协程是程序运行的方式，可以单线程，可以多线程。</p>
+
+<h6 id="section-1">协程与子例程的差异</h6>
+
+<p>一般的子例程采用传统的‘后进新出’的执行方式，只有当调用的子函数完全执行完毕的时候，返回来执行父函数。</p>
+
+<p>协程就是多个线程可以并行执行，但是只有线程或者函数处于正在运行的状态，其他都处于暂停态。线程之间交换执行权。这种并行执行，交换执行权的线程，就称为协程。</p>
+
+<p>从内存看，子例程就是只是用一个栈，而协程则是同时存在多个栈，但是只有一个栈是运行状态。以多占用内存为代价，实现多任务的并行。</p>
+
+<h5 id="section-2">协程与普通线程的差异</h5>
+
+<p>同一时间可以有多个线程处于运行状态，但是协程只能有一个在运行。普通的线程是抢先式的，但是协程是合作式的，执行权由自己分配。</p>
+
+<p>协程的好处在于抛出错误的时候，可以找到原始的调用栈，而不至于像异步操作的回调一样，一旦出错，原始的调用栈早就结束。</p>
+
+<p>generator是es6对协程的实现，但属于不完全实现，是‘半协程’，只有generator的调用者才能把程序的执行权交还给generator函数，如果是完全执行的协程，任何函数都可以让暂停的协程继续执行。</p>
+
+<p>我们可以将多个需要相互协作的任务写成generator函数，他们之间使用yield语句交换控制权。</p>
+
+<h5 id="section-3">小思考</h5>
+<p>这次遇到的问题感觉generator也提供了一个结局的方案：</p>
+
+<p>m站两个模块，初始化的时候相互依赖，最后则是我的先初始化，然后emit了一个自定义事件，然后在善成的模块初始化之后，在监听了这个事件。</p>
+
+<p>如果使用generator，可以模块1先初始化部分，此时交出控制权，让模块2进行初始化，然后再完成模块1的初始化，就可以不用事件来处理了。</p>
+
+<h4 id="section-4">应用场景</h4>
+<p>#####异步操作的同步化表达
+把异步操作写在yield语句里面，在调用next的时候再向后执行，等于就是异步操作的回调可以用同步的方式写出来。</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span><span class="o">*</span> <span class="nx">loadUI</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">showLoadingScreen</span><span class="p">();</span>
+  <span class="k">yield</span> <span class="nx">loadUIDataAsynchronously</span><span class="p">();</span>
+ <span class="nx">hideLoadingScreen</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">loader</span> <span class="o">=</span> <span class="nx">loadUI</span><span class="p">();</span>
+<span class="c1">// 加载UI</span>
+<span class="nx">loader</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>
+<span class="c1">// 卸载UI</span>
+<span class="nx">loader</span><span class="p">.</span><span class="nx">next</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p>Ajax的异步操作同步化表达,和上面的一样，才callback里面调用next，于是generator函数就可以同步化来写了：</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span><span class="o">*</span> <span class="nx">main</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">yield</span> <span class="nx">request</span><span class="p">(</span><span class="s2">"http://some.url"</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">resp</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">resp</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">request</span><span class="p">(</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">makeAjaxCall</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">response</span><span class="p">){</span>
+    <span class="nx">it</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="nx">response</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">it</span> <span class="o">=</span> <span class="nx">main</span><span class="p">();</span>
+<span class="nx">it</span><span class="p">.</span><span class="nx">next</span><span class="p">();</span>
+</code></pre>
+</div>
+
+<p>这里还有个逐行读取文本的例子：</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span><span class="o">*</span> <span class="nx">numbers</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nx">file</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FileReader</span><span class="p">(</span><span class="s2">"numbers.txt"</span><span class="p">);</span>
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="nx">file</span><span class="p">.</span><span class="nx">eof</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">yield</span> <span class="nb">parseInt</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">readLine</span><span class="p">(),</span> <span class="mi">10</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span> <span class="k">finally</span> <span class="p">{</span>
+    <span class="nx">file</span><span class="p">.</span><span class="nx">close</span><span class="p">();</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>tudo:上面为什么要这么写?</p>
+
+<p>todo:还有两个应用….</p>
+
+<p>tudo:yield语句用作函数参数或赋值表达式的右边，可以不加括号?
+foo(yield ‘a’, yield ‘b’); // OK
+let input = yield; // OK</p>
+
+<p>tudo:与Iterator接口的关系</p>
+
+<p>tudo:throw方法</p>
+
+<p>tudo:yield*命令的作用</p>
+
+<p>tudo:构造函数是generator函数</p>
+
+<p>tudo:es7的generator函数推导</p>
+
+
+      <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">Front-end-learning</a> is maintained by <a href="http://yourhomepage.com">panyifei</a>.</span>
+  <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/pietromenna/jekyll-cayman-theme">Cayman theme</a> by <a href="http://github.com/jasonlong">Jason Long</a>.</span>
+</footer>
+
+
+    </section>
+
+  </body>
+</html>

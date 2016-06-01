@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  
+  <head>
+  <meta charset="UTF-8">
+  <title>Front-end-learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+</head>
+
+  <body>
+    <section class="page-header">
+  <h1 class="project-name">Front-end-learning</h1>
+  <h2 class="project-tagline">一个前端工程狮的打怪日常，主要是javascript</h2>
+  <a href="#" class="btn">View on GitHub</a>
+  <a href="#" class="btn">Download .zip</a>
+  <a href="#" class="btn">Download .tar.gz</a>
+</section>
+
+
+    <section class="main-content">
+      
+      <h1 id="js">JS性能</h1>
+<p>## 测时间的函数
+<code class="highlighter-rouge">javascript
+function test(func){
+  console.time("test");
+  func.apply(null,[].slice.call(arguments,1));//执行待测函数
+  console.timeEnd("test");
+}
+</code></p>
+
+<h2 id="numcodestring">输入一个num和code，返回相应长度的string。</h2>
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">get</span><span class="p">(</span><span class="nx">num</span><span class="p">,</span><span class="nx">code</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">array</span><span class="o">=</span><span class="p">[];</span>
+  <span class="k">while</span><span class="p">(</span><span class="nx">num</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span>
+       <span class="nx">array</span><span class="p">[</span><span class="nx">num</span><span class="p">]</span> <span class="o">=</span> <span class="nx">code</span><span class="p">;</span>
+       <span class="nx">num</span><span class="o">--</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">array</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">""</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">//109ms左右</span>
+<span class="nx">test</span><span class="p">(</span><span class="nx">get</span><span class="p">,</span><span class="mi">100000</span><span class="p">,</span><span class="s1">'c'</span><span class="p">)</span>
+<span class="kd">function</span> <span class="nx">get</span><span class="p">(</span><span class="nx">num</span><span class="p">,</span><span class="nx">code</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span> <span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">num</span><span class="p">;</span><span class="nx">i</span><span class="o">++</span><span class="p">){</span>
+    <span class="nx">res</span><span class="o">+=</span><span class="nx">code</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">res</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//24ms左右</span>
+<span class="nx">test</span><span class="p">(</span><span class="nx">get</span><span class="p">,</span><span class="mi">100000</span><span class="p">,</span><span class="s1">'c'</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">get</span><span class="p">(</span><span class="nx">num</span><span class="p">,</span><span class="nx">code</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+  <span class="k">while</span><span class="p">(</span><span class="nx">num</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">){</span>
+    <span class="nx">res</span><span class="o">+=</span><span class="nx">code</span><span class="p">;</span>
+    <span class="nx">num</span><span class="o">--</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="nx">res</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">//13ms左右</span>
+<span class="nx">test</span><span class="p">(</span><span class="nx">get</span><span class="p">,</span><span class="mi">100000</span><span class="p">,</span><span class="s1">'c'</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>这里没有一些规则还是无法理解呀..</p>
+
+
+      <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">Front-end-learning</a> is maintained by <a href="http://yourhomepage.com">panyifei</a>.</span>
+  <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/pietromenna/jekyll-cayman-theme">Cayman theme</a> by <a href="http://github.com/jasonlong">Jason Long</a>.</span>
+</footer>
+
+
+    </section>
+
+  </body>
+</html>

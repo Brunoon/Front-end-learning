@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  
+  <head>
+  <meta charset="UTF-8">
+  <title>Front-end-learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+</head>
+
+  <body>
+    <section class="page-header">
+  <h1 class="project-name">Front-end-learning</h1>
+  <h2 class="project-tagline">一个前端工程狮的打怪日常，主要是javascript</h2>
+  <a href="#" class="btn">View on GitHub</a>
+  <a href="#" class="btn">Download .zip</a>
+  <a href="#" class="btn">Download .tar.gz</a>
+</section>
+
+
+    <section class="main-content">
+      
+      <h1 id="section">浏览器兼容性</h1>
+
+<h4 id="inline-block">inline-block使用</h4>
+
+<div class="language-css highlighter-rouge"><pre class="highlight"><code>    <span class="nc">.disply-line-block</span><span class="p">{</span>
+	    <span class="nl">display</span><span class="p">:</span><span class="n">inline-block</span><span class="p">;</span>
+	    <span class="err">*</span><span class="nl">display</span><span class="p">:</span><span class="nb">inline</span><span class="p">;</span>
+	    <span class="err">*</span><span class="py">zoom</span><span class="p">:</span><span class="m">1</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre>
+</div>
+<p>一般的直接inline-blcok就可以了，但是ie6,7不行，不是不支持，而是支持的不好，所以先用display:inline先强制不换行。然后再zoom:1来触发元素的hasLayout，就可以设置宽高了。
+而前面加上*是只让IE6,7来识别。</p>
+
+<h4 id="placeholder">placeholder使用</h4>
+
+<p>注意placeholder是html5的新属性，只有一些比较新的浏览器才支持，所以ie6~9都是不支持的。想有效果，只能通过js来写hack，就是监听onfocus和onblur方法来控制显示和消失。</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code>    <span class="c1">//如果是ie6，7，8，9,就自主展示</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"MSIE"</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&amp;&amp;</span><span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"MSIE 7.0"</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">||</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"MSIE 8.0"</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">||</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"MSIE 9.0"</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)){</span>                     
+    <span class="p">}</span>
+</code></pre>
+</div>
+
+<p>placeholder的颜色修改</p>
+
+<div class="language-css highlighter-rouge"><pre class="highlight"><code>    <span class="o">//</span><span class="nt">placeholder</span><span class="err">的颜色</span>
+    <span class="nd">::-webkit-input-placeholder</span> <span class="p">{</span> <span class="c">/* WebKit browsers */</span>
+        <span class="nl">color</span><span class="p">:</span><span class="m">#ffb8a1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nd">:-moz-placeholder</span> <span class="p">{</span> <span class="c">/* Mozilla Firefox 4 to 18 */</span>
+        <span class="nl">color</span><span class="p">:</span><span class="m">#ffb8a1</span><span class="p">;</span>
+        <span class="nl">opacity</span><span class="p">:</span>  <span class="m">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nd">::-moz-placeholder</span> <span class="p">{</span> <span class="c">/* Mozilla Firefox 19+ */</span>
+        <span class="nl">color</span><span class="p">:</span><span class="m">#ffb8a1</span><span class="p">;</span>
+        <span class="nl">opacity</span><span class="p">:</span>  <span class="m">1</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nd">:-ms-input-placeholder</span><span class="p">{</span><span class="nl">color</span><span class="p">:</span><span class="no">red</span><span class="p">;}</span><span class="c">/*ie10*/</span>
+</code></pre>
+</div>
+
+<h4 id="ie7jsbug">ie7下的js<code class="highlighter-rouge">对象</code>小bug</h4>
+<p>这句对象申明，ie7就会报错，不能有逗号：</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code>    <span class="kd">var</span> <span class="nx">x</span><span class="o">=</span><span class="p">{</span>
+         <span class="na">a</span><span class="p">:</span><span class="mi">11</span><span class="p">,</span>
+    <span class="p">};</span>
+</code></pre>
+</div>
+
+<h4 id="locationoriginie">location.origin这个东西ie是不支持的</h4>
+<p>还是使用location.hostname之类的吧</p>
+
+<h4 id="ie8hack">ie8的hack</h4>
+<p>css属性后面加上<code class="highlighter-rouge">\9</code>就可以写出hack ie6，7，8的代码了，但是，ie9也会支持</p>
+
+<p><code class="highlighter-rouge">\0</code>ie8支持，但是ie9也支持</p>
+
+<p>想单独hack ie8，就加个新的选择器覆盖一下好了，比如:root。</p>
+
+
+      <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">Front-end-learning</a> is maintained by <a href="http://yourhomepage.com">panyifei</a>.</span>
+  <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/pietromenna/jekyll-cayman-theme">Cayman theme</a> by <a href="http://github.com/jasonlong">Jason Long</a>.</span>
+</footer>
+
+
+    </section>
+
+  </body>
+</html>
