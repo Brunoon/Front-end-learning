@@ -1,7 +1,7 @@
 # Setup
 title:        Front-end-learning
 tagline:      一个前端工程狮的打怪日常，主要是javascript
-baseurl:      "Front-end-learning"
+baseurl:      "/Front-end-learning"
 
 # About/contact
 author:
