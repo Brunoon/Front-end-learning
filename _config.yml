@@ -1,0 +1,12 @@
+# Setup
+title:        Front-end-learning
+tagline:      一个前端工程狮的打怪日常，主要是javascript
+baseurl:      ""
+
+# About/contact
+author:
+  name:       panyifei
+  url:        http://yourhomepage.com
+
+#Others
+markdown: kramdown
