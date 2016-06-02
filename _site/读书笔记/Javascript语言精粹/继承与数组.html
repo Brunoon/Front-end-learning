@@ -21,35 +21,39 @@
 </section>
 
     <section class="main-content">
-      <h1 id="section">继承与数组</h1>
-<p>## 继承
-### 伪类
-就是很简单的原型继承，唯一需要注意的就是调用构造函数的时候我们需要使用new，如果不用的话，就会直接把属性挂载到window上了。</p>
+      <h1>继承与数组</h1>
+
+<h2>继承</h2>
+
+<h3>伪类</h3>
+
+<p>就是很简单的原型继承，唯一需要注意的就是调用构造函数的时候我们需要使用new，如果不用的话，就会直接把属性挂载到window上了。</p>
 
 <p>我们可以在里面加入检测，参见上一篇文章。</p>
 
-<h3 id="section-1">对象说明符</h3>
+<h3>对象说明符</h3>
+
 <p>就是说我们在传入多个参数的时候，建议直接传入一个对象，因为这样，我们就可以在调用的时候写的比较清楚。</p>
 
-<h3 id="section-2">函数化</h3>
-<p>到目前为止的继承都没有办法实现私有的模式，我们可以应用模块模式来创建私有的成员。</p>
+<h3>函数化</h3>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">build</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s1">'1214'</span><span class="p">;</span>
+<p>到目前为止的继承都没有办法实现私有的模式，我们可以应用模块模式来创建私有的成员。</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">build</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">obj</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;1214&#39;</span><span class="p">;</span>
   <span class="nx">obj</span><span class="p">.</span><span class="nx">get_name</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
       <span class="k">return</span> <span class="nx">name</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="k">return</span> <span class="nx">obj</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <p>这样子我们唯一访问name的途径就是通过build({}).get_name();我们可以将这个东西彻底私有。</p>
 
-<h3 id="section-3">部件</h3>
+<h3>部件</h3>
+
 <p>上面的写法就是一种扩展部件的形式，我们可以在任意对象上调用build方法，来对这个对象进行新功能的封装，并且拥有者一些私有的方法。</p>
 
-<h2 id="section-4">数组</h2>
+<h2>数组</h2>
+
 <p>JS本身其实没有数组的数据结构，但是他有一个array-like的对象。与其他语言相比，他不要求里面的对象类型相同。和一般的对象相比，他多了能够使用序号访问属性的能力，而且还有一个无法遍历的属性length。</p>
 
 <p>length属性的值是数组的最大整数属性名加1。</p>
@@ -62,13 +66,15 @@
 
 <p>这几个函数每次操作都会移除原属性，重新插入，所以大型数组的效率不会太好。换种数据结构呗..链表不就完了</p>
 
-<h3 id="section-5">枚举</h3>
+<h3>枚举</h3>
+
 <p>for in倒是可以遍历，但是无法保证属性的顺序，可能有些浏览器是按照顺序来的，但是我们没法保证。而且从原型继承来的属性问题依然存在，倒是可以Object.hasOwnProperty来判断，不过太麻烦了。一般就直接用for语句了。</p>
 
-<h3 id="array">判断array</h3>
+<h3>判断array</h3>
+
 <p>我们可以typeof属性length看是不是number，然后propertyIsEnumerable来检测length是不是无法枚举。</p>
 
-<p>或者Object.prototype.toString().apply(value) == ‘[object Array]’来判断。</p>
+<p>或者Object.prototype.toString().apply(value) == &#39;[object Array]&#39;来判断。</p>
 
       <div id="disqus_thread"></div>
 <script>

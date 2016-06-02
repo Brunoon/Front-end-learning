@@ -21,11 +21,10 @@
 </section>
 
     <section class="main-content">
-      <h3 id="freemarker">Freemarker分页</h3>
+      <h3>Freemarker分页</h3>
 
 <p>公司后台用的java，模板使用的是freemarker，一般分页都是写在后台的，这样打开了页面不用加载js就可以跳去想要的页面了，这里学习一下freemarker里面分页的写法</p>
-
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="err">&lt;</span>#-- 传入当前的页面和总共的页数 --&gt;
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="err">&lt;</span>#-- 传入当前的页面和总共的页数 --&gt;
 <span class="err">&lt;</span>#macro pageNavigationOrg pageIndex pageCount&gt;
     <span class="err">&lt;</span>#assign curPage = pageIndex&gt;
     <span class="err">&lt;</span>#assign pageCount = pageCount&gt;
@@ -45,24 +44,24 @@
     <span class="err">&lt;</span>#else&gt;
         <span class="err">&lt;</span>#assign endPage = pageCount&gt;
     <span class="err">&lt;</span>/#if&gt;
-<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"pages"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;pages&quot;</span><span class="nt">&gt;</span>
 <span class="err">&lt;</span>#--如果当前页大于第一页，输出上一页导航--&gt;
     <span class="err">&lt;</span>#if (curPage &gt; 1) &gt;
         <span class="err">&lt;</span>#assign prePage = curPage-1&gt;
-        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/staff/queryStaffByOrg?orgId=${orgId!''}&amp;pageNumber=${prePage}"</span> <span class="na">class=</span><span class="s">"prev"</span>
-           <span class="na">title=</span><span class="s">"上一页"</span><span class="nt">&gt;</span>上一页<span class="nt">&lt;/a&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/staff/queryStaffByOrg?orgId=${orgId!&#39;&#39;}&amp;pageNumber=${prePage}&quot;</span> <span class="na">class=</span><span class="s">&quot;prev&quot;</span>
+           <span class="na">title=</span><span class="s">&quot;上一页&quot;</span><span class="nt">&gt;</span>上一页<span class="nt">&lt;/a&gt;</span>
     <span class="err">&lt;</span>/#if&gt;
 <span class="err">&lt;</span>#--开始输出页码导航--&gt;
 <span class="err">&lt;</span>#--
     如果开始页大于1 (表示当前页和2的差值大于1)
-        先输出"第一页的link"和"..."
+        先输出&quot;第一页的link&quot;和&quot;...&quot;
     否则跳过
         然后由遍历的过程输出第一页的链接
 --&gt;
     <span class="err">&lt;</span>#if (startPage &gt; 1)&gt;
-        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/staff/queryStaffByOrg?orgId=${orgId!''}&amp;pageNumber=1"</span> <span class="na">class=</span><span class="s">"page-item item-number"</span> <span class="na">title=</span><span class="s">"1"</span><span class="nt">&gt;</span>1<span class="nt">&lt;/a&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/staff/queryStaffByOrg?orgId=${orgId!&#39;&#39;}&amp;pageNumber=1&quot;</span> <span class="na">class=</span><span class="s">&quot;page-item item-number&quot;</span> <span class="na">title=</span><span class="s">&quot;1&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/a&gt;</span>
         <span class="err">&lt;</span>#if (startPage &gt; 2)&gt;
-            <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"page-item item-ellipsis"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;page-item item-ellipsis&quot;</span><span class="nt">&gt;</span>...<span class="nt">&lt;/span&gt;</span>
         <span class="err">&lt;</span>/#if&gt;
     <span class="err">&lt;</span>/#if&gt;
 <span class="err">&lt;</span>#--
@@ -71,35 +70,33 @@
 --&gt;
     <span class="err">&lt;</span>#if (startPage <span class="err">&lt;</span>= endPage)&gt;
         <span class="err">&lt;</span>#list startPage..endPage as page&gt;
-            <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/staff/queryStaffByOrg?orgId=${orgId!''}&amp;pageNumber=${page}"</span> <span class="na">class=</span><span class="s">"page-item item-number&lt;#if curPage == page&gt; cursor&lt;/#if&gt;"</span> <span class="na">title=</span><span class="s">"${page}"</span><span class="nt">&gt;</span>${page}<span class="nt">&lt;/a&gt;</span>
+            <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/staff/queryStaffByOrg?orgId=${orgId!&#39;&#39;}&amp;pageNumber=${page}&quot;</span> <span class="na">class=</span><span class="s">&quot;page-item item-number&lt;#if curPage == page&gt; cursor&lt;/#if&gt;&quot;</span> <span class="na">title=</span><span class="s">&quot;${page}&quot;</span><span class="nt">&gt;</span>${page}<span class="nt">&lt;/a&gt;</span>
         <span class="err">&lt;</span>/#list&gt;
     <span class="err">&lt;</span>/#if&gt;
 <span class="err">&lt;</span>#--
-    如果endPage <span class="nt">&lt; pageCount</span> 	<span class="err">(表示结束页是</span><span class="na">startPage</span> <span class="err">+</span> <span class="na">8</span><span class="err">，否则</span><span class="na">endPage =</span><span class="err"> </span><span class="s">pageCount)</span>
-        <span class="na">1</span><span class="err">.先判断是否小于最后一页的前一页,如果是先输出"..."，否则跳过</span>
+    如果endPage <span class="nt">&lt; pageCount</span>   <span class="err">(表示结束页是</span><span class="na">startPage</span> <span class="err">+</span> <span class="na">8</span><span class="err">，否则</span><span class="na">endPage =</span><span class="err"> </span><span class="s">pageCount)</span>
+        <span class="na">1</span><span class="err">.先判断是否小于最后一页的前一页,如果是先输出&quot;...&quot;，否则跳过</span>
         <span class="na">2</span><span class="err">.单独输出最后一页</span>
     <span class="err">否则跳过</span>
         <span class="err">实质上在上面的遍历的过程中已经输出了最后一页的链接</span>
 <span class="na">--</span><span class="nt">&gt;</span>
     <span class="err">&lt;</span>#if (endPage <span class="nt">&lt; pageCount</span><span class="err">)</span><span class="nt">&gt;</span>
         <span class="err">&lt;</span>#if (endPage <span class="nt">&lt; pageCount</span> <span class="na">-</span> <span class="na">1</span><span class="err">)</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"page-item item-ellipsis"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/span&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">&quot;page-item item-ellipsis&quot;</span><span class="nt">&gt;</span>...<span class="nt">&lt;/span&gt;</span>
         <span class="err">&lt;</span>/#if&gt;
-        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/staff/queryStaffByOrg?orgId=${orgId!''}&amp;pageNumber=${pageCount}"</span> <span class="na">class=</span><span class="s">"page-item item-number"</span> <span class="na">title=</span><span class="s">"${pageCount}"</span><span class="nt">&gt;</span>${pageCount}<span class="nt">&lt;/a&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/staff/queryStaffByOrg?orgId=${orgId!&#39;&#39;}&amp;pageNumber=${pageCount}&quot;</span> <span class="na">class=</span><span class="s">&quot;page-item item-number&quot;</span> <span class="na">title=</span><span class="s">&quot;${pageCount}&quot;</span><span class="nt">&gt;</span>${pageCount}<span class="nt">&lt;/a&gt;</span>
     <span class="err">&lt;</span>/#if&gt;
 <span class="err">&lt;</span>#--如果当前页小于总页数，输出下一页导航--&gt;
     <span class="err">&lt;</span>#if (curPage <span class="nt">&lt; pageCount</span><span class="err">)</span><span class="nt">&gt;</span>
         <span class="err">&lt;</span>#assign nextPage = curPage+1&gt;
-        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"/staff/queryStaffByOrg?orgId=${orgId!''}&amp;pageNumber=${pageCount}"</span> <span class="na">data-pg=</span><span class="s">"${nextPage}"</span> <span class="na">class=</span><span class="s">"next"</span>
-           <span class="na">title=</span><span class="s">"下一页"</span><span class="nt">&gt;</span>下一页<span class="nt">&lt;/a&gt;</span>
+        <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;/staff/queryStaffByOrg?orgId=${orgId!&#39;&#39;}&amp;pageNumber=${pageCount}&quot;</span> <span class="na">data-pg=</span><span class="s">&quot;${nextPage}&quot;</span> <span class="na">class=</span><span class="s">&quot;next&quot;</span>
+           <span class="na">title=</span><span class="s">&quot;下一页&quot;</span><span class="nt">&gt;</span>下一页<span class="nt">&lt;/a&gt;</span>
     <span class="err">&lt;</span>/#if&gt;
 <span class="err">&lt;</span>#--结束输出页码导航--&gt;
 <span class="nt">&lt;/div&gt;</span>
 <span class="err">&lt;</span>/#macro&gt;
-</code></pre>
-</div>
-
-<p>就是说先根据与1和pageCount的比较来判断定下了一个startPage和endPage，这是决定中间的输出的，然后前面的<code class="highlighter-rouge">...</code>和后面的<code class="highlighter-rouge">...</code>这两个值是他们分别与1和pageCount来单独比较的，而<code class="highlighter-rouge">上一页和</code>下一页`是单独判断是否展示的。原来自己看了下分页，也就是这么简单的事情而已  (●’◡’●)ﾉ♥</p>
+</code></pre></div>
+<p>就是说先根据与1和pageCount的比较来判断定下了一个startPage和endPage，这是决定中间的输出的，然后前面的<code>...</code>和后面的<code>...</code>这两个值是他们分别与1和pageCount来单独比较的，而<code>上一页和</code>下一页`是单独判断是否展示的。原来自己看了下分页，也就是这么简单的事情而已  (●&#39;◡&#39;●)ﾉ♥</p>
 
       <div id="disqus_thread"></div>
 <script>

@@ -21,7 +21,8 @@
 </section>
 
     <section class="main-content">
-      <h1 id="semver">Semver规范</h1>
+      <h1>Semver规范</h1>
+
 <p>这是个用来管理版本的规范</p>
 
 <p>从前到后分为主版本号.次版本号.修订号</p>
@@ -30,11 +31,13 @@
 
 <p>主版本号代表做了不兼容的修改，次版本号代表做了可兼容的新功能，修订号代表是可兼容的修正。</p>
 
-<h2 id="tilde-range">Tilde range</h2>
-<p><code class="highlighter-rouge">~1.2.3</code>这个符号意味着大于等于1.2.3，小于1.3.0。</p>
+<h2>Tilde range</h2>
 
-<h2 id="caret-range">Caret range</h2>
-<p><code class="highlighter-rouge">^1.2.3</code>这个意味着大于等于1.2.3,小于2.0.0的。</p>
+<p><code>~1.2.3</code>这个符号意味着大于等于1.2.3，小于1.3.0。</p>
+
+<h2>Caret range</h2>
+
+<p><code>^1.2.3</code>这个意味着大于等于1.2.3,小于2.0.0的。</p>
 
 <p>tudo:
 点评的如果Tilde range升级了最后一位，线上会被通知到吗？</p>

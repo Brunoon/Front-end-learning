@@ -21,84 +21,80 @@
 </section>
 
     <section class="main-content">
-      <h1 id="json">20JSON</h1>
+      <h1>20JSON</h1>
+
 <p>Json的语法可以是接下来的三种方式</p>
 
 <ul>
-  <li>简单值，除了undefined不行，其他都可以，null是可以的！！！！</li>
-  <li>对象，就是个复杂类型嘛</li>
-  <li>数组</li>
+<li>简单值，除了undefined不行，其他都可以，null是可以的！！！！</li>
+<li>对象，就是个复杂类型嘛</li>
+<li>数组</li>
 </ul>
 
-<h2 id="section">对象</h2>
-<p><code class="highlighter-rouge">对象的属性必须加上双引号</code>！！！这在JSON中是必须的</p>
+<h2>对象</h2>
 
-<h2 id="section-1">解析与序列化</h2>
+<p><code>对象的属性必须加上双引号</code>！！！这在JSON中是必须的</p>
+
+<h2>解析与序列化</h2>
+
 <p>JSON比xml火的原因在于在转化为js对象之后，xml需要在DOM树中来获取，而json可以像js对象一样拿取值。</p>
 
-<h3 id="json-1">JSON对象</h3>
-<p>#### eval解析法
-解析最开始的时候可以使用eval，注意这里需要用<code class="highlighter-rouge">小括号包裹住</code>才认识</p>
+<h3>JSON对象</h3>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nb">eval</span><span class="p">(</span><span class="s1">'({"a":1})'</span><span class="p">);</span>
-</code></pre>
-</div>
+<h4>eval解析法</h4>
 
-<h4 id="jsonparse">JSON对象parse解析</h4>
+<p>解析最开始的时候可以使用eval，注意这里需要用<code>小括号包裹住</code>才认识</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nb">eval</span><span class="p">(</span><span class="s1">&#39;({&quot;a&quot;:1})&#39;</span><span class="p">);</span>
+</code></pre></div>
+<h4>JSON对象parse解析</h4>
+
 <p>JSON.parse可以直接解析</p>
 
-<h4 id="jsonstringify">JSON对象stringify序列化</h4>
+<h4>JSON对象stringify序列化</h4>
+
 <p>JSON.stringify可以执行序列化，这个方法三个参数</p>
 
 <ul>
-  <li>第一参：对象</li>
-  <li>第二参：过滤器</li>
-  <li>第三参：缩进情况</li>
+<li>第一参：对象</li>
+<li>第二参：过滤器</li>
+<li>第三参：缩进情况</li>
 </ul>
 
 <p>如果二参是数组，那么序列化只会保留数组中列出的属性。</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">book</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"title"</span><span class="p">:</span><span class="s2">"hah"</span><span class="p">,</span>
-    <span class="s2">"name"</span><span class="p">:</span><span class="s2">"aa"</span><span class="p">,</span>
-    <span class="s2">"beta"</span><span class="p">:</span><span class="s2">"a"</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">book</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;title&quot;</span><span class="o">:</span><span class="s2">&quot;hah&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;name&quot;</span><span class="o">:</span><span class="s2">&quot;aa&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;beta&quot;</span><span class="o">:</span><span class="s2">&quot;a&quot;</span>
 <span class="p">};</span>
-<span class="kd">var</span> <span class="nx">jsonText</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">book</span><span class="p">,[</span><span class="s2">"name"</span><span class="p">,</span><span class="s2">"beta"</span><span class="p">]);</span>
-<span class="c1">//"{"name":"aa","beta":"a"}"</span>
-</code></pre>
-</div>
-
+<span class="kd">var</span> <span class="nx">jsonText</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">book</span><span class="p">,[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span><span class="s2">&quot;beta&quot;</span><span class="p">]);</span>
+<span class="c1">//&quot;{&quot;name&quot;:&quot;aa&quot;,&quot;beta&quot;:&quot;a&quot;}&quot;</span>
+</code></pre></div>
 <p>如果二参是函数的话，也就是个筛选的函数</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">jsonText</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">book</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span><span class="nx">value</span><span class="p">){</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">jsonText</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">book</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span><span class="nx">value</span><span class="p">){</span>
     <span class="k">switch</span><span class="p">(</span><span class="nx">key</span><span class="p">){</span>
-        <span class="k">case</span> <span class="s2">"title"</span><span class="err">:</span>
+        <span class="k">case</span> <span class="s2">&quot;title&quot;</span><span class="o">:</span>
             <span class="k">return</span> <span class="nx">value</span><span class="p">;</span><span class="c1">//这里会返回值</span>
-        <span class="k">case</span> <span class="s2">"name"</span><span class="err">:</span>
+        <span class="k">case</span> <span class="s2">&quot;name&quot;</span><span class="o">:</span>
             <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span><span class="c1">//这里就会直接忽略</span>
-        <span class="k">case</span> <span class="s2">"beta"</span><span class="err">:</span>
+        <span class="k">case</span> <span class="s2">&quot;beta&quot;</span><span class="o">:</span>
             <span class="k">return</span> <span class="mi">111</span><span class="p">;</span><span class="c1">//这里就是手动赋值了</span>
-        <span class="nl">default</span><span class="p">:</span>
+        <span class="k">default</span><span class="o">:</span>
             <span class="k">return</span> <span class="nx">value</span><span class="p">;</span><span class="c1">//这句加上才能保证其他的正常返回</span>
     <span class="p">}</span>
 <span class="p">});</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <p>第三参用来控制缩进和空白符
 - 比如4个字符，注意这里默认会加个换行符的，因为光缩进不换行也没有意义
 - 如果超过10个字符，会被设置为10的
 - 也可以用string，这个时候就会替代空格</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">jsonText</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">book</span><span class="p">,</span><span class="kc">null</span><span class="p">,</span><span class="mi">4</span><span class="p">);</span>
-</code></pre>
-</div>
-
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">jsonText</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">book</span><span class="p">,</span><span class="kc">null</span><span class="p">,</span><span class="mi">4</span><span class="p">);</span>
+</code></pre></div>
 <p>可以在一个对象上改写toJSON方法，作为过滤器的补充。</p>
 
 <p>这里的顺序是先应用toJson方法，然后应用第二个参数的函数过滤器，然后序列化，然后应用第三个参数的格式化。</p>
 
-<h4 id="section-2">解析的选项</h4>
+<h4>解析的选项</h4>
+
 <p>JSON.parse()也是可以提供一个函数来作为还原函数，函数参数为key和value。</p>
 
       <div id="disqus_thread"></div>

@@ -21,9 +21,11 @@
 </section>
 
     <section class="main-content">
-      <h1 id="section">精华以及基础</h1>
-<p>## 优缺点
-首先他是弱类型，虽然不会在编辑阶段就能发现一些问题，但是他自由，并且不用应付类型系统来得到想要的行为。</p>
+      <h1>精华以及基础</h1>
+
+<h2>优缺点</h2>
+
+<p>首先他是弱类型，虽然不会在编辑阶段就能发现一些问题，但是他自由，并且不用应付类型系统来得到想要的行为。</p>
 
 <p>对象字面量表示法：通过列出对象的组成就能被创建，是JSON的灵感来源。</p>
 
@@ -31,65 +33,55 @@
 
 <p>主要是他基本都被挂载在全局对象上，共用一个公共命名空间其实是非常大的罪。</p>
 
-<h2 id="section-1">基础</h2>
+<h2>基础</h2>
+
 <ul>
-  <li>
-    <p>注释是有两种，一种是/* */的块注释，一种是//，注意块注释可能会有问题，因为在正则中可能会导致块注释提前失效了</p>
-  </li>
-  <li>
-    <p>注意字符串是不可变的，一旦被创建永远无法被改变，所以只能不断的创建新的字符串。</p>
-  </li>
-  <li>
-    <p>数字，字符串和布尔值貌似对象，因为他们拥有方法，但是他们是不可变的。<code class="highlighter-rouge">JS中的对象是可变的键控集合！！</code></p>
-  </li>
-  <li>
-    <p>对象的属性名可以是<code class="highlighter-rouge">空字符串</code>！！但是这些不合法的或者保留字的只能用引号括起来才行。</p>
-  </li>
+<li><p>注释是有两种，一种是/* */的块注释，一种是//，注意块注释可能会有问题，因为在正则中可能会导致块注释提前失效了</p></li>
+<li><p>注意字符串是不可变的，一旦被创建永远无法被改变，所以只能不断的创建新的字符串。</p></li>
+<li><p>数字，字符串和布尔值貌似对象，因为他们拥有方法，但是他们是不可变的。<code>JS中的对象是可变的键控集合！！</code></p></li>
+<li><p>对象的属性名可以是<code>空字符串</code>！！但是这些不合法的或者保留字的只能用引号括起来才行。</p></li>
 </ul>
 
-<h3 id="section-2">正确的取值</h3>
+<h3>正确的取值</h3>
+
 <p>我们一般赋值可以用 || 来设置默认值，用 &amp;&amp; 运算符来避免错误，比如：</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code> <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">b</span> <span class="o">||</span> <span class="s2">""</span><span class="p">;</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"> <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">a</span><span class="p">.</span><span class="nx">b</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
  <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">s</span><span class="p">.</span><span class="nx">aa</span> <span class="o">&amp;&amp;</span> <span class="nx">s</span><span class="p">.</span><span class="nx">aa</span><span class="p">.</span><span class="nx">b</span><span class="p">;</span><span class="c1">//这样即便aa是undefined也不会报错了</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <ul>
-  <li>对象是通过引用来传递的，所以他们永远不会自动被复制。</li>
+<li>对象是通过引用来传递的，所以他们永远不会自动被复制。</li>
 </ul>
 
-<h3 id="section-3">原型</h3>
-<p>这里的Object.create的写法其实很简单</p>
+<h3>原型</h3>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nb">Object</span><span class="p">.</span><span class="nx">create</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">){</span>
+<p>这里的Object.create的写法其实很简单</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nb">Object</span><span class="p">.</span><span class="nx">create</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">o</span><span class="p">){</span>
      <span class="kd">var</span> <span class="nx">F</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){}</span>
      <span class="nx">F</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="nx">o</span><span class="p">;</span>
      <span class="k">return</span> <span class="k">new</span> <span class="nx">F</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <p>我们可以通过hasOwnProperty来检测对象独有的属性。</p>
 
-<h3 id="section-4">函数</h3>
+<h3>函数</h3>
+
 <p>创建一个函数的时候，其实会附加两个隐藏属性，一个是上下文，一个是实现函数行为的代码。</p>
 
-<p>调用函数的时候，可以理解为调用函数的”调用”属性。</p>
+<p>调用函数的时候，可以理解为调用函数的&quot;调用&quot;属性。</p>
 
-<h3 id="this">this指针</h3>
+<h3>this指针</h3>
+
 <p>有四种调用方法的模式</p>
 
-<h3 id="section-5">方法调用模式</h3>
+<h3>方法调用模式</h3>
 
 <p>就是说函数作为对象的一个属性，那么我们称之为一个方法。如果我们的表达式包含一个提取属性的动作，比如点操作，就被当做一个方法调用。这里毫无疑问，this代表了调用的那个对象。</p>
 
-<h3 id="section-6">函数调用模式</h3>
+<h3>函数调用模式</h3>
 
 <p>函数并非是一个对象的属性来调用的时候，就是当做一个函数来调用的，此时的this就是全局对象。浏览器下面是window</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code> <span class="kd">var</span> <span class="nx">aa</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="na">b</span><span class="p">:</span><span class="kd">function</span><span class="p">(){</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"> <span class="kd">var</span> <span class="nx">aa</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="nx">b</span><span class="o">:</span><span class="kd">function</span><span class="p">(){</span>
  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
         <span class="p">}</span>
  <span class="p">}</span>
@@ -98,13 +90,11 @@
  <span class="nx">c</span><span class="p">();</span><span class="c1">//window</span>
  <span class="p">(</span><span class="nx">aa</span><span class="p">.</span><span class="nx">b</span><span class="p">)();</span><span class="c1">//{}</span>
 <span class="c1">//当然，这里的执行顺序没有变化，因为.的级别只低于圆括号，高于函数调用。</span>
-</code></pre>
-</div>
+</code></pre></div>
+<h3>构造器调用模式</h3>
 
-<h3 id="section-7">构造器调用模式</h3>
 <p>我们使用new来通过构造器调用模式的时候，里面的this是新对象。同时，如果从原型对象上继承的方法来使用this，还是会是新对象，因为虽然方法是继承来的，但是还是在新对象上调用的。</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code> <span class="kd">function</span> <span class="nx">aa</span><span class="p">(){</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"> <span class="kd">function</span> <span class="nx">aa</span><span class="p">(){</span>
    <span class="k">this</span><span class="p">.</span><span class="nx">status</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span>
  <span class="p">}</span>
  <span class="nx">aa</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">status</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
@@ -112,12 +102,11 @@
    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">status</span><span class="p">)</span>
  <span class="p">}</span>
  <span class="k">new</span> <span class="nx">aa</span><span class="p">().</span><span class="nx">getStatus</span><span class="p">()</span><span class="c1">//1</span>
-</code></pre>
-</div>
+</code></pre></div>
+<h3>Apply调用模式</h3>
 
-<h3 id="apply">Apply调用模式</h3>
 <p>就是简单的改变this
-<code class="highlighter-rouge">javascript
+<code>javascript
   function add(a,b,c){
     return a+b+c;
   }
@@ -125,73 +114,76 @@
   add.apply(null,a);//6
 </code></p>
 
-<h3 id="bind">探讨下bind</h3>
+<h3>探讨下bind</h3>
+
 <p>当我们用bind方法绑定了this之后，再赋值给一个变量。作为上面的函数调用的结果的this指针指向哪里？</p>
 
 <p>答案是指向bind过的对象。</p>
 
 <p>而且bind过的对象再bind就没有效果了，被锁住了，语法糖而已。</p>
 
-<h3 id="section-8">函数的参数</h3>
+<h3>函数的参数</h3>
+
 <p>我们可以通过arguments来访问函数的所有参数，但是arguments并不是一个真的数组，他只是一个“类似数组”的对象，拥有一个length属性，但没有任何数组的方法。当然我们可以使用Array.prototype.reverse.call来调用。</p>
 
-<h3 id="section-9">递归</h3>
+<h3>递归</h3>
+
 <p>这里的递归算法得抽空好好看一看。//tudo</p>
 
-<h3 id="section-10">作用域</h3>
+<h3>作用域</h3>
+
 <p>JS没有块级作用域，但是它有函数作用域。ES6的let申明实现了块级作用域。</p>
 
-<h3 id="section-11">闭包</h3>
+<h3>闭包</h3>
+
 <p>我们在调用了某个函数的时候，他返回的值也是一个子函数，这个子函数就拥有了访问原函数的变量的能力，这就是闭包。</p>
 
 <p>闭包正常使用并不会有内存问题!!!但是在IE里面会有些内存问题。</p>
 
 <p>tudo</p>
 
-<h3 id="section-12">模块</h3>
-<p>我们可以使用函数和闭包来构建模块。(模块就是一个提供接口，但是却隐藏了状态与实现的函数或对象。)通过模块的写法，我们可以很好的减少全局变量的使用。</p>
+<h3>模块</h3>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">aa</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">inner</span> <span class="o">=</span> <span class="s1">'ss'</span><span class="p">;</span>
+<p>我们可以使用函数和闭包来构建模块。(模块就是一个提供接口，但是却隐藏了状态与实现的函数或对象。)通过模块的写法，我们可以很好的减少全局变量的使用。</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">aa</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">inner</span> <span class="o">=</span> <span class="s1">&#39;ss&#39;</span><span class="p">;</span>
   <span class="k">return</span> <span class="kd">function</span><span class="p">(){</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">inner</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}();</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <p>如上，最后的()调用是精彩之处，inner这个变量只有返回的那个函数可以访问得到，</p>
 
 <p>这就是模块模式的一般形式，定义了私有变量和函数的函数，然互利用闭包创建一个可以访问私有变量和函数的特权函数。</p>
 
 <p>也可以产生安全的对象，如下：</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">sss</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s1">'11'</span><span class="p">;</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">sss</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;11&#39;</span><span class="p">;</span>
   <span class="k">return</span> <span class="p">{</span>
-    <span class="na">setName</span><span class="p">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">){</span>
+    <span class="nx">setName</span><span class="o">:</span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">){</span>
       <span class="nx">name</span> <span class="o">=</span> <span class="nx">a</span><span class="p">;</span>
     <span class="p">},</span>
-    <span class="na">getName</span><span class="p">:</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">getName</span><span class="o">:</span><span class="kd">function</span><span class="p">(){</span>
       <span class="k">return</span> <span class="nx">name</span><span class="p">;</span>
     <span class="p">}</span>
   <span class="p">}</span>
 <span class="p">}</span>
 <span class="c1">//返回的对象拥有对于属性进行修改的方法，即使我们改变这个对象的方法，我们仍然不能访问到那些属性了！！</span>
-</code></pre>
-</div>
+</code></pre></div>
+<h3>级联</h3>
 
-<h3 id="section-13">级联</h3>
 <p>就是在函数的最后返回this，我们可以设置或者修改对象的状态，可以给全能的端口降降温，一个接口要做的事情就是比较少了。</p>
 
-<h3 id="section-14">柯里化</h3>
+<h3>柯里化</h3>
+
 <p>柯里化实际上函数式编程的思想，是函数能够部分执行。我们在JS中可以使用闭包来实现保存住一定的参数而已，使用bind也可以。</p>
 
 <p>具体实现就是将一个接受多个参数的函数转化为一个接受了一个函数，然后返回一个接受剩下参数的函数。</p>
 
 <p>在写bind的polyfill的时候其实就已经写了一个柯里化参数了。</p>
 
-<h3 id="section-15">记忆</h3>
+<h3>记忆</h3>
+
 <p>这是件蛮有意思的事情，就是如果看出了一些重复的没有意义的调用，我们可以在函数中使用一些数组之类的东西来减少运行的次数，来存储上次的结果。</p>
 
       <div id="disqus_thread"></div>

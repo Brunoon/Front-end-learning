@@ -21,87 +21,81 @@
 </section>
 
     <section class="main-content">
-      <h1 id="chrome">Chrome插件编写</h1>
+      <h1>Chrome插件编写</h1>
+
 <p>Chrome的tab插件用的不爽，于是自己学习着写一个好了，<a href="https://developer.chrome.com/extensions/getstarted">chrome的文档</a>很全面，自己的<a href="https://github.com/panyifei/chrome-tab-plugin">插件地址</a></p>
 
-<h2 id="section">编写</h2>
-<p>最重要的就是先新建一个<code class="highlighter-rouge">manifest.json</code>，要操作的主要就是这个json数据，申明了功能，以及资源的路径</p>
+<h2>编写</h2>
+
+<p>最重要的就是先新建一个<code>manifest.json</code>，要操作的主要就是这个json数据，申明了功能，以及资源的路径</p>
 
 <p>然后用到的资源文件也只需要放在同一个目录下就可以了</p>
 
 <p>然后就在chrome://extension里面自己安装一下就好了，这里需要开一下开发者模式</p>
 
-<h2 id="mainfest">mainfest内容</h2>
-<p>#### browserAction
-这个东西是展示在地址栏右侧的小图标</p>
+<h2>mainfest内容</h2>
 
-<p>与之对应的是<code class="highlighter-rouge">pageAction</code>，只争对单独的地址才会有所响应</p>
+<h4>browserAction</h4>
+
+<p>这个东西是展示在地址栏右侧的小图标</p>
+
+<p>与之对应的是<code>pageAction</code>，只争对单独的地址才会有所响应</p>
 
 <ul>
-  <li>设置default_icon来这个icon,还可以设置default_title,这个没啥用</li>
-  <li>还可以default_popup,这个可以在点击时弹出一个页面，页面的内容可以自己设置，html格式，如下，当然需要一个<a href="https://developer.chrome.com/extensions/examples/tutorials/getstarted/popup.js">popup.js</a></li>
+<li>设置default<em>icon来这个icon,还可以设置default</em>title,这个没啥用</li>
+<li>还可以default_popup,这个可以在点击时弹出一个页面，页面的内容可以自己设置，html格式，如下，当然需要一个<a href="https://developer.chrome.com/extensions/examples/tutorials/getstarted/popup.js">popup.js</a></li>
 </ul>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;manifest_version&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;逸飞的小插件&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This extension shows a Google Image search result for the current page&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;browser_action&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;default_icon&quot;</span><span class="p">:</span> <span class="s2">&quot;icon.png&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;default_popup&quot;</span><span class="p">:</span> <span class="s2">&quot;popup.html&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;permissions&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;activeTab&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;https://ajax.googleapis.com/&quot;</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4>tab页面尝试</h4>
 
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"manifest_version"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"逸飞的小插件"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"This extension shows a Google Image search result for the current page"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"browser_action"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"default_icon"</span><span class="p">:</span><span class="w"> </span><span class="s2">"icon.png"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"default_popup"</span><span class="p">:</span><span class="w"> </span><span class="s2">"popup.html"</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"permissions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="s2">"activeTab"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"https://ajax.googleapis.com/"</span><span class="w">
-  </span><span class="p">]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
-
-<h4 id="tab">tab页面尝试</h4>
 <p>想要在点击插件时弹出新的页面，于是添加了background，并且去掉了popup相关的东西</p>
-
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"manifest_version"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"逸飞的小插件"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"This extension shows a Google Image search result for the current page"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"version"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1.0"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"browser_action"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"default_icon"</span><span class="p">:</span><span class="w"> </span><span class="s2">"icon.png"</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="nt">"permissions"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="s2">"activeTab"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"https://ajax.googleapis.com/"</span><span class="w">
-  </span><span class="p">],</span><span class="w">
-  </span><span class="nt">"background"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"eventPage.js"</span><span class="p">],</span><span class="w">
-    </span><span class="nt">"persistent"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
-
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;manifest_version&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+  <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;逸飞的小插件&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This extension shows a Google Image search result for the current page&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
+  <span class="nt">&quot;browser_action&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;default_icon&quot;</span><span class="p">:</span> <span class="s2">&quot;icon.png&quot;</span>
+  <span class="p">},</span>
+  <span class="nt">&quot;permissions&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;activeTab&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;https://ajax.googleapis.com/&quot;</span>
+  <span class="p">],</span>
+  <span class="nt">&quot;background&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;eventPage.js&quot;</span><span class="p">],</span>
+    <span class="nt">&quot;persistent&quot;</span><span class="p">:</span> <span class="kc">false</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
 <p>然后eventPage里面就是简单的监听了一下点击,就可以实现点击访问那个页面了</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">chrome</span><span class="p">.</span><span class="nx">browserAction</span><span class="p">.</span><span class="nx">onClicked</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">chrome</span><span class="p">.</span><span class="nx">tabs</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span><span class="s1">'url'</span><span class="p">:</span> <span class="nx">chrome</span><span class="p">.</span><span class="nx">extension</span><span class="p">.</span><span class="nx">getURL</span><span class="p">(</span><span class="s1">'popup.html'</span><span class="p">)},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">tab</span><span class="p">)</span> <span class="p">{</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">chrome</span><span class="p">.</span><span class="nx">browserAction</span><span class="p">.</span><span class="nx">onClicked</span><span class="p">.</span><span class="nx">addListener</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">chrome</span><span class="p">.</span><span class="nx">tabs</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span><span class="s1">&#39;url&#39;</span><span class="o">:</span> <span class="nx">chrome</span><span class="p">.</span><span class="nx">extension</span><span class="p">.</span><span class="nx">getURL</span><span class="p">(</span><span class="s1">&#39;popup.html&#39;</span><span class="p">)},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">tab</span><span class="p">)</span> <span class="p">{</span>
         <span class="c1">// Tab opened.</span>
     <span class="p">});</span>
 <span class="p">});</span>
-</code></pre>
-</div>
+</code></pre></div>
+<h4>chrome<em>url</em>overrides</h4>
 
-<h4 id="chromeurloverrides">chrome_url_overrides</h4>
-<p>这个属性添加进之后可以在打开<code class="highlighter-rouge">新标签页</code>和历史等的时候访问定好的页面</p>
-
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"chrome_url_overrides"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"newtab"</span><span class="p">:</span><span class="w"> </span><span class="s2">"popup.html"</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
-
+<p>这个属性添加进之后可以在打开<code>新标签页</code>和历史等的时候访问定好的页面</p>
+<div class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="nt">&quot;chrome_url_overrides&quot;</span> <span class="p">:</span> <span class="p">{</span>
+    <span class="nt">&quot;newtab&quot;</span><span class="p">:</span> <span class="s2">&quot;popup.html&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
 <p>这个页面的js和css都是直接可以写在项目中直接访问的,自己稍微完善了一下，已经很有feel了，哈哈~</p>
 
       <div id="disqus_thread"></div>

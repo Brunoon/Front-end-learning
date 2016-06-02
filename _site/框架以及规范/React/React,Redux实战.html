@@ -21,25 +21,27 @@
 </section>
 
     <section class="main-content">
-      <h2 id="reactredux">React,Redux实战</h2>
+      <h2>React,Redux实战</h2>
 
-<h3 id="thisprops">运行时修改this.props</h3>
+<h3>运行时修改this.props</h3>
+
 <p>无法在运行过程中直接对this.props进行修改，我们只能为之写一个action来触发，然后重绘。</p>
 
-<h3 id="urlrestfulid">访问url里restful传入的id</h3>
-<p>使用<code class="highlighter-rouge">this.props.routeParams</code>可以访问。</p>
+<h3>访问url里restful传入的id</h3>
 
-<h3 id="jsxhtml">防止jsx对html结构进行转义</h3>
-<div class="language-html highlighter-rouge"><pre class="highlight"><code>  <span class="nt">&lt;div</span> <span class="na">dangerouslySetInnerHTML=</span><span class="err">&gt;</span><span class="s">&lt;/div</span><span class="nt">&gt;</span>
-</code></pre>
-</div>
+<p>使用<code>this.props.routeParams</code>可以访问。</p>
 
-<h3 id="action">action的处理过程</h3>
+<h3>防止jsx对html结构进行转义</h3>
+<div class="highlight"><pre><code class="language-html" data-lang="html">  <span class="nt">&lt;div</span> <span class="na">dangerouslySetInnerHTML=</span><span class="err">&gt;</span><span class="s">&lt;/div</span><span class="nt">&gt;</span>
+</code></pre></div>
+<h3>action的处理过程</h3>
+
 <p>action会触发reducer，然后通过reducer里面对action.type的判断来决定页面上this.props的值。这里的值可以由全局的state和action里面的data混合着返回。</p>
 
-<p>然后就会触发页面上<code class="highlighter-rouge">componentWillMount</code>的方法，进而对页面进行重绘。</p>
+<p>然后就会触发页面上<code>componentWillMount</code>的方法，进而对页面进行重绘。</p>
 
-<h3 id="render">render方法的执行条件</h3>
+<h3>render方法的执行条件</h3>
+
 <p>如果我们在父元素里面调用了render，那么子元素肯定执行render的。</p>
 
 <p>如果我们想要阻止子元素的render，我们可以在子元素里面进行shouldComponentUpdate来进行compare。我们可以使用shallowCompare来简单的比较引用是否改变。因为如果我们想要传新对象的话，这个肯定会渲染的。而如果我们还传老的对象，代表我们并没有修改。层次比较多的时候我们可以使用update这个add-on来执行我们的更新操作。</p>

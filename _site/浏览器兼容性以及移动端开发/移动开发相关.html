@@ -21,136 +21,136 @@
 </section>
 
     <section class="main-content">
-      <h1 id="section">移动开发相关</h1>
+      <h1>移动开发相关</h1>
 
-<h3 id="onpageshow">页面从缓存中拿<code class="highlighter-rouge">onpageshow</code></h3>
-<p>后退键在安卓和ios上的表现不同，安卓的后退键会默认地把页面刷新一次。然而ios则会从页面的cache中拿取页面，而不会再次执行js代码，导致了一些问题。解决办法是通过给window绑定<code class="highlighter-rouge">onpageshow</code>，然后判断<code class="highlighter-rouge">event.persisted</code>，如果是从缓存中拿取的，就location.reload一下，就会重新执行一下页面的js了。</p>
+<h3>页面从缓存中拿<code>onpageshow</code></h3>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code>	<span class="nb">window</span><span class="p">.</span><span class="nx">onpageshow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+<p>后退键在安卓和ios上的表现不同，安卓的后退键会默认地把页面刷新一次。然而ios则会从页面的cache中拿取页面，而不会再次执行js代码，导致了一些问题。解决办法是通过给window绑定<code>onpageshow</code>，然后判断<code>event.persisted</code>，如果是从缓存中拿取的，就location.reload一下，就会重新执行一下页面的js了。</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">    <span class="nb">window</span><span class="p">.</span><span class="nx">onpageshow</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">persisted</span><span class="p">)</span> <span class="p">{</span>
            <span class="nx">location</span><span class="p">.</span><span class="nx">reload</span><span class="p">();</span>
         <span class="p">}</span>
     <span class="p">};</span>
-</code></pre>
-</div>
+</code></pre></div>
+<h3>锁住整个页面不让滑动</h3>
 
-<h3 id="section-1">锁住整个页面不让滑动</h3>
-<p>讲道理的话，给<code class="highlighter-rouge">body</code>一个<code class="highlighter-rouge">overflow:hidden</code>就行了</p>
-
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nc">.fix-scroll</span><span class="p">{</span>
-    <span class="nl">position</span><span class="p">:</span> <span class="nb">absolute</span><span class="p">;</span>
-    <span class="nl">width</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
-    <span class="nl">height</span><span class="p">:</span><span class="m">100%</span><span class="p">;</span>
-    <span class="nl">overflow</span><span class="p">:</span><span class="nb">hidden</span><span class="p">;</span>
+<p>讲道理的话，给<code>body</code>一个<code>overflow:hidden</code>就行了</p>
+<div class="highlight"><pre><code class="language-css" data-lang="css"><span class="nc">.fix-scroll</span><span class="p">{</span>
+    <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span><span class="m">100%</span><span class="p">;</span>
+    <span class="k">overflow</span><span class="o">:</span><span class="k">hidden</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <p>但是移动浏览器安卓2.3对于锁住滑动支持的不好</p>
 
-<p>所以完美的解决在于，<code class="highlighter-rouge">body</code>和<code class="highlighter-rouge">html</code>都加上上述的类就行了</p>
+<p>所以完美的解决在于，<code>body</code>和<code>html</code>都加上上述的类就行了</p>
 
-<h3 id="placeholder">移动端不用<code class="highlighter-rouge">placeholder</code></h3>
-<p>placeholder本身浏览器的支持还是不错的，但是如果想控制placeholder的属性，<code class="highlighter-rouge">::-webkit-input-placeholder</code>支持的就不好了</p>
+<h3>移动端不用<code>placeholder</code></h3>
+
+<p>placeholder本身浏览器的支持还是不错的，但是如果想控制placeholder的属性，<code>::-webkit-input-placeholder</code>支持的就不好了</p>
 
 <p>于是使用替代的data-placeholder</p>
 
 <p>然后在div中添加以下代码</p>
-
-<div class="language-css highlighter-rouge"><pre class="highlight"><code>    <span class="o">&amp;</span><span class="nd">::after</span> <span class="p">{</span>
-        <span class="nl">content</span><span class="p">:</span> <span class="n">attr</span><span class="p">(</span><span class="n">data-placeholder</span><span class="p">);</span>
-        <span class="nl">display</span><span class="p">:</span> <span class="nb">block</span><span class="p">;</span>
-        <span class="nl">position</span><span class="p">:</span> <span class="nb">absolute</span><span class="p">;</span>
-        <span class="nl">top</span><span class="p">:</span> <span class="m">50%</span><span class="p">;</span>
-        <span class="nl">right</span><span class="p">:</span> <span class="m">10px</span><span class="p">;</span>
-        <span class="err">.transform(translateY(-50%));</span>
-        <span class="nl">white-space</span><span class="p">:</span> <span class="nb">nowrap</span><span class="p">;</span>
-        <span class="nl">font-size</span><span class="p">:</span> <span class="m">15px</span><span class="p">;</span>
-        <span class="nl">color</span><span class="p">:</span> <span class="err">@</span><span class="n">color-text-grey</span><span class="p">;</span>
-        <span class="nl">z-index</span><span class="p">:</span> <span class="m">-1</span><span class="p">;</span>
+<div class="highlight"><pre><code class="language-css" data-lang="css">    <span class="o">&amp;:</span><span class="nd">:after</span> <span class="p">{</span>
+        <span class="k">content</span><span class="o">:</span> <span class="n">attr</span><span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">placeholder</span><span class="p">);</span>
+        <span class="k">display</span><span class="o">:</span> <span class="k">block</span><span class="p">;</span>
+        <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
+        <span class="k">top</span><span class="o">:</span> <span class="m">50%</span><span class="p">;</span>
+        <span class="k">right</span><span class="o">:</span> <span class="m">10px</span><span class="p">;</span>
+        <span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">translateY</span><span class="p">(</span><span class="m">-50%</span><span class="p">));</span>
+        <span class="k">white-space</span><span class="o">:</span> <span class="k">nowrap</span><span class="p">;</span>
+        <span class="k">font-size</span><span class="o">:</span> <span class="m">15px</span><span class="p">;</span>
+        <span class="k">color</span><span class="o">:</span> <span class="o">@</span><span class="k">color</span><span class="o">-</span><span class="k">text</span><span class="o">-</span><span class="n">grey</span><span class="p">;</span>
+        <span class="k">z-index</span><span class="o">:</span> <span class="m">-1</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="o">&amp;</span><span class="nc">.has-value</span><span class="nd">::after</span> <span class="p">{</span>
-        <span class="nl">display</span><span class="p">:</span> <span class="nb">none</span><span class="p">;</span>
+    <span class="o">&amp;</span><span class="nc">.has-value</span><span class="o">:</span><span class="nd">:after</span> <span class="p">{</span>
+        <span class="k">display</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
     <span class="p">}</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <p>通过切换has-value就可以切换展示与否了</p>
 
-<h3 id="reactes5-shim">安卓2.3不支持react,使用<code class="highlighter-rouge">ES5-shim</code></h3>
+<h3>安卓2.3不支持react,使用<code>ES5-shim</code></h3>
+
 <p>因为安卓2.3对于es5的属性不能完全的支持，而react里面用到了bind，freeze等等es5才支持的属性，所以直接使用，会挂。</p>
 
-<p>直接在页面上引入了<code class="highlighter-rouge">es5-shim.js</code> 和 <code class="highlighter-rouge">es5-shim.min.js</code>这两个js就搞定了。<a href="https://github.com/es-shims/es5-shim/">代码地址</a></p>
+<p>直接在页面上引入了<code>es5-shim.js</code> 和 <code>es5-shim.min.js</code>这两个js就搞定了。<a href="https://github.com/es-shims/es5-shim/">代码地址</a></p>
 
 <p>功能是让那些对es5支持的不好的浏览器可以使用es5的特性。</p>
 
-<h3 id="section-2">安卓2.3对于空格符的支持</h3>
-<p>必须得写成<code class="highlighter-rouge">&amp;nbsp;</code>，如果不加分号安卓2.3会不识别，其他都识别的</p>
+<h3>安卓2.3对于空格符的支持</h3>
 
-<h3 id="input">安卓2.3在input获得焦点的时候会有黄色边框</h3>
+<p>必须得写成<code>&amp;nbsp;</code>，如果不加分号安卓2.3会不识别，其他都识别的</p>
+
+<h3>安卓2.3在input获得焦点的时候会有黄色边框</h3>
+
 <p>加上这个属性就可以搞定了</p>
-
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">input</span><span class="nd">:focus</span><span class="p">{</span>
-      <span class="nl">-webkit-tap-highlight-color</span><span class="p">:</span><span class="n">rgba</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">,</span><span class="m">0</span><span class="p">);</span>
+<div class="highlight"><pre><code class="language-css" data-lang="css"><span class="nt">input</span><span class="nd">:focus</span><span class="p">{</span>
+      <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">tap</span><span class="o">-</span><span class="n">highlight</span><span class="o">-</span><span class="k">color</span><span class="o">:</span><span class="n">rgba</span><span class="p">(</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="p">);</span>
     <span class="p">}</span>
+</code></pre></div>
+<h3>安卓2.3拿到domain需要拼装一下</h3>
 
-</code></pre>
-</div>
+<p>一般的只需要<code>location.origin</code>就可以拿到了，但是安卓2.3需要<code>location.protocol + &#39;//&#39; + location.host</code>这样才能够保证兼容性。</p>
 
-<h3 id="domain">安卓2.3拿到domain需要拼装一下</h3>
-<p>一般的只需要<code class="highlighter-rouge">location.origin</code>就可以拿到了，但是安卓2.3需要<code class="highlighter-rouge">location.protocol + '//' + location.host</code>这样才能够保证兼容性。</p>
+<h3>genomotion小bug</h3>
 
-<h3 id="genomotionbug">genomotion小bug</h3>
 <p>测试轮询ajax刷新状态的，结果genomotion的模拟器居然同样的请求不重新请求，导致一直是失败的状态，坑爹的模拟器</p>
 
-<h3 id="ioslocalstorage">ios隐身模式下禁用localstorage</h3>
+<h3>ios隐身模式下禁用localstorage</h3>
+
 <p>处理localstorage的地方用try catch包裹住，防止js报错从而卡住了页面</p>
 
-<h3 id="displayflex">display:flex的注意点</h3>
+<h3>display:flex的注意点</h3>
+
 <p>这个很神奇，让元素拥有自动扩展和收缩的能力，非常好用，注意里面的子元素都必须是block的，否则android下面会有问题</p>
 
-<h3 id="align-itemscenter">align-items:center</h3>
+<h3>align-items:center</h3>
+
 <p>这个属性是与display:flex配合使用的，是用来垂直方向上的居中对齐的，很好用，是用来在flex中替代vertical-align:middle的。</p>
 
 <p>注意安卓机器只能识别为display:-webkit-box，这时得加上 -webkit-box-align:center;才行！！！！</p>
 
 <p>而且iphone 7版本(5s)的得加上-webkit-align-items:center;</p>
 
-<h2 id="ios-inputborder-radius">ios input自带的border-radius和阴影背景</h2>
+<h2>ios input自带的border-radius和阴影背景</h2>
+
 <p>这样可以去掉</p>
-
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nt">border-radius</span><span class="o">:</span> <span class="nt">0px</span><span class="o">;</span>
+<div class="highlight"><pre><code class="language-css" data-lang="css"><span class="nt">border-radius</span><span class="o">:</span> <span class="nt">0px</span><span class="o">;</span>
 <span class="nt">-webkit-appearance</span><span class="nd">:none</span><span class="o">;</span>
-</code></pre>
-</div>
+</code></pre></div>
+<h2>transform 使用百分比进行动画在安卓低版本版本下会有bug</h2>
 
-<h2 id="transform-bug">transform 使用百分比进行动画在安卓低版本版本下会有bug</h2>
-<p>参见例子<a href="http://www.thepetedesign.com/demos/zepto_onepage_scroll_demo.html">zepto_onepage_scroll</a>,这个网站在低版本4.1的三星下是有问题的，因为在translate3d时用了百分比，最后改了代码，使用了px作为单位就正常了</p>
+<p>参见例子<a href="http://www.thepetedesign.com/demos/zepto_onepage_scroll_demo.html">zepto<em>onepage</em>scroll</a>,这个网站在低版本4.1的三星下是有问题的，因为在translate3d时用了百分比，最后改了代码，使用了px作为单位就正常了</p>
 
-<h2 id="fixedzeptohideshow41">fixed父元素的子元素想使用zepto来控制hide和show，结果4.1的三星就没有效果了</h2>
+<h2>fixed父元素的子元素想使用zepto来控制hide和show，结果4.1的三星就没有效果了</h2>
+
 <p>解决方法直接在父元素上调用hide或者show，或者给子元素也加上fixed属性就行了</p>
 
-<h2 id="section-3">输入密码的同时唤起数字键盘</h2>
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"password"</span> <span class="na">pattern=</span><span class="s">"[0-9]*"</span> <span class="nt">&gt;</span>
-</code></pre>
-</div>
+<h2>输入密码的同时唤起数字键盘</h2>
+<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;password&quot;</span> <span class="na">pattern=</span><span class="s">&quot;[0-9]*&quot;</span> <span class="nt">&gt;</span>
+</code></pre></div>
 <p>这样在ios下可以完美的唤起数字键盘，并且输入会被掩码盖住，部分安卓机下有效</p>
 
-<p><img alt="掩码唤起数字键盘" width="300px" src="pics//pic1.jpg" /></p>
+<p><img alt="掩码唤起数字键盘" width='300px' src="pics//pic1.jpg" /></p>
 
-<h2 id="select">安卓机下去掉select元素的上下的那个小符号</h2>
-<p>使用<code class="highlighter-rouge">-webkit-appearance: none;</code></p>
+<h2>安卓机下去掉select元素的上下的那个小符号</h2>
 
-<p><img alt="掩码唤起数字键盘" width="700px" src="pics//pic2.png" /></p>
+<p>使用<code>-webkit-appearance: none;</code></p>
 
-<h3 id="section-4">字体被透明化</h3>
-<p><img alt="字体透明化" width="700px" src="pics//opacity.png" /></p>
+<p><img alt="掩码唤起数字键盘" width='700px' src="pics//pic2.png" /></p>
+
+<h3>字体被透明化</h3>
+
+<p><img alt="字体透明化" width='700px' src="pics//opacity.png" /></p>
 
 <p>把背景的opacity去掉，然后background-color改为background:rgba(0, 0, 0, 0.7)，这个会比较好用，手机上的兼容性不错，上图的左边为优化过的，不被透明化了。</p>
 
-<h3 id="input-1">input输入框右侧出现的小叉叉</h3>
-<p><img alt="input小叉叉" width="700px" src="pics//inputX.png" />
-<code class="highlighter-rouge">css
+<h3>input输入框右侧出现的小叉叉</h3>
+
+<p><img alt="input小叉叉" width='700px' src="pics//inputX.png" />
+<code>css
 //IE下
 input::-ms-clear { display: none; }
 //chrome内核
@@ -159,10 +159,12 @@ input::-webkit-search-cancel-button{
 }
 </code></p>
 
-<h3 id="fixed">fixed属性在小键盘弹出的时候失效</h3>
+<h3>fixed属性在小键盘弹出的时候失效</h3>
+
 <p>我们有时把input的搜索框fixed在页面上，然后在手机的小键盘弹出时，fixed属性会失效，我们的解决办法可以把整个页面变成竖向的flex布局。</p>
 
-<h3 id="overflowscroll">设置了overflow:scroll之后手机上滑动感觉不流畅</h3>
+<h3>设置了overflow:scroll之后手机上滑动感觉不流畅</h3>
+
 <p>-webkit-overflow-scrolling: touch;</p>
 
 <p>设置了这个属性之后，滑动变的更丝滑了</p>

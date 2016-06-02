@@ -21,57 +21,53 @@
 </section>
 
     <section class="main-content">
-      <h1 id="history">history相关</h1>
+      <h1>history相关</h1>
+
 <p><strong>HTML5</strong> history为window添加了<strong>pushState</strong>，<strong>replaceState</strong>这两个方法，还提供了一个事件<strong>popstate</strong>。具体的方法就不讲解了，直接去官网查看吧。<a href="https://developer.mozilla.org/en-US/docs/Web/API/History_API">Mozilla</a></p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>	于是我们可以在页面上ajax获得数据，重绘页面，然后用户在点击倒退键时，还在这个页面上。因为我们在重绘页面的时候，调用一下pushSate为history增加了一条记录。
-</code></pre>
-</div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">    于是我们可以在页面上ajax获得数据，重绘页面，然后用户在点击倒退键时，还在这个页面上。因为我们在重绘页面的时候，调用一下pushSate为history增加了一条记录。
+</code></pre></div>
 <p>自己遵循commonjs写了一个小模块，提供了检验和调用的实现，以下是代码的讲解以及提高的思路。</p>
 
-<h2 id="section">检验的接口：</h2>
-<p>这个H5的API支持情况很好，但是坑还是很多的。从<a href="http://caniuse.com/#search=pushstate">caniuse</a>上来看，支持程度很好，但是android的几个版本不支持有些尴尬。不过那几个版本非常小众。这里最终的解决是去<a href="https://modernizr.com/">Modernizr</a>找的检测方法的代码，因为直接属性检测问题比较大，例如android2.3浏览器支持这个pushState的方法，但是并不支持这个方法的行为…这里还用到了zepto</p>
+<h2>检验的接口：</h2>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'zepto'</span><span class="p">);</span>
+<p>这个H5的API支持情况很好，但是坑还是很多的。从<a href="http://caniuse.com/#search=pushstate">caniuse</a>上来看，支持程度很好，但是android的几个版本不支持有些尴尬。不过那几个版本非常小众。这里最终的解决是去<a href="https://modernizr.com/">Modernizr</a>找的检测方法的代码，因为直接属性检测问题比较大，例如android2.3浏览器支持这个pushState的方法，但是并不支持这个方法的行为...这里还用到了zepto</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">$</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;zepto&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">historyState</span> <span class="o">=</span> <span class="p">{};</span>
 <span class="nx">historyState</span><span class="p">.</span><span class="nx">ifSupport</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
     <span class="kd">var</span> <span class="nx">ua</span> <span class="o">=</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">userAgent</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">((</span><span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'Android 2.'</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span>
-        <span class="p">(</span><span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'Android 4.0'</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">&amp;&amp;</span>
-        <span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'Mobile Safari'</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span>
-        <span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'Chrome'</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span>
-        <span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'Windows Phone'</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">((</span><span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;Android 2.&#39;</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">||</span>
+        <span class="p">(</span><span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;Android 4.0&#39;</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">&amp;&amp;</span>
+        <span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;Mobile Safari&#39;</span><span class="p">)</span> <span class="o">!==</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span>
+        <span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;Chrome&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span> <span class="o">&amp;&amp;</span>
+        <span class="nx">ua</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;Windows Phone&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
     <span class="p">}</span>
-    <span class="k">return</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">history</span> <span class="o">&amp;&amp;</span> <span class="s1">'pushState'</span> <span class="k">in</span> <span class="nb">window</span><span class="p">.</span><span class="nx">history</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">history</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;pushState&#39;</span> <span class="k">in</span> <span class="nb">window</span><span class="p">.</span><span class="nx">history</span><span class="p">);</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div>
+<h2>新生成页面调用的接口：</h2>
 
-<h2 id="section-1">新生成页面调用的接口：</h2>
 <p>实现思路就是将原来的层隐藏，加入一个新层覆盖上去，然后调用window.history.pushState加一条记录，返回的时候将原来的层清理，并将最开始的层显示出来，顺便清理了这个绑定。</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
- * @param   options     {required}  参数对象
-        {
-            hideDiv     {required}  需要隐藏的部分
-            addDiv      {required}  新增的部分
-            wrapDiv     {optional}  包裹的元素，若没有，默认为body
-            bindFunc    {optional}  对页面新添加的东西绑定类似点击的事件
-            state       {optional}  传入的数据
-            title       {optional}  目前被忽略
-            url         {optional}  url，需求是不变
-        }
- */</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="cm">/**</span>
+<span class="cm"> * @param   options     {required}  参数对象</span>
+<span class="cm">        {</span>
+<span class="cm">            hideDiv     {required}  需要隐藏的部分</span>
+<span class="cm">            addDiv      {required}  新增的部分</span>
+<span class="cm">            wrapDiv     {optional}  包裹的元素，若没有，默认为body</span>
+<span class="cm">            bindFunc    {optional}  对页面新添加的东西绑定类似点击的事件</span>
+<span class="cm">            state       {optional}  传入的数据</span>
+<span class="cm">            title       {optional}  目前被忽略</span>
+<span class="cm">            url         {optional}  url，需求是不变</span>
+<span class="cm">        }</span>
+<span class="cm"> */</span>
 <span class="nx">historyState</span><span class="p">.</span><span class="nx">newPage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">hideDiv</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">hideDiv</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">addDiv</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">addDiv</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">wrapDiv</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">wrapDiv</span> <span class="o">||</span> <span class="nx">$</span><span class="p">(</span><span class="s1">'body'</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">wrapDiv</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">wrapDiv</span> <span class="o">||</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">);</span>
     <span class="kd">var</span> <span class="nx">bindFunc</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">bindFunc</span> <span class="o">||</span> <span class="kd">function</span><span class="p">(){};</span>
     <span class="kd">var</span> <span class="nx">state</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">state</span> <span class="o">||</span> <span class="p">{};</span>
-    <span class="kd">var</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">||</span> <span class="s1">''</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">url</span> <span class="o">||</span> <span class="s1">''</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">url</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
     <span class="c1">//隐藏当前页面，并添加进新页面</span>
     <span class="nx">hideDiv</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
     <span class="nx">wrapDiv</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">addDiv</span><span class="p">);</span>
@@ -83,31 +79,28 @@
             <span class="nx">addDiv</span><span class="p">.</span><span class="nx">remove</span><span class="p">();</span>
             <span class="nx">hideDiv</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
             <span class="c1">//手动清掉了这个方法</span>
-          <span class="nb">window</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s2">"popstate"</span><span class="p">,</span><span class="nx">popFunc</span><span class="p">);</span>                  
+          <span class="nb">window</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s2">&quot;popstate&quot;</span><span class="p">,</span><span class="nx">popFunc</span><span class="p">);</span>                  
         <span class="p">};</span>
-        <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"popstate"</span><span class="p">,</span><span class="nx">popFunc</span><span class="p">);</span>
+        <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;popstate&quot;</span><span class="p">,</span><span class="nx">popFunc</span><span class="p">);</span>
         <span class="nb">window</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">pushState</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="nx">title</span><span class="p">,</span><span class="nx">url</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">};</span>
 <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">historyState</span><span class="p">;</span>
-</code></pre>
-</div>
-
-<h2 id="section-2">简单的切换调用的借口</h2>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
- * @param   options     {required}  参数对象
-        {
-            hideDiv     {required}  需要隐藏的部分
-            showDiv      {required}  显示的部分
-        }
- */</span>
+</code></pre></div>
+<h2>简单的切换调用的借口</h2>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="cm">/**</span>
+<span class="cm"> * @param   options     {required}  参数对象</span>
+<span class="cm">        {</span>
+<span class="cm">            hideDiv     {required}  需要隐藏的部分</span>
+<span class="cm">            showDiv      {required}  显示的部分</span>
+<span class="cm">        }</span>
+<span class="cm"> */</span>
 <span class="nx">historyState</span><span class="p">.</span><span class="nx">switchPage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">options</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">hideDiv</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">hideDiv</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">showDiv</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">showDiv</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">state</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">state</span> <span class="o">||</span> <span class="p">{};</span>
-    <span class="kd">var</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">||</span> <span class="s1">''</span><span class="p">;</span>
-    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">url</span> <span class="o">||</span> <span class="s1">''</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">title</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">url</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
     <span class="c1">//隐藏当前页面，并添加进新页面</span>
     <span class="nx">hideDiv</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
     <span class="nx">showDiv</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
@@ -117,16 +110,15 @@
             <span class="nx">hideDiv</span><span class="p">.</span><span class="nx">show</span><span class="p">();</span>
             <span class="nx">showDiv</span><span class="p">.</span><span class="nx">hide</span><span class="p">();</span>
             <span class="c1">//手动清掉了这个方法</span>
-            <span class="nb">window</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s2">"popstate"</span><span class="p">,</span><span class="nx">popFunc</span><span class="p">);</span>                  
+            <span class="nb">window</span><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span><span class="s2">&quot;popstate&quot;</span><span class="p">,</span><span class="nx">popFunc</span><span class="p">);</span>                  
         <span class="p">};</span>
-        <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">"popstate"</span><span class="p">,</span><span class="nx">popFunc</span><span class="p">);</span>
+        <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;popstate&quot;</span><span class="p">,</span><span class="nx">popFunc</span><span class="p">);</span>
         <span class="nb">window</span><span class="p">.</span><span class="nx">history</span><span class="p">.</span><span class="nx">pushState</span><span class="p">(</span><span class="nx">state</span><span class="p">,</span><span class="nx">title</span><span class="p">,</span><span class="nx">url</span><span class="p">);</span>
     <span class="p">}</span>  
 <span class="p">};</span>
-</code></pre>
-</div>
+</code></pre></div>
+<h2>不足</h2>
 
-<h2 id="section-3">不足</h2>
 <p>模块设计有些问题，导致不能嵌套，而且不能点击前进键。</p>
 
 <p>因为点击即调用了popstate的绑定，如果想支持嵌套的话，得将popstate的绑定放到一个init的函数，这个初始化函数只调用一次就好。</p>
@@ -135,8 +127,9 @@
 
 <p>这里给出思路，就不手动实现了。</p>
 
-<h2 id="section-4">后言</h2>
-<p>这个模块毕竟有兼容性问题，最后使用了hashchange来实现了，参见<a href="https://github.com/panyifei/learning/blob/master/HTML5/hashchange事件.md">hashchange事件</a>。</p>
+<h2>后言</h2>
+
+<p>这个模块毕竟有兼容性问题，最后使用了hashchange来实现了，参见<a href="https://github.com/panyifei/learning/blob/master/HTML5/hashchange%E4%BA%8B%E4%BB%B6.md">hashchange事件</a>。</p>
 
       <div id="disqus_thread"></div>
 <script>

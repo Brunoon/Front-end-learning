@@ -21,34 +21,33 @@
 </section>
 
     <section class="main-content">
-      <h1 id="section">模块加载系统</h1>
-<p>### AMD规范</p>
+      <h1>模块加载系统</h1>
+
+<h3>AMD规范</h3>
 
 <p>异步模块定义，避免了同步加载方式导致的页面假死现象。</p>
 
 <p>每个模块需要按照一定的格式书写，define和require。</p>
 
 <p>define是模块开发者关注的写法，require是模块使用者关注的写法。</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code>    <span class="nx">define</span><span class="p">(</span><span class="s1">'xxx'</span><span class="p">,[</span><span class="s2">"aaa"</span><span class="p">,</span><span class="s2">"bbb"</span><span class="p">],</span><span class="kd">function</span><span class="p">(</span><span class="nx">aaa</span><span class="p">,</span><span class="nx">bbb</span><span class="p">){</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">    <span class="nx">define</span><span class="p">(</span><span class="s1">&#39;xxx&#39;</span><span class="p">,[</span><span class="s2">&quot;aaa&quot;</span><span class="p">,</span><span class="s2">&quot;bbb&quot;</span><span class="p">],</span><span class="kd">function</span><span class="p">(</span><span class="nx">aaa</span><span class="p">,</span><span class="nx">bbb</span><span class="p">){</span>
     <span class="p">});</span>
-    <span class="nx">require</span><span class="p">([</span><span class="s1">'aaa'</span><span class="p">,</span><span class="s1">'bbb'</span><span class="p">],</span><span class="kd">function</span><span class="p">(</span><span class="nx">aaa</span><span class="p">,</span><span class="nx">bbb</span><span class="p">){</span>
+    <span class="nx">require</span><span class="p">([</span><span class="s1">&#39;aaa&#39;</span><span class="p">,</span><span class="s1">&#39;bbb&#39;</span><span class="p">],</span><span class="kd">function</span><span class="p">(</span><span class="nx">aaa</span><span class="p">,</span><span class="nx">bbb</span><span class="p">){</span>
     <span class="p">});</span>
-</code></pre>
-</div>
-
-<h3 id="section-1">路径探索</h3>
+</code></pre></div>
+<h3>路径探索</h3>
 
 <p>todo：再看看</p>
 
-<h3 id="require">require方法</h3>
+<h3>require方法</h3>
+
 <p>require的作用是在依赖加载完毕之后，再执行用户的回调，于是会有个加载的过程：</p>
 
 <ul>
-  <li>取得依赖的第一个ID，然后拿到他的路径</li>
-  <li>检查是否加载过，或者正在被加载，所以需要列表保存加载的状态</li>
-  <li>创建script节点，绑定一应的onerror，onload，onreadychange来判断成功与否，然后插入DOM，开始加载</li>
-  <li>将模块的加载状态保存到对象中</li>
+<li>取得依赖的第一个ID，然后拿到他的路径</li>
+<li>检查是否加载过，或者正在被加载，所以需要列表保存加载的状态</li>
+<li>创建script节点，绑定一应的onerror，onload，onreadychange来判断成功与否，然后插入DOM，开始加载</li>
+<li>将模块的加载状态保存到对象中</li>
 </ul>
 
       <div id="disqus_thread"></div>

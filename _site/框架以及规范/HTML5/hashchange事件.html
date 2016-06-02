@@ -21,149 +21,125 @@
 </section>
 
     <section class="main-content">
-      <h1 id="hashchange">hashchange事件</h1>
+      <h1>hashchange事件</h1>
 
 <p>这里承接history相关，对于后退键不刷新页面，使用了修改hash来模拟实现的方法。</p>
 
-<p><code class="highlighter-rouge">hashchange</code>其实就是一个window的事件，在页面的hash被修改时会被触发。下面直接根据代码讲解吧。</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">popPage</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">iScroll</span><span class="p">,</span><span class="nx">options</span><span class="p">){</span>
+<p><code>hashchange</code>其实就是一个window的事件，在页面的hash被修改时会被触发。下面直接根据代码讲解吧。</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">popPage</span><span class="p">.</span><span class="nx">init</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">iScroll</span><span class="p">,</span><span class="nx">options</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-    <span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+    <span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
     <span class="nx">self</span><span class="p">.</span><span class="nx">showFlag</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-    <span class="nx">self</span><span class="p">.</span><span class="nx">parentEl</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">'&lt;div class="pop-page"&gt;&lt;div class="user-control" id="user-control"&gt;&lt;/div&gt;&lt;/div&gt;'</span><span class="p">);</span>
-    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">'hashchange'</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+    <span class="nx">self</span><span class="p">.</span><span class="nx">parentEl</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;&lt;div class=&quot;pop-page&quot;&gt;&lt;div class=&quot;user-control&quot; id=&quot;user-control&quot;&gt;&lt;/div&gt;&lt;/div&gt;&#39;</span><span class="p">);</span>
+    <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;hashchange&#39;</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
         <span class="nx">event</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">==</span> <span class="s2">"#poppage"</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">==</span> <span class="s2">&quot;#poppage&quot;</span><span class="p">){</span>
             <span class="c1">//前进键打开(ios)，直接清hash</span>
             <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">self</span><span class="p">.</span><span class="nx">showFlag</span><span class="p">){</span>
-                <span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
+                <span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
                 <span class="k">return</span><span class="p">;</span>
             <span class="p">}</span>
             <span class="nx">self</span><span class="p">.</span><span class="nx">showFlag</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
             <span class="c1">//body设置overflow可能会滚到到头部，先保存</span>
             <span class="nx">self</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">;</span>
             <span class="c1">//安卓需要给body和html都加上才会锁住</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'html'</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">'fix-scroll'</span><span class="p">);</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'body'</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">'fix-scroll'</span><span class="p">);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;fix-scroll&#39;</span><span class="p">);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;fix-scroll&#39;</span><span class="p">);</span>
             <span class="c1">//小的兼容问题，不设置的页面有几率不回到顶部</span>
             <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'body'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">parentEl</span><span class="p">);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">self</span><span class="p">.</span><span class="nx">parentEl</span><span class="p">);</span>
             <span class="c1">//android2.3 bug，不加setTimeout初始化iSroll失败</span>
             <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
                 <span class="c1">//class改变得在setTimeout里面</span>
                 <span class="c1">//animation   android2.3部分支持，测试无效，最后使用了transction</span>
-                <span class="nx">self</span><span class="p">.</span><span class="nx">parentEl</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">'from-right'</span><span class="p">);</span>
+                <span class="nx">self</span><span class="p">.</span><span class="nx">parentEl</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="s1">&#39;from-right&#39;</span><span class="p">);</span>
                 <span class="c1">//判断iScroll是否传入</span>
                 <span class="k">if</span><span class="p">(</span><span class="nx">iScroll</span><span class="o">!=</span><span class="kc">undefined</span><span class="p">){</span>
-                    <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{</span><span class="na">click</span><span class="p">:</span><span class="kc">true</span><span class="p">};</span>
-                    <span class="k">new</span> <span class="nx">iScroll</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'user-control'</span><span class="p">),</span><span class="nx">options</span><span class="p">);</span>
+                    <span class="kd">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{</span><span class="nx">click</span><span class="o">:</span><span class="kc">true</span><span class="p">};</span>
+                    <span class="k">new</span> <span class="nx">iScroll</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;user-control&#39;</span><span class="p">),</span><span class="nx">options</span><span class="p">);</span>
                 <span class="p">}</span>
             <span class="p">},</span><span class="mi">0</span><span class="p">);</span>
         <span class="p">}</span><span class="k">else</span><span class="p">{</span>
             <span class="c1">//还原，清空</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'html'</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">'fix-scroll'</span><span class="p">);</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'body'</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">'fix-scroll'</span><span class="p">);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;fix-scroll&#39;</span><span class="p">);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">).</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;fix-scroll&#39;</span><span class="p">);</span>
             <span class="nx">self</span><span class="p">.</span><span class="nx">el</span><span class="p">().</span><span class="nx">empty</span><span class="p">();</span>
-            <span class="nx">self</span><span class="p">.</span><span class="nx">parentEl</span><span class="p">.</span><span class="nx">remove</span><span class="p">().</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">'from-right'</span><span class="p">);</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">parentEl</span><span class="p">.</span><span class="nx">remove</span><span class="p">().</span><span class="nx">removeClass</span><span class="p">(</span><span class="s1">&#39;from-right&#39;</span><span class="p">);</span>
             <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">;</span>
             <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">scrollTop</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">scrollTop</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">});</span>
 <span class="p">};</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <ul>
-  <li>
-    <p>阻止了页面默认行为，页面的滚动自己来控制，不会有烦人的兼容</p>
-  </li>
-  <li>
-    <p>切换hash触发window的hashchange事件</p>
-  </li>
-  <li>
-    <p>body元素固定住，不让他滚动，原页面最小影响</p>
-  </li>
-  <li>
-    <p>手机浏览器哪怕body设置了<code class="highlighter-rouge">overflow</code>也是可以滚动的，解决方式是给<code class="highlighter-rouge">html</code>也加上<code class="highlighter-rouge">overflow</code></p>
-  </li>
-  <li>
-    <p>使用<code class="highlighter-rouge">overflow</code>有个坑，安卓2.3不支持这个属性，所以想做的话，从外部传进一个iscroll</p>
-  </li>
-  <li>
-    <p>外部传入iscroll，为了兼容，我传入了元素<code class="highlighter-rouge">document.getElementById('user-control')</code></p>
-  </li>
-  <li>
-    <p>iscroll对于新生成的元素需要写在settimeout里面</p>
-  </li>
-  <li>
-    <p>动画选择使用transction，animation在安卓2.3支持不好</p>
-  </li>
+<li><p>阻止了页面默认行为，页面的滚动自己来控制，不会有烦人的兼容</p></li>
+<li><p>切换hash触发window的hashchange事件</p></li>
+<li><p>body元素固定住，不让他滚动，原页面最小影响</p></li>
+<li><p>手机浏览器哪怕body设置了<code>overflow</code>也是可以滚动的，解决方式是给<code>html</code>也加上<code>overflow</code></p></li>
+<li><p>使用<code>overflow</code>有个坑，安卓2.3不支持这个属性，所以想做的话，从外部传进一个iscroll</p></li>
+<li><p>外部传入iscroll，为了兼容，我传入了元素<code>document.getElementById(&#39;user-control&#39;)</code></p></li>
+<li><p>iscroll对于新生成的元素需要写在settimeout里面</p></li>
+<li><p>动画选择使用transction，animation在安卓2.3支持不好</p></li>
 </ul>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code>    <span class="nx">popPage</span><span class="p">.</span><span class="nx">newPage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">    <span class="nx">popPage</span><span class="p">.</span><span class="nx">newPage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="nx">self</span><span class="p">.</span><span class="nx">showFlag</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
         <span class="c1">//这样来触发hashchange方法</span>
-        <span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="s2">"#poppage"</span><span class="p">;</span>
+        <span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="s2">&quot;#poppage&quot;</span><span class="p">;</span>
         <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">el</span><span class="p">();</span>
     <span class="p">};</span>
     <span class="nx">popPage</span><span class="p">.</span><span class="nx">el</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
-        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">parentEl</span><span class="p">.</span><span class="nx">children</span><span class="p">(</span><span class="s1">'.user-control'</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">parentEl</span><span class="p">.</span><span class="nx">children</span><span class="p">(</span><span class="s1">&#39;.user-control&#39;</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="nx">popPage</span><span class="p">.</span><span class="nx">close</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
         <span class="kd">var</span> <span class="nx">self</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="c1">//这里加了个setTimeout，就可以直接清除了</span>
         <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-            <span class="k">if</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">==</span> <span class="s2">"#poppage"</span><span class="p">){</span>
+            <span class="k">if</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">==</span> <span class="s2">&quot;#poppage&quot;</span><span class="p">){</span>
                 <span class="nx">history</span><span class="p">.</span><span class="nx">go</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>  
             <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'还未添加页面'</span><span class="p">);</span>
+                <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;还未添加页面&#39;</span><span class="p">);</span>
             <span class="p">}</span>    
         <span class="p">},</span><span class="mi">0</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">popPage</span><span class="p">;</span>
-</code></pre>
-</div>
-
-<p>这里是生成的页面，然后还提供了一个close方法，可供外界关闭这个新页面，这里的close用<code class="highlighter-rouge">setTimeout</code>包住了，不然会有异步的问题。还提供了一个可以得到内部元素的指针。</p>
+</code></pre></div>
+<p>这里是生成的页面，然后还提供了一个close方法，可供外界关闭这个新页面，这里的close用<code>setTimeout</code>包住了，不然会有异步的问题。还提供了一个可以得到内部元素的指针。</p>
 
 <p>还得配合以下的css一起使用</p>
-
-<div class="language-css highlighter-rouge"><pre class="highlight"><code><span class="nc">.pop-page</span><span class="p">{</span>
-    <span class="nl">background-color</span><span class="p">:</span> <span class="m">#fff</span><span class="p">;</span>
-    <span class="nl">position</span><span class="p">:</span> <span class="nb">absolute</span><span class="p">;</span>
-    <span class="nl">width</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
-    <span class="nl">height</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
-    <span class="nl">overflow</span><span class="p">:</span> <span class="nb">scroll</span><span class="p">;</span>
-    <span class="nl">margin</span><span class="p">:</span><span class="m">0px</span> <span class="m">-20px</span> <span class="m">0px</span> <span class="m">20px</span><span class="p">;</span>
-    <span class="nl">opacity</span><span class="p">:</span> <span class="m">0.9</span><span class="p">;</span>
-    <span class="nl">transition</span><span class="p">:</span><span class="n">all</span> <span class="m">0.5s</span><span class="p">;</span>
-    <span class="nl">-moz-transition</span><span class="p">:</span><span class="n">all</span> <span class="m">0.5s</span><span class="p">;</span> <span class="c">/* Firefox 4 */</span>
-    <span class="nl">-webkit-transition</span><span class="p">:</span><span class="n">all</span> <span class="m">0.5s</span><span class="p">;</span> <span class="c">/* Safari and Chrome */</span>
-    <span class="nl">-o-transition</span><span class="p">:</span><span class="n">all</span> <span class="m">0.5s</span><span class="p">;</span> <span class="c">/* Opera */</span>
+<div class="highlight"><pre><code class="language-css" data-lang="css"><span class="nc">.pop-page</span><span class="p">{</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="m">#fff</span><span class="p">;</span>
+    <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span>
+    <span class="k">overflow</span><span class="o">:</span> <span class="k">scroll</span><span class="p">;</span>
+    <span class="k">margin</span><span class="o">:</span><span class="m">0px</span> <span class="m">-20px</span> <span class="m">0px</span> <span class="m">20px</span><span class="p">;</span>
+    <span class="k">opacity</span><span class="o">:</span> <span class="m">0</span><span class="o">.</span><span class="m">9</span><span class="p">;</span>
+    <span class="n">transition</span><span class="o">:</span><span class="n">all</span> <span class="m">0.5s</span><span class="p">;</span>
+    <span class="o">-</span><span class="n">moz</span><span class="o">-</span><span class="n">transition</span><span class="o">:</span><span class="n">all</span> <span class="m">0.5s</span><span class="p">;</span> <span class="c">/* Firefox 4 */</span>
+    <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">transition</span><span class="o">:</span><span class="n">all</span> <span class="m">0.5s</span><span class="p">;</span> <span class="c">/* Safari and Chrome */</span>
+    <span class="o">-</span><span class="n">o</span><span class="o">-</span><span class="n">transition</span><span class="o">:</span><span class="n">all</span> <span class="m">0.5s</span><span class="p">;</span> <span class="c">/* Opera */</span>
 <span class="p">}</span>
 <span class="nc">.from-right</span><span class="p">{</span>
-    <span class="nl">margin</span><span class="p">:</span><span class="m">0px</span> <span class="m">0px</span> <span class="m">0px</span> <span class="m">0px</span><span class="p">;</span>
-    <span class="nl">opacity</span><span class="p">:</span> <span class="m">1</span><span class="p">;</span>
+    <span class="k">margin</span><span class="o">:</span><span class="m">0px</span> <span class="m">0px</span> <span class="m">0px</span> <span class="m">0px</span><span class="p">;</span>
+    <span class="k">opacity</span><span class="o">:</span> <span class="m">1</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="nc">.fix-scroll</span><span class="p">{</span>
-    <span class="nl">position</span><span class="p">:</span> <span class="nb">absolute</span><span class="p">;</span>
-    <span class="nl">width</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
-    <span class="nl">height</span><span class="p">:</span><span class="m">100%</span><span class="p">;</span>
-    <span class="nl">overflow</span><span class="p">:</span><span class="nb">hidden</span><span class="p">;</span>
+    <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span><span class="m">100%</span><span class="p">;</span>
+    <span class="k">overflow</span><span class="o">:</span><span class="k">hidden</span><span class="p">;</span>
 <span class="p">}</span>
 <span class="nc">.user-control</span><span class="p">{</span>
-    <span class="nl">position</span><span class="p">:</span> <span class="nb">relative</span><span class="p">;</span>
-    <span class="nl">background-color</span><span class="p">:</span> <span class="m">#fff</span><span class="p">;</span>
-    <span class="nl">width</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
-    <span class="nl">height</span><span class="p">:</span> <span class="m">100%</span><span class="p">;</span>
+    <span class="k">position</span><span class="o">:</span> <span class="k">relative</span><span class="p">;</span>
+    <span class="k">background-color</span><span class="o">:</span> <span class="m">#fff</span><span class="p">;</span>
+    <span class="k">width</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span>
+    <span class="k">height</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span>
 <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div>
+<h2>总结</h2>
 
-<h2 id="section">总结</h2>
 <p>踩了无数的android2.3的坑。包括动画，overflow。</p>
 
 <p>后退时将新页面销毁了，因为这样比较安全。</p>

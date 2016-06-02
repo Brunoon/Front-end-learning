@@ -9,7 +9,7 @@ author:
   url:        https://github.com/panyifei
 
 #Others
-markdown: kramdown
+markdown: redcarpet
 
 zhihu_username:     pan-yi-fei-41
 github_username:    panyifei

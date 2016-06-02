@@ -21,45 +21,49 @@
 </section>
 
     <section class="main-content">
-      <h1 id="cokoa">Co源码以及与Koa的深入理解</h1>
+      <h1>Co源码以及与Koa的深入理解</h1>
+
 <p>tj大神的co，将本来应该是一个数据类型的generator变成了一种处理异步的解决方案</p>
 
 <p>其实主要就是一个遍历函数，将promise或者generator的异步函数一直执行到得到最后的结果再返回，这样就可以把本来放到异步中的方法按照同步的顺序来写。</p>
 
-<h2 id="yield">yield</h2>
+<h2>yield</h2>
+
 <p>函数内部的yield后面传入的可以是以下</p>
 
 <ul>
-  <li>Promise(就是promise嘛)</li>
-  <li>thunks(就是一个偏函数，执行之后只有一个简单的拥有一个callback的参数的函数)</li>
-  <li>array(通过array可以并行执行里面的function，<code class="highlighter-rouge">并行</code>是主要的价值)</li>
-  <li>objects(和array相同，也是并行执行里面的yieldable，<code class="highlighter-rouge">并行</code>是主要的价值)</li>
-  <li>generators</li>
-  <li>generators functions(下面的这两个东西可以支持，但是并不被推荐，因为我们应该转向更加标准的promise)</li>
+<li>Promise(就是promise嘛)</li>
+<li>thunks(就是一个偏函数，执行之后只有一个简单的拥有一个callback的参数的函数)</li>
+<li>array(通过array可以并行执行里面的function，<code>并行</code>是主要的价值)</li>
+<li>objects(和array相同，也是并行执行里面的yieldable，<code>并行</code>是主要的价值)</li>
+<li>generators</li>
+<li>generators functions(下面的这两个东西可以支持，但是并不被推荐，因为我们应该转向更加标准的promise)</li>
 </ul>
 
-<h2 id="api">API</h2>
-<p>### co(fn*).then
-将一个generator解决为一个promise</p>
+<h2>API</h2>
 
-<h3 id="var-fn--cowrapfn">var fn = co.wrap(fn*)</h3>
+<h3>co(fn*).then</h3>
+
+<p>将一个generator解决为一个promise</p>
+
+<h3>var fn = co.wrap(fn*)</h3>
+
 <p>讲一个generator转化为一个返回promise的常规函数</p>
 
-<h2 id="section">本质的探索</h2>
+<h2>本质的探索</h2>
+
 <p>他的最初实现是基于Thunk函数的。接收了一个生成器函数作为参数，并生成了一个实际操作函数，函数通过接收回调的方式来传入最后的返回值。</p>
 
-<h2 id="thunk">所以先了解下thunk函数</h2>
-<p>这东西的发展是由函数的求值策略的分歧决定的，两种求值策略</p>
+<h2>所以先了解下thunk函数</h2>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code>  <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<p>这东西的发展是由函数的求值策略的分歧决定的，两种求值策略</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">  <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
  <span class="kd">function</span> <span class="nx">a</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
    <span class="k">return</span> <span class="nx">y</span><span class="p">;</span>
  <span class="p">}</span>
  <span class="nx">a</span><span class="p">(</span><span class="nx">b</span><span class="o">+</span><span class="mi">1</span><span class="p">);</span>
-</code></pre>
-</div>
-
-<p>上面的代码一<code class="highlighter-rouge">b+1</code>在什么时候执行比较好，</p>
+</code></pre></div>
+<p>上面的代码一<code>b+1</code>在什么时候执行比较好，</p>
 
 <p>一种是传值调用，在进入函数体之前就直接执行完，把值传进去。c语言是这么做的</p>
 
@@ -70,8 +74,7 @@
 <p>传名函数的编译器实现，其实就是放入一个临时函数，再将临时函数传入函数体，这个临时函数就叫做thunk函数。</p>
 
 <p>js语言是传值调用，他的thunk含义有些不同，js中，thunk函数替换的不是表达式，而是多参数函数，将它替换成单参数的版本，且只接受回调函数作为参数。</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code>  <span class="c1">//正常的readFile函数</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">  <span class="c1">//正常的readFile函数</span>
   <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">fileName</span><span class="p">,</span> <span class="nx">callback</span><span class="p">);</span>
   <span class="kd">var</span> <span class="nx">readFileThunk</span> <span class="o">=</span> <span class="nx">Thunk</span><span class="p">(</span><span class="nx">fileName</span><span class="p">);</span>
   <span class="nx">readFileThunk</span><span class="p">(</span><span class="nx">callback</span><span class="p">);</span>
@@ -81,12 +84,9 @@
       <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">fileName</span><span class="p">,</span><span class="nx">callback</span><span class="p">);</span>
     <span class="p">}</span>
   <span class="p">}</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <p>所以其实任何有回调的函数都是可以搞成thunk形式的，下面是一个简单的生成器</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code>  <span class="kd">var</span> <span class="nx">Thunk</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">){</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">  <span class="kd">var</span> <span class="nx">Thunk</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">){</span>
     <span class="k">return</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
       <span class="c1">//先传入其他的参数初始化</span>
       <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
@@ -100,15 +100,13 @@
   <span class="p">}</span>
   <span class="kd">var</span> <span class="nx">readFileThunk</span> <span class="o">=</span> <span class="nx">Thunk</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">);</span>
   <span class="nx">readFileThunk</span><span class="p">(</span><span class="nx">fileA</span><span class="p">)(</span><span class="nx">callback</span><span class="p">);</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <p>tj的thunkify源码
-<code class="highlighter-rouge">javascript
+<code>javascript
 /**
  * Module dependencies.
  */
-var assert = require('assert');
+var assert = require(&#39;assert&#39;);
 /**
  * Expose `thunkify()`.
  */
@@ -121,7 +119,7 @@ module.exports = thunkify;
  * @api public
  */
 function thunkify(fn){
-  assert('function' == typeof fn, 'function required');
+  assert(&#39;function&#39; == typeof fn, &#39;function required&#39;);
   return function(){
     //这里就是将所有的参数放进了一个新的数组，这里之所以不用[].slice。是因为有人在bluebird docs发现，如果直接这样泄露arguments，v8的一些优化的编译会被搁置，就会有性能上的损失。
     var args = new Array(arguments.length);
@@ -149,20 +147,20 @@ function thunkify(fn){
 };
 </code></p>
 
-<p><img alt="不用slice处理arguments" width="700px" src="..//pics//pic1.png" /></p>
+<p><img alt="不用slice处理arguments" width='700px' src="..//pics//pic1.png" /></p>
 
-<p><img alt="为了使回调函数只执行一次" width="700px" src="..//pics//pic2.png" /></p>
+<p><img alt="为了使回调函数只执行一次" width='700px' src="..//pics//pic2.png" /></p>
 
-<h2 id="generator">generator函数的回调流程管理</h2>
+<h2>generator函数的回调流程管理</h2>
+
 <p>包装成这样到底有个啥用场？用在了generator的流程管理</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'fs'</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">thunkify</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'thunkify'</span><span class="p">);</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">thunkify</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;thunkify&#39;</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">readFile</span> <span class="o">=</span> <span class="nx">thunkify</span><span class="p">(</span><span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">gen</span> <span class="o">=</span> <span class="kd">function</span><span class="o">*</span> <span class="p">(){</span>
-  <span class="kd">var</span> <span class="nx">r1</span> <span class="o">=</span> <span class="k">yield</span> <span class="nx">readFile</span><span class="p">(</span><span class="s1">'/etc/fstab'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">r1</span> <span class="o">=</span> <span class="k">yield</span> <span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;/etc/fstab&#39;</span><span class="p">);</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">r1</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
-  <span class="kd">var</span> <span class="nx">r2</span> <span class="o">=</span> <span class="k">yield</span> <span class="nx">readFile</span><span class="p">(</span><span class="s1">'/etc/shells'</span><span class="p">);</span>
+  <span class="kd">var</span> <span class="nx">r2</span> <span class="o">=</span> <span class="k">yield</span> <span class="nx">readFile</span><span class="p">(</span><span class="s1">&#39;/etc/shells&#39;</span><span class="p">);</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">r2</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
 <span class="p">};</span>
 <span class="kd">var</span> <span class="nx">g</span> <span class="o">=</span> <span class="nx">gen</span><span class="p">();</span>
@@ -175,13 +173,11 @@ function thunkify(fn){
     <span class="nx">g</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
   <span class="p">});</span>
 <span class="p">});</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <p>就如同上面的，generator的执行过程实际上是将同一个回调函数，反复传入next的value结果中。这样我们就可以递归的来自动完成这个过程了。于是据诞生了基于thunk函数的执行器，也就是co了。</p>
 
-<h2 id="co">最简单的co</h2>
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">run</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+<h2>最简单的co</h2>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">run</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
   <span class="kd">var</span> <span class="nx">gen</span> <span class="o">=</span> <span class="nx">fn</span><span class="p">();</span>
   <span class="kd">function</span> <span class="nx">next</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">gen</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
@@ -191,9 +187,7 @@ function thunkify(fn){
   <span class="nx">next</span><span class="p">();</span>
 <span class="p">}</span>
 <span class="nx">run</span><span class="p">(</span><span class="nx">gen</span><span class="p">);</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <p>执行器帮我们不停地调用传入生成器的next函数，如果done为true的时候，代表迭代完成，会将值传给回调函数。</p>
 
 <p>当然前提是每一个一步函数都得是thunk函数的形式。</p>
@@ -201,8 +195,8 @@ function thunkify(fn){
 <p>thunk并不是generator函数的自动执行的唯一方案。我们需要的其实只是一个机制，循环调用，并且交出和返回程序的执行权，thunk可以做到，promise也可以做到。</p>
 
 <p>首先将readfile包装成promise形式
-<code class="highlighter-rouge">javascript
-var fs =require('fs');
+<code>javascript
+var fs =require(&#39;fs&#39;);
 var readFile  = function(fileName){
   return new Promise(function(resolve,reject){
     fs.readFile(fileName,function(error,data){
@@ -212,27 +206,23 @@ var readFile  = function(fileName){
   });
 }
 var gen = function* (){
-  var f1 = yield readFile('f1.js');
-  var f2 = yield readFile('f2.js');
+  var f1 = yield readFile(&#39;f1.js&#39;);
+  var f2 = yield readFile(&#39;f2.js&#39;);
   console.log(f1);
   console.log(f2);
 }
 </code></p>
 
 <p>然后手动执行下generator函数</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">g</span> <span class="o">=</span> <span class="nx">gen</span><span class="p">();</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">g</span> <span class="o">=</span> <span class="nx">gen</span><span class="p">();</span>
 <span class="nx">g</span><span class="p">.</span><span class="nx">next</span><span class="p">().</span><span class="nx">value</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
   <span class="nx">g</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="nx">data</span><span class="p">).</span><span class="nx">value</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
     <span class="nx">g</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
   <span class="p">});</span>
 <span class="p">})</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <p>写一个自动执行器</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">run</span><span class="p">(</span><span class="nx">gen</span><span class="p">){</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">run</span><span class="p">(</span><span class="nx">gen</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">g</span> <span class="o">=</span> <span class="nx">gen</span><span class="p">();</span>
   <span class="kd">function</span> <span class="nx">next</span><span class="p">(</span><span class="nx">data</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">g</span><span class="p">.</span><span class="nx">next</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
@@ -243,17 +233,14 @@ var gen = function* (){
   <span class="p">}</span>
   <span class="nx">next</span><span class="p">();</span>
 <span class="p">}</span>
-</code></pre>
-</div>
-
-<h2 id="co-1">co的源码</h2>
+</code></pre></div>
+<h2>co的源码</h2>
 
 <p>下面的是co源码的逐行阅读，先把参照的一些图片列举出来</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code>  <span class="c1">//array原生的slice</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">  <span class="c1">//array原生的slice</span>
   <span class="kd">var</span> <span class="nx">slice</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">;</span>
   <span class="c1">//这里写的这么古怪就只是想在es6的模块引入时更加舒服一些，参见下面的图片3</span>
-  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">co</span><span class="p">[</span><span class="s1">'default'</span><span class="p">]</span> <span class="o">=</span> <span class="nx">co</span><span class="p">.</span><span class="nx">co</span> <span class="o">=</span> <span class="nx">co</span><span class="p">;</span>
+  <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">co</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">co</span><span class="p">.</span><span class="nx">co</span> <span class="o">=</span> <span class="nx">co</span><span class="p">;</span>
   <span class="c1">//将传入的generator函数包装成一个返回promise的方法</span>
   <span class="c1">//这是一个独立的方法，就是将传入的函数包装成了co执行前的形式</span>
   <span class="nx">co</span><span class="p">.</span><span class="nx">wrap</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
@@ -276,9 +263,9 @@ var gen = function* (){
     <span class="c1">//总之不管怎样，他是把传进来的东西包装成了一个promise</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="p">{</span>
       <span class="c1">//这里是判断下gen是不是函数，generators function执行之后是一个object</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">gen</span> <span class="o">===</span> <span class="s1">'function'</span><span class="p">)</span> <span class="nx">gen</span> <span class="o">=</span> <span class="nx">gen</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">gen</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="nx">gen</span> <span class="o">=</span> <span class="nx">gen</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">args</span><span class="p">);</span>
       <span class="c1">//传入的不是generators函数，没有next，就直接resolve返回结果;这里是错误兼容而已，因为co就是基于generator的，传入其他的没有意义</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">gen</span> <span class="o">||</span> <span class="k">typeof</span> <span class="nx">gen</span><span class="p">.</span><span class="nx">next</span> <span class="o">!==</span> <span class="s1">'function'</span><span class="p">)</span> <span class="k">return</span> <span class="nx">resolve</span><span class="p">(</span><span class="nx">gen</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">gen</span> <span class="o">||</span> <span class="k">typeof</span> <span class="nx">gen</span><span class="p">.</span><span class="nx">next</span> <span class="o">!==</span> <span class="s1">&#39;function&#39;</span><span class="p">)</span> <span class="k">return</span> <span class="nx">resolve</span><span class="p">(</span><span class="nx">gen</span><span class="p">);</span>
       <span class="c1">//主要就是走下面的onFulfilled方法，这个方法返回的是一个promise(resolve或者reject)</span>
       <span class="nx">onFulfilled</span><span class="p">();</span>
       <span class="kd">function</span> <span class="nx">onFulfilled</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
@@ -312,8 +299,8 @@ var gen = function* (){
         <span class="kd">var</span> <span class="nx">value</span> <span class="o">=</span> <span class="nx">toPromise</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">ctx</span><span class="p">,</span> <span class="nx">ret</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
         <span class="c1">//如果成功转化为了promise，就在这个promise执行完了再调用onFulfilled方法</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="nx">isPromise</span><span class="p">(</span><span class="nx">value</span><span class="p">))</span> <span class="k">return</span> <span class="nx">value</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">onFulfilled</span><span class="p">,</span> <span class="nx">onRejected</span><span class="p">);</span>
-        <span class="k">return</span> <span class="nx">onRejected</span><span class="p">(</span><span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">'You may only yield a function, promise, generator, array, or object, '</span>
-          <span class="o">+</span> <span class="s1">'but the following object was passed: "'</span> <span class="o">+</span> <span class="nb">String</span><span class="p">(</span><span class="nx">ret</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">));</span>
+        <span class="k">return</span> <span class="nx">onRejected</span><span class="p">(</span><span class="k">new</span> <span class="nx">TypeError</span><span class="p">(</span><span class="s1">&#39;You may only yield a function, promise, generator, array, or object, &#39;</span>
+          <span class="o">+</span> <span class="s1">&#39;but the following object was passed: &quot;&#39;</span> <span class="o">+</span> <span class="nb">String</span><span class="p">(</span><span class="nx">ret</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">));</span>
       <span class="p">}</span>
     <span class="p">});</span>
   <span class="p">}</span>
@@ -326,7 +313,7 @@ var gen = function* (){
     <span class="c1">//判断传入的是不是generator，或者generator function，是的话，继续调用co函数进行循环~</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">isGeneratorFunction</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="o">||</span> <span class="nx">isGenerator</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="k">return</span> <span class="nx">co</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
     <span class="c1">//如果就是个普通的thunk函数，也把他转化为promise</span>
-    <span class="k">if</span> <span class="p">(</span><span class="s1">'function'</span> <span class="o">==</span> <span class="k">typeof</span> <span class="nx">obj</span><span class="p">)</span> <span class="k">return</span> <span class="nx">thunkToPromise</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;function&#39;</span> <span class="o">==</span> <span class="k">typeof</span> <span class="nx">obj</span><span class="p">)</span> <span class="k">return</span> <span class="nx">thunkToPromise</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
     <span class="c1">//如果是array或者object的话，也走相应地变换方法</span>
     <span class="k">if</span> <span class="p">(</span><span class="nb">Array</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="k">return</span> <span class="nx">arrayToPromise</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
     <span class="k">if</span> <span class="p">(</span><span class="nx">isObject</span><span class="p">(</span><span class="nx">obj</span><span class="p">))</span> <span class="k">return</span> <span class="nx">objectToPromise</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
@@ -373,11 +360,11 @@ var gen = function* (){
   <span class="p">}</span>
   <span class="c1">//检查是否是promise，果然就是简单的判断他有没有then方法</span>
   <span class="kd">function</span> <span class="nx">isPromise</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="s1">'function'</span> <span class="o">==</span> <span class="k">typeof</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">then</span><span class="p">;</span>
+    <span class="k">return</span> <span class="s1">&#39;function&#39;</span> <span class="o">==</span> <span class="k">typeof</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">then</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="c1">//这里判断是不是generator就是判断他的next和throw方法是不是function</span>
   <span class="kd">function</span> <span class="nx">isGenerator</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="s1">'function'</span> <span class="o">==</span> <span class="k">typeof</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">next</span> <span class="o">&amp;&amp;</span> <span class="s1">'function'</span> <span class="o">==</span> <span class="k">typeof</span> <span class="nx">obj</span><span class="p">.</span><span class="k">throw</span><span class="p">;</span>
+    <span class="k">return</span> <span class="s1">&#39;function&#39;</span> <span class="o">==</span> <span class="k">typeof</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">next</span> <span class="o">&amp;&amp;</span> <span class="s1">&#39;function&#39;</span> <span class="o">==</span> <span class="k">typeof</span> <span class="nx">obj</span><span class="p">.</span><span class="k">throw</span><span class="p">;</span>
   <span class="p">}</span>
   <span class="c1">//判断是否是generatorFunction就是判断了他的constructor的name</span>
   <span class="kd">function</span> <span class="nx">isGeneratorFunction</span><span class="p">(</span><span class="nx">obj</span><span class="p">)</span> <span class="p">{</span>
@@ -385,20 +372,20 @@ var gen = function* (){
     <span class="c1">//这里是为了解决没有constructor的对象，比如Object.create(null)</span>
     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">constructor</span><span class="p">)</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
     <span class="c1">//这里两种情况会返回true，一种是名字正确地，一种是他的prototype是generator</span>
-    <span class="k">if</span> <span class="p">(</span><span class="s1">'GeneratorFunction'</span> <span class="o">===</span> <span class="nx">constructor</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="s1">'GeneratorFunction'</span> <span class="o">===</span> <span class="nx">constructor</span><span class="p">.</span><span class="nx">displayName</span><span class="p">)</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;GeneratorFunction&#39;</span> <span class="o">===</span> <span class="nx">constructor</span><span class="p">.</span><span class="nx">name</span> <span class="o">||</span> <span class="s1">&#39;GeneratorFunction&#39;</span> <span class="o">===</span> <span class="nx">constructor</span><span class="p">.</span><span class="nx">displayName</span><span class="p">)</span> <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
     <span class="k">return</span> <span class="nx">isGenerator</span><span class="p">(</span><span class="nx">constructor</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span>
   <span class="p">}</span>
    <span class="c1">//就是通过constructor来判断是不是一个简单的对象</span>
   <span class="kd">function</span> <span class="nx">isObject</span><span class="p">(</span><span class="nx">val</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">return</span> <span class="nb">Object</span> <span class="o">==</span> <span class="nx">val</span><span class="p">.</span><span class="nx">constructor</span><span class="p">;</span>
   <span class="p">}</span>
-</code></pre>
-</div>
+</code></pre></div>
+<h3>图片3</h3>
 
-<h3 id="section-1">图片3</h3>
-<p><img alt="处理es6模块的引入" width="700px" src="..//pics//pic3.png" /></p>
+<p><img alt="处理es6模块的引入" width='700px' src="..//pics//pic3.png" /></p>
 
-<h3 id="promise-chaining">promise chaining导致的内存泄露</h3>
+<h3>promise chaining导致的内存泄露</h3>
+
 <p>这里只是源码的一个小注释，去看了不少东西</p>
 
 <p>阅读了https://github.com/tj/co/issues/180</p>
@@ -419,40 +406,41 @@ var gen = function* (){
 
 <p>接下来阅读https://github.com/promises-aplus/promises-spec/issues/179</p>
 
-<h3 id="promise">promise的平行执行</h3>
+<h3>promise的平行执行</h3>
+
 <p>promise被创建的时候就开始了他们的任务，是无法被执行的。他们只代表了结果的状态，将他们传给promise.all的时候甚至都是并行执行的。他不关心执行顺序，也不关心是否平行运行。
 tudo:看一下nodejs的多线程？？</p>
 
-<h3 id="co-2">Co的错误处理</h3>
+<h3>Co的错误处理</h3>
+
 <p>这里主要是涉及到generator.throw方法，可以在generator外部抛出异常，而在generator内部来catch住异常。</p>
 
-<p>co里面使用了这个属性，就可以针对某几个yield进行try catch，如果不进行处理，统一的会在后面的catch语句中<code class="highlighter-rouge">co(*fn).catch</code>找到。</p>
+<p>co里面使用了这个属性，就可以针对某几个yield进行try catch，如果不进行处理，统一的会在后面的catch语句中<code>co(*fn).catch</code>找到。</p>
 
-<h3 id="koa">Koa执行的理解</h3>
-<p><img alt="洋葱模型" width="600px" src="..//pics//pic4.png" /></p>
+<h3>Koa执行的理解</h3>
+
+<p><img alt="洋葱模型" width='600px' src="..//pics//pic4.png" /></p>
 
 <p>请求进来的时候会一次经过各个中间件进行执行，中间件之间的跳转是yield next，执行完了之后就会逆序执行。</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span> <span class="o">*</span><span class="p">(</span><span class="nx">next</span><span class="p">){</span>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="kd">function</span> <span class="o">*</span><span class="p">(</span><span class="nx">next</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">start</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span><span class="p">;</span>
   <span class="c1">//执行到这句话的时候跳到下一个中间件</span>
   <span class="k">yield</span> <span class="nx">next</span><span class="p">;</span>
   <span class="c1">//下面的中间件执行完了之后再执行下面的部分</span>
   <span class="kd">var</span> <span class="nx">ms</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Date</span> <span class="o">-</span> <span class="nx">start</span><span class="p">;</span>
-  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'%s %s - %s'</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">method</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span> <span class="nx">ms</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;%s %s - %s&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">method</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">url</span><span class="p">,</span> <span class="nx">ms</span><span class="p">);</span>
 <span class="p">});</span>
-</code></pre>
-</div>
+</code></pre></div>
+<h4>写两个yield next会有什么问题？</h4>
 
-<h4 id="yield-next">写两个yield next会有什么问题？</h4>
 <p>这里遇到yield next其实还是会继续向下执行下一个generator的，但是因为下一个中间件done的状态已经是true了，再次调用一下此前已经执行完的generator，调用返回的结果肯定还是done为true，因为此前已经执行完了。所以后面继续yield next是没有意义的~~</p>
 
 <p>Koa的中间件是运行在co函数之下的。</p>
 
-<h4 id="koa-1">Koa的中间件的实现</h4>
-<p>这里看到了一个Koa中间件的实现</p>
+<h4>Koa的中间件的实现</h4>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">gens</span> <span class="o">=</span> <span class="p">[];</span>
+<p>这里看到了一个Koa中间件的实现</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">gens</span> <span class="o">=</span> <span class="p">[];</span>
 <span class="kd">function</span> <span class="nx">use</span><span class="p">(</span><span class="nx">generetor</span><span class="p">){</span>
     <span class="nx">gens</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">generetor</span><span class="p">);</span>
 <span class="p">}</span>
@@ -474,7 +462,7 @@ tudo:看一下nodejs的多线程？？</p>
                 <span class="k">return</span><span class="p">;</span>
             <span class="p">}</span>
             <span class="c1">// 如果为yield后面接的为generator，传入co进行递归，并且将promise返回</span>
-            <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">value</span><span class="p">.</span><span class="nx">next</span> <span class="o">===</span> <span class="s2">"function"</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span><span class="p">.</span><span class="k">throw</span> <span class="o">===</span> <span class="s2">"function"</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">value</span><span class="p">.</span><span class="nx">next</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span><span class="p">.</span><span class="k">throw</span> <span class="o">===</span> <span class="s2">&quot;function&quot;</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">value</span> <span class="o">=</span> <span class="nx">co</span><span class="p">(</span><span class="nx">value</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
             <span class="p">}</span>
             <span class="k">if</span><span class="p">(</span><span class="nx">value</span><span class="p">.</span><span class="nx">then</span><span class="p">){</span>
@@ -502,19 +490,19 @@ tudo:看一下nodejs的多线程？？</p>
 <span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="o">*</span><span class="p">(</span><span class="nx">next</span><span class="p">){</span>
     <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">yield</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">resolve</span><span class="p">){</span>
         <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-            <span class="nx">resolve</span><span class="p">(</span><span class="s2">"step1"</span><span class="p">)</span>
+            <span class="nx">resolve</span><span class="p">(</span><span class="s2">&quot;step1&quot;</span><span class="p">)</span>
         <span class="p">},</span> <span class="mi">1000</span><span class="p">)</span>
     <span class="p">});</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span>
     <span class="k">yield</span> <span class="nx">next</span><span class="p">;</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"step2"</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;step2&quot;</span><span class="p">);</span>
 <span class="p">});</span>
 <span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="o">*</span><span class="p">(</span><span class="nx">next</span><span class="p">){</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"step3"</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;step3&quot;</span><span class="p">);</span>
     <span class="k">yield</span> <span class="nx">next</span><span class="p">;</span>
     <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">yield</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">resolve</span><span class="p">){</span>
         <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-            <span class="nx">resolve</span><span class="p">(</span><span class="s2">"step4"</span><span class="p">)</span>
+            <span class="nx">resolve</span><span class="p">(</span><span class="s2">&quot;step4&quot;</span><span class="p">)</span>
         <span class="p">},</span> <span class="mi">1000</span><span class="p">)</span>
     <span class="p">});</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span>
@@ -522,20 +510,19 @@ tudo:看一下nodejs的多线程？？</p>
 <span class="nx">use</span><span class="p">(</span><span class="kd">function</span><span class="o">*</span><span class="p">(){</span>
     <span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">yield</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">resolve</span><span class="p">){</span>
         <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-            <span class="nx">resolve</span><span class="p">(</span><span class="s2">"step5"</span><span class="p">)</span>
+            <span class="nx">resolve</span><span class="p">(</span><span class="s2">&quot;step5&quot;</span><span class="p">)</span>
         <span class="p">},</span> <span class="mi">1000</span><span class="p">)</span>
     <span class="p">});</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">d</span><span class="p">);</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"step6"</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;step6&quot;</span><span class="p">);</span>
 <span class="p">});</span>
 <span class="nx">trigger</span><span class="p">();</span>
-</code></pre>
-</div>
-
+</code></pre></div>
 <p>tudo:啥叫链式的generator??</p>
 
-<h4 id="koa-2">Koa的运行顺序图</h4>
-<p><img alt="Koa的运行顺序" width="800px" src="..//pics//pic5.png" /></p>
+<h4>Koa的运行顺序图</h4>
+
+<p><img alt="Koa的运行顺序" width='800px' src="..//pics//pic5.png" /></p>
 
 <p>这张图非常详细了，原来本身的respond，以及自己定义的一些中间件统一的会被整成一个generator，然后交给co来执行。</p>
 

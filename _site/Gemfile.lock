@@ -1,5 +1,5 @@
 GEM
-  remote: https://rubygems.org/
+  remote: https://ruby.taobao.org/
   specs:
     colorator (0.1)
     ffi (1.9.10)
@@ -45,4 +45,4 @@ DEPENDENCIES
   pygments.rb
 
 BUNDLED WITH
-   1.11.2
+   1.12.5

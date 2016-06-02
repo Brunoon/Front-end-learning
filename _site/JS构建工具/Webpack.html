@@ -21,14 +21,18 @@
 </section>
 
     <section class="main-content">
-      <h1 id="webpack">Webpack</h1>
-<p>## 新一代的前端构建工具
-好吧，gulp感觉还没用多久呢，怎么Webpack又突然火了呢..</p>
+      <h1>Webpack</h1>
 
-<h2 id="section">使用初步小结</h2>
-<p>初次使用是配合react,对于less文件也可以进行require操作而进行打包感觉非常奇特，只需要在配置文件定好的entry中require需要的less文件，然后再配置文件的module的写一个loader：<code class="highlighter-rouge">style-loader!css-loader!less-loader</code>就可以了。</p>
+<h2>新一代的前端构建工具</h2>
 
-<h2 id="less-loaderbug">less-loader的小bug</h2>
+<p>好吧，gulp感觉还没用多久呢，怎么Webpack又突然火了呢..</p>
+
+<h2>使用初步小结</h2>
+
+<p>初次使用是配合react,对于less文件也可以进行require操作而进行打包感觉非常奇特，只需要在配置文件定好的entry中require需要的less文件，然后再配置文件的module的写一个loader：<code>style-loader!css-loader!less-loader</code>就可以了。</p>
+
+<h2>less-loader的小bug</h2>
+
 <p>居然right: -1px\0;这种语法回报错误！！</p>
 
       <div id="disqus_thread"></div>

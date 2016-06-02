@@ -21,91 +21,81 @@
 </section>
 
     <section class="main-content">
-      <h1 id="commonjscmdamdcortex">Commonjs,CMD,AMD和cortex介绍</h1>
+      <h1>Commonjs,CMD,AMD和cortex介绍</h1>
 
-<p>这里只是一些入门级别的认识，深入一些的可查看我的阅读笔记<a href="https://github.com/panyifei/learning/blob/master/Javascript框架设计/模块加载系统.md">模块加载系统</a></p>
+<p>这里只是一些入门级别的认识，深入一些的可查看我的阅读笔记<a href="https://github.com/panyifei/learning/blob/master/Javascript%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1/%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD%E7%B3%BB%E7%BB%9F.md">模块加载系统</a></p>
 
-<h2 id="commonjs">Commonjs规范</h2>
+<h2>Commonjs规范</h2>
 
 <p>commonjs是服务器模块的规范，<strong>nodejs</strong>实现了规范</p>
 
 <ul>
-  <li>
-    <p>单独的文件就是一个模块，每个模块拥有自己的作用域；</p>
-  </li>
-  <li>
-    <p>通过<code class="highlighter-rouge">module.exports</code>来将对象和方法抛出去；</p>
-  </li>
-  <li>
-    <p>通过<code class="highlighter-rouge">require</code>来引入，就可以访问挂载的对象，并且直接调用变量；</p>
-  </li>
+<li><p>单独的文件就是一个模块，每个模块拥有自己的作用域；</p></li>
+<li><p>通过<code>module.exports</code>来将对象和方法抛出去；</p></li>
+<li><p>通过<code>require</code>来引入，就可以访问挂载的对象，并且直接调用变量；</p></li>
 </ul>
 
-<h3 id="section">每个模块</h3>
+<h3>每个模块</h3>
 
 <ul>
-  <li>每个都有个module对象，这个对象不是全局变量，而是<strong>本地变量</strong></li>
-  <li>exports  = module.exports，可以放弃使用exports，只使用module.exports</li>
+<li>每个都有个module对象，这个对象不是全局变量，而是<strong>本地变量</strong></li>
+<li>exports  = module.exports，可以放弃使用exports，只使用module.exports</li>
 </ul>
 
 <blockquote>
-  <p><strong>CommonJS</strong>就是个<strong>同步加载方案</strong>，因为服务器一般文件都在本地硬盘，所以加载比较快</p>
+<p><strong>CommonJS</strong>就是个<strong>同步加载方案</strong>，因为服务器一般文件都在本地硬盘，所以加载比较快</p>
 </blockquote>
 
-<hr />
+<hr>
 
-<h2 id="amd">AMD规范</h2>
+<h2>AMD规范</h2>
 
-<p>AMD是异步模块的定义，模块的加载不影响后面的语句，所有的依赖的语句，会被放在一个加载完才执行的回调函数中,AMD推崇<code class="highlighter-rouge">依赖前置</code></p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>require(['zepto'],function($){
-	$('body');
+<p>AMD是异步模块的定义，模块的加载不影响后面的语句，所有的依赖的语句，会被放在一个加载完才执行的回调函数中,AMD推崇<code>依赖前置</code></p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">require([&#39;zepto&#39;],function($){
+    $(&#39;body&#39;);
 });
-</code></pre>
-</div>
+</code></pre></div>
 <p>参考了<a href="http://www.ruanyifeng.com/blog/2012/10/asynchronous_module_definition.html">阮一峰</a>老师的文章</p>
 
-<hr />
+<hr>
 
-<p>##Requirejs
-根据AMD实现了异步的加载，并且管理了<strong>模块的依赖性</strong>
+<h2>Requirejs</h2>
+
+<p>根据AMD实现了异步的加载，并且管理了<strong>模块的依赖性</strong>
 简单使用就是去官网下载下，然后data-main指定主入口模块</p>
 
 <p>主模块的代码遵循AMD：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>require([],function(){})
-</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-text" data-lang="text">require([],function(){})
+</code></pre></div>
 <p>加载的模块的写法：</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>define([],function(){})
-</code></pre>
-</div>
-
+<div class="highlight"><pre><code class="language-text" data-lang="text">define([],function(){})
+</code></pre></div>
 <p>参考了<a href="http://www.ruanyifeng.com/blog/2012/11/require_js.html">阮一峰</a>老师的文章</p>
 
-<hr />
+<hr>
 
-<h2 id="cortex">Cortex</h2>
+<h2>Cortex</h2>
+
 <p><a href="https://github.com/kaelzhang">张颖老师</a>的<a href="https://github.com/cortexjs/cortex">cortex</a>，是一个前端解决方案，类似于npm，提供了模块的管理，加载，本地调试。目前用在点评网的所有的前端项目上</p>
 
-<p>###思想
-将多余的事情交给框架</p>
+<h3>思想</h3>
+
+<p>将多余的事情交给框架</p>
 
 <p>让前端工程师注重在业务逻辑上</p>
 
 <p>解决公共模块版本问题</p>
 
-<h3 id="tip">Tip</h3>
-<ul>
-  <li>一个页面可以通过引入多个facade来引入多个项目的前端资源，这样来解耦了页面</li>
-  <li>这些的模块依赖是在服务器端已然直销并且可以拼装出来了，通过一些算法进行合并和修饰</li>
-  <li>cortex通过Semver来区别进行版本的管理，来看是否兼容来决定加载几个依赖的，nodejs是只要依赖的就加载，maven是只加载最新的，都不是最优实现</li>
-  <li>cortex将静态资源统一加上了版本号来让cdn区分是不是该去拿最新的，当发现要更新时，cdn会与我们的静态服务器进行通信，来拿取。</li>
-  <li>依赖树的信息通过neocortex-4j来吐到页面上，可以并行加载</li>
-  <li>combo的好处在于一个请求把所有的数据拉回来，其实就是这个请求打到cdn上，cdn发现没有这个结果，就回源，打到我们的服务器上，我们的服务器就会去拼装js</li>
-</ul>
+<h3>Tip</h3>
 
+<ul>
+<li>一个页面可以通过引入多个facade来引入多个项目的前端资源，这样来解耦了页面</li>
+<li>这些的模块依赖是在服务器端已然直销并且可以拼装出来了，通过一些算法进行合并和修饰</li>
+<li>cortex通过Semver来区别进行版本的管理，来看是否兼容来决定加载几个依赖的，nodejs是只要依赖的就加载，maven是只加载最新的，都不是最优实现</li>
+<li>cortex将静态资源统一加上了版本号来让cdn区分是不是该去拿最新的，当发现要更新时，cdn会与我们的静态服务器进行通信，来拿取。</li>
+<li>依赖树的信息通过neocortex-4j来吐到页面上，可以并行加载</li>
+<li>combo的好处在于一个请求把所有的数据拉回来，其实就是这个请求打到cdn上，cdn发现没有这个结果，就回源，打到我们的服务器上，我们的服务器就会去拼装js</li>
+</ul>
 
       <div id="disqus_thread"></div>
 <script>
