@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en-us">
-
   <head>
   <meta charset="UTF-8">
   <title>前端技术</title>
@@ -9,6 +8,7 @@
   <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/font-awesome.min.css">
 </head>
 
   <body>
@@ -20,9 +20,7 @@
   <!-- <a href="#" class="btn">Download .tar.gz</a> -->
 </section>
 
-
     <section class="main-content">
-
       <h1 id="history">history相关</h1>
 <p><strong>HTML5</strong> history为window添加了<strong>pushState</strong>，<strong>replaceState</strong>这两个方法，还提供了一个事件<strong>popstate</strong>。具体的方法就不讲解了，直接去官网查看吧。<a href="https://developer.mozilla.org/en-US/docs/Web/API/History_API">Mozilla</a></p>
 
@@ -140,23 +138,62 @@
 <h2 id="section-4">后言</h2>
 <p>这个模块毕竟有兼容性问题，最后使用了hashchange来实现了，参见<a href="https://github.com/panyifei/learning/blob/master/HTML5/hashchange事件.md">hashchange事件</a>。</p>
 
+      <div id="disqus_thread"></div>
+<script>
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = '//panyifei.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
 
-      <footer class="site-footer">
-  <span class="site-footer-owner"><a href="">前端技术</a> is maintained by <a href="https://github.com/panyifei">panyifei</a>.</span>
+      <!-- <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">前端技术</a> is maintained by <a href="https://github.com/panyifei">逸飞</a>.</span>
+</footer> -->
+
+<footer>
+	<div class="span-inline">
+		
+			<span>
+				<a target="_blank" href="https://github.com/panyifei">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-github fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="https://www.zhihu.com/people/pan-yi-fei-41">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">知</i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="http://www.jianshu.com/users/3b9067fb7edf">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">简</i>
+					</span>
+				</a>
+			</span>
+		
+	</div>
+	<p class="copyright">
+		Copyright &copy; 前端技术 2016
+		<br>
+		Theme by <a href="https://github.com/pietromenna">Pietromenna</a>
+	</p>
 </footer>
 
-
     </section>
-    <div id="disqus_thread"></div>
-    <script>
-      (function() { // DON'T EDIT BELOW THIS LINE
-      var d = document, s = d.createElement('script');
-      s.src = '//panyifei.disqus.com/embed.js';
-      s.setAttribute('data-timestamp', +new Date());
-      (d.head || d.body).appendChild(s);
-      })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-    <script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
   </body>
 </html>

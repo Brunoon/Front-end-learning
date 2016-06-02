@@ -2,10 +2,8 @@
   box-sizing: border-box;
 }
 
-#disqus_thread{
-  overflow: hidden;
-  width: 65%;
-  margin: 0 auto;
+ul{
+  list-style: none;
 }
 
 body {
@@ -246,3 +244,25 @@ a {
 
 .site-footer-credits {
   color: #819198; }
+
+/*评论*/
+#disqus_thread{
+    margin-top:30px;
+}
+/*找过来的底部*/
+footer{
+    margin-top: 70px;
+}
+.span-inline{
+    text-align:center;
+}
+.span-inline span{
+    width: 100px;
+}
+.span-inline span a{
+    color: #404040;
+    font-size: 1.2em;
+}
+.copyright{
+    text-align:center;
+}

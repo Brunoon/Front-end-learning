@@ -5,8 +5,12 @@ baseurl:      "/Front-end-learning"
 
 # About/contact
 author:
-  name:       panyifei
+  name:       逸飞
   url:        https://github.com/panyifei
 
 #Others
 markdown: kramdown
+
+zhihu_username:     pan-yi-fei-41
+github_username:    panyifei
+jianshu_username:   3b9067fb7edf

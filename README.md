@@ -109,8 +109,6 @@ title: {{ site.name }}
 ## 工具使用
 - [photoshop简单使用][12]
 
-使用github来管理也是希望与大家分享并得到纠正。欢迎感兴趣的同学star~
-
 [1]:./框架以及规范/模块引入/Commonjs,CMD,AMD和cortex介绍
 [3]:./框架以及规范/ECMAScript6/Promise以及各种异步的学习
 [4]:./框架以及规范/HTML5/history相关
@@ -174,7 +172,7 @@ title: {{ site.name }}
 [63]:./框架以及规范/HTML5/Web-Workers
 [64]:./框架以及规范/模块引入/Requirejs学习以及实现
 [65]:./框架以及规范/模块引入/Requirejs源码阅读
-[66]:./框架以及规范/模块引入/TypeScript
+[66]:./框架以及规范/TypeScript
 [67]:./读书笔记/高性能Javascript/5章字符串和正则表达式
 [68]:./读书笔记/高性能Javascript/6章快速响应的用户界面
 [69]:./前端基础/关于this
