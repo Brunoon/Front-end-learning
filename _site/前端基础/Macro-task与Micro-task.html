@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  
+
   <head>
   <meta charset="UTF-8">
   <title>Front-end-learning</title>
@@ -22,7 +22,7 @@
 
 
     <section class="main-content">
-      
+
       <h1 id="macro-taskmicro-task">macro-task与micro-task</h1>
 <p>在挂起任务时，JS 引擎会将所有任务按照类别分到这两个队列中，首先在 macrotask 的队列（这个队列也被叫做 task queue）中取出第一个任务，执行完毕后取出 microtask 队列中的所有任务顺序执行；之后再取 macrotask 任务，周而复始，直至两个队列的任务都取完。</p>
 
@@ -43,6 +43,16 @@ micro-task: process.nextTick, Promises（这里指浏览器实现的原生 Promi
 
 
     </section>
-
+    <div id="disqus_thread"></div>
+    <script>
+      (function() { // DON'T EDIT BELOW THIS LINE
+      var d = document, s = d.createElement('script');
+      s.src = '//panyifei.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+    <script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
   </body>
 </html>
