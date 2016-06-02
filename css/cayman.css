@@ -2,14 +2,14 @@
   box-sizing: border-box;
 }
 
-ul{
+ul,li{
   list-style: none;
 }
 
 body {
   padding: 0;
   margin: 0;
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 12px/1.5 "Microsoft YaHei","Hiragino Sans GB", Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.5;
   color: #606c71; }
@@ -81,6 +81,10 @@ a {
   @media screen and (max-width: 42em) {
     .project-name {
       font-size: 1.75rem; } }
+
+.project-name a{
+     color:#fff;
+}
 
 .project-tagline {
   margin-bottom: 2rem;
