@@ -2,7 +2,7 @@
   box-sizing: border-box;
 }
 
-#layout{
+#disqus_thread{
   overflow: hidden;
   width: 65%;
   margin: 0 auto;
