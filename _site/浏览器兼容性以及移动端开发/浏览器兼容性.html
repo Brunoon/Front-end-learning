@@ -75,6 +75,17 @@
 
 <p>想单独hack ie8，就加个新的选择器覆盖一下好了，比如:root。</p>
 
+<h4>chrome上input自带的上下的按钮</h4>
+
+<p>去除chrome自带的上下的按钮</p>
+<div class="highlight"><pre><code class="language-css" data-lang="css">    <span class="nt">input</span><span class="o">:</span><span class="nd">:-webkit-outer-spin-button</span><span class="o">,</span>
+    <span class="nt">input</span><span class="o">:</span><span class="nd">:-webkit-inner-spin-button</span><span class="p">{</span>
+        <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">appearance</span><span class="o">:</span> <span class="k">none</span> <span class="cp">!important</span><span class="p">;</span>
+        <span class="k">margin</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p><img alt="input number" width='700px' src="pics//inputNumber.png" /></p>
+
       <div id="disqus_thread"></div>
 <script>
   (function() { // DON'T EDIT BELOW THIS LINE
