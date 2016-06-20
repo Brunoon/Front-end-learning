@@ -70,6 +70,7 @@ title: {{ site.name }}
 - [页面渲染过程][53]
 - [CSS布局][54]
 - [关于this][69]
+- [Web Components][73]
 
 ## 读书笔记
 - Javascript高级程序设计(23章还没看，直接先看24章了)
@@ -109,6 +110,7 @@ title: {{ site.name }}
 ## 工具使用
 - [photoshop简单使用][12]
 
+<<<<<<< HEAD
 [1]:./框架以及规范/模块引入/Commonjs,CMD,AMD和cortex介绍
 [3]:./框架以及规范/ECMAScript6/Promise以及各种异步的学习
 [4]:./框架以及规范/HTML5/history相关
@@ -179,3 +181,4 @@ title: {{ site.name }}
 [70]:./读书笔记/高性能Javascript/7章Ajax
 [71]:./框架以及规范/React/React文档阅读
 [72]:./读书笔记/图解HTTP
+[73]:./前端基础/Web Component
