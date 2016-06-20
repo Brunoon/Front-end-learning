@@ -180,4 +180,4 @@ title: {{ site.name }}
 [70]:./读书笔记/高性能Javascript/7章Ajax
 [71]:./框架以及规范/React/React文档阅读
 [72]:./读书笔记/图解HTTP
-[73]:./前端基础/Web-Component
+[73]:./前端基础/Web-Components
