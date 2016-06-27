@@ -41,19 +41,17 @@
 <div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">SuperButton</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">registerElement</span><span class="p">(</span><span class="s1">&#39;super-button&#39;</span><span class="p">);</span>
 <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="k">new</span> <span class="nx">SuperButton</span><span class="p">());</span>
 </code></pre></div>
-<p>也可以传入元素的prototype
-<code>javascript
-var buttonProto = Object.create(HTMLElement.prototype);
-buttonProto.print = function() {
-  console.log(&#39;Super Button!&#39;);
-}
-var SuperButton = document.registerElement(&#39;super-button&#39;, {
-  prototype: buttonProto
-});
-var supperButton = document.querySelector(&#39;super-button&#39;);
-supperButton.print();
-</code></p>
-
+<p>也可以传入元素的prototype</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">buttonProto</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">HTMLElement</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span>
+<span class="nx">buttonProto</span><span class="p">.</span><span class="nx">print</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Super Button!&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">SuperButton</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">registerElement</span><span class="p">(</span><span class="s1">&#39;super-button&#39;</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">prototype</span><span class="o">:</span> <span class="nx">buttonProto</span>
+<span class="p">});</span>
+<span class="kd">var</span> <span class="nx">supperButton</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;super-button&#39;</span><span class="p">);</span>
+<span class="nx">supperButton</span><span class="p">.</span><span class="nx">print</span><span class="p">();</span>
+</code></pre></div>
 <p>我们还可以用它来继承，或者添加属性和方法，很强大。</p>
 
 <p>然后它还提供了一些很有用的回调函数，通过这些回调函数，我们可以决定什么时候操作DOM之类的。</p>
@@ -75,6 +73,12 @@ supperButton.print();
 <h2>HTML Import</h2>
 
 <p>长久以来，网页可以加载外部的样式表，脚本，图片，多媒体但是其实没有什么好的办法来加载其他网页的，iframe和ajax都只能解决部分问题。HTML Import就是为了解决这个问题提出的。</p>
+
+<p>用于将外部的HTML文档加载进当前的文档，我们可以将html，css，js封装在一个文件里。</p>
+
+<p>这里有个貌似大问题，这里必须得同域！！</p>
+
+<p>我们除了使用link标签，还可以使用javascript来调用link元素，完成HTML Import。</p>
 
 <p>在模板中创建HTML代码和子DOM树，我们可以通过不同的物理文件来组织代码，通过link标签来引入这些文件，就像我们在PHP中引入js一样。</p>
 
@@ -152,6 +156,10 @@ supperButton.print();
 <p>react的组件生态思想和webcomponent很类似，但是他做了更多的事情，除了web Component，react想做的是platform component。</p>
 
 <p>angular2.0已明确提出将支持Node绑定、模板集成。也开始支持web component规范，代表这个规范在将来肯定是会变成趋势的。</p>
+
+<p>参考：</p>
+
+<p>http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom-201/#toc-style-scoped</p>
 
       <div id="disqus_thread"></div>
 <script>

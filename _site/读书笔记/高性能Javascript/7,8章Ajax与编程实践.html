@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta charset="UTF-8">
+  <title>前端技术</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/highlight.css">
+</head>
+
+  <body>
+    <section class="page-header">
+    <h1 class="project-name"><a href="/Front-end-learning/README">前端技术</a></h1>
+    <h2 class="project-tagline">逸飞的前端打怪日常，主要是javascript</h2>
+    <a href="https://github.com/panyifei/Front-end-learning" class="btn">View on GitHub</a>
+    <a href="https://github.com/panyifei/Front-end-learning/archive/master.zip" class="btn">Download .zip</a>
+</section>
+
+    <section class="main-content">
+      <h1>7章Ajax</h1>
+
+<p>Ajax从最基本层面说，是一种与服务器建立通信而无需重载页面的方法，数据可以从服务器获取或发送给服务器。有很多种方法建立通信，各有各自的优点和限制。</p>
+
+<h2>请求数据的方式</h2>
+
+<ul>
+<li>XMLHttpRequest</li>
+<li>动态脚本注入</li>
+<li>iframes</li>
+<li>Comet</li>
+<li>Multipart XHR</li>
+</ul>
+
+<p>Comet和iframes作为数据传输技术往往用在极端情况下，这里就不讨论了。</p>
+
+<p>XHR其实也什么好说的，毕竟现在的使用范围那么广，尽管是同域限制。注意post和get的区别，当我们经常请求某一个数据的时候，可以使用GET，因为get的请求会被缓存。当我们参数较长的时候，我们应该用Post来获得数据，因为IE限制URL长度，过长时会导致请求的URL被截断。</p>
+
+<p>动态脚本注入的话，实际上就是JSONP，解决跨域的较好的方法。但是只能使用get请求，并不能使用post，关于跨域的问题我会重新整理一遍。</p>
+
+<p>MXHR其实和XHR非常类似，也是同样的请求，不过是将一些静态资源在后端进行base64位的编码，然后通过一个请求传到前端，然后我们可以在readyState等于3的时候看下传到的资源，不过这件事情的价值不大..首先是我们可以直接base64放在文档里面，其次每个图片的base64里面都有一些部分是申明的会被浪费，雪碧图说不定效果还更好一些，而且最大的问题，这些资源不能被浏览器缓存。</p>
+
+<h2>发送数据</h2>
+
+<p>我们通过get和post方法都是可以发送数据，GET会更快一些，一个GET请求只发送一个数据包，而一个POST请求，至少要发送两个数据包(一个装载头信息，一个装POST正文。POST更适合发送大量数据，他不关心额外数据包的数量。另一个原因是IE对于URL长度有限制，GET会被限制。</p>
+
+<p>Beacons</p>
+
+<p>这个技术我们非常类似于动态脚本注入，就是通过设置<code>img的src</code>来发送请求(而且并不用创建img元素或者将它插入DOM中，只需要new Image()就行了)。我们只能监听onload事件来看请求是否成功，或者监听this.width来根据服务器返回的图片的宽度来得到响应。其实这个东西使用过，用来监听一些网络状况比较好使，打点嘛</p>
+
+<h2>数据格式</h2>
+
+<h3>XML</h3>
+
+<p>AJAX最开始的时候，使用的是XML作为格式，因为通用性极佳，操作严格，易于验证</p>
+
+<p>但是xml太冗余，有效数据比例很低，而且限制于结构，我们需要针对每段XML写不同的解析的工具，很麻烦。我们可能得使用getElementByTagName</p>
+
+<p>但是现在高级点的浏览器都有xPath来通过一个路径来获取值，但是低级的浏览器不支持，IE8有类似的，就算用也得使用getElementByTagName来写降级的代码。</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">path</span><span class="o">=</span><span class="s2">&quot;/bookstore/book/title&quot;</span><span class="p">;</span>
+<span class="nx">xml</span><span class="p">.</span><span class="nx">selectNodes</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span>
+</code></pre></div>
+<h3>JSON</h3>
+
+<p>JSON是一种使用Javascript对象和数组直接量编写的轻量级且易于解析的数据格式。我们解析JSON很简单，只要JSON.parse和JSON.stringify就可以。</p>
+
+<p>支持性还可以，正常的浏览器都可以，IE8以及以上是支持的。不支持的话，我们可以有简单的polyfill。</p>
+
+<p>parse方法最简单的polyfill就是用eval执行一遍直接就能转化为对象了。</p>
+
+<p>这里介绍了一些无聊的压缩传输的方法，没有价值。</p>
+
+<p>接下来的几小节讲的东西都没有什么价值。</p>
+
+<h1>8章编程实践</h1>
+
+<h2>避免双重求值</h2>
+
+<p>有四种方法可以执行一段字符串</p>
+
+<ul>
+<li>eval()</li>
+<li>Function()构造函数</li>
+<li>setTimeout</li>
+<li>setInterval</li>
+</ul>
+
+<p>首先代码会以正常的方式求值，然后在执行过程中对包含在字符串中的代码发起另一个求值运算。代价非常昂贵，最好不要使用。</p>
+
+<h2>使用Object/Array直接量</h2>
+
+<p>相比于new Array，我们还是使用直接量来创建的效果是最好的。</p>
+
+<h2>避免重复工作</h2>
+
+<p>就是比如一些浏览器特性的检测操作，每次调用某个方法的时候都会重复调用。这个时候就可以调用惰性载入函数或者延迟加载。就是高程中也提过的，判断后，使用新函数替换原函数，然后以后的每次调用都是调的新函数了。或者使用申明时就检测一次的方法。</p>
+
+<h2>使用快的部分和原生的方法</h2>
+
+<p>就是说位操作的速度肯定会比一般的数学的操作要快得多</p>
+
+<p>我们在能够使用原生的值或者原生的方法的时候尽量使用原生的，速度会快很多。因为他们都是浏览器自带的方法(典型的例子是选择器，jquery的选择速度已经很快了，但是使用querySelector还是能快个10%)，早就编译成了C++的代码，会更快一些。(chrome来说差别不大，因为都是使用的即时js编译器)</p>
+
+      <div id="disqus_thread"></div>
+<script>
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = '//panyifei.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
+
+      <!-- <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">前端技术</a> is maintained by <a href="https://github.com/panyifei">逸飞</a>.</span>
+</footer> -->
+
+<footer>
+	<div class="span-inline">
+		
+			<span>
+				<a target="_blank" href="https://github.com/panyifei">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-github fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="https://www.zhihu.com/people/pan-yi-fei-41">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">知</i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="http://www.jianshu.com/users/3b9067fb7edf">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">简</i>
+					</span>
+				</a>
+			</span>
+		
+	</div>
+	<p class="copyright">
+		Copyright &copy; 前端技术 2016
+		<br>
+		Owned by <a href="https://github.com/panyifei">潘逸飞</a>
+	</p>
+</footer>
+
+    </section>
+  </body>
+</html>
