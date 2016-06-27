@@ -3,9 +3,23 @@
   {% include head.html %}
   <body>
     {% include page-header.html %}
+    <h2 style="text-align:center">
+        <output id="cards">
+          <figure>
+            <img src="webcomponent/user.png" width="267" height="302">
+          </figure>
+        </output>
+    </h2>
     <section class="main-content">
       {{ content }}
       {% include page-footer.html %}
     </section>
   </body>
+  <script>
+    var output = document.querySelector('#cards');
+    github = document.createElement('github-card');
+    github.setAttribute('user', 'panyifei');
+    output.innerHTML = '';
+    output.appendChild(github);
+  </script>
 </html>
