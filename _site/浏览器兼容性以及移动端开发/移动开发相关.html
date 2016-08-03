@@ -167,7 +167,11 @@ input::-webkit-search-cancel-button{
 
 <p>-webkit-overflow-scrolling: touch;</p>
 
-<p>设置了这个属性之后，滑动变的更丝滑了</p>
+<p>设置了这个属性之后，在手机上的滑动变的更丝滑了</p>
+
+<h3>emoji表情插入后端数据库出错</h3>
+
+<p>因为数据库是UTF-8的，而手机的emoji表情是UTF-16位的。插入数据库就会出错，所以js做了层阻拦，就是用一层正则&#39;/[\uD800-\uDBFF][\uDC00-\uDFFF]/g&#39;检验了一下，但是阻止emoji有些不人性化啊。</p>
 
       <div id="disqus_thread"></div>
 <script>

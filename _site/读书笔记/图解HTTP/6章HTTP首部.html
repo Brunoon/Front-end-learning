@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta charset="UTF-8">
+  <title>前端技术</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/highlight.css">
+</head>
+
+  <body>
+    <section class="page-header">
+    <h1 class="project-name"><a href="/Front-end-learning/README">前端技术</a></h1>
+    <h2 class="project-tagline">逸飞的前端打怪日常，主要是javascript</h2>
+    <a href="https://github.com/panyifei/Front-end-learning" class="btn">View on GitHub</a>
+    <a href="https://github.com/panyifei/Front-end-learning/archive/master.zip" class="btn">Download .zip</a>
+</section>
+
+    <section class="main-content">
+      <h1>6章HTTP首部</h1>
+
+<p>HTTP协议的请求和响应报文中必定包含HTTP首部。</p>
+
+<p>HTTP请求报文是由方法，URI，HTTP版本和首部字段</p>
+
+<p>HTTP响应是由HTTP版本，状态码和首部字段组成</p>
+
+<h2>首部内容</h2>
+
+<p>首部字段给浏览器和服务器提供报文主体大小，使用的语言，认证信息等内容。</p>
+
+<p>一般就是首部字段名:字段值。</p>
+
+<p>注意字段值可以有多个值，由逗号分隔。</p>
+
+<p>若是重复了话规范没有明确，得看浏览器内部处理逻辑的不同。</p>
+
+<p>分为4种类型：</p>
+
+<ul>
+<li>通用首部字段：请求和响应报文都会使用的首部，9个</li>
+<li>请求首部字段：请求使用的首部，补充了请求的增加内容，客户端信息，响应内容优先级等信息</li>
+<li>响应首部字段：补充了响应的附加内容，也会要求客户端附加额外的内容信息</li>
+<li>实体首部字段：针对实体部分使用的首部，补充了资源内容的更新时间</li>
+</ul>
+
+<p>HTTP1.1定义了47种首部字段。先不直接列举了。</p>
+
+<p>注意，除了规范中的这些个首部字段，还有定义在其他RFC的首部字段，比如Cookie，Set-Cookie等使用频率也很高。</p>
+
+<p>HTTP首部将定义成缓存代理和非缓存代理的行为，分成了2种。</p>
+
+<ul>
+<li>端到端首部：此类别的首部会发送到最终的接收目标，且必须保存在缓存生成的响应中，必须被转发。</li>
+<li>逐跳首部：只对单次转发有效，会因为缓存和代理而不再转发。如果要使用hop-by-hop首部，需要提供Connection首部。有8个</li>
+</ul>
+
+<h2>通用首部字段</h2>
+
+<ul>
+<li>Cache-control：操作缓存的工作机制。比如max-age是几秒内不会重新请求服务器，s-maxage是对多位用户使用的公共缓存服务器；no-cache是不缓存过期的，就是说缓存服务器还是会缓存，只是每次都会从服务器确认下。no-store才是不能存储；public指可以向任意用户提供缓冲，而private则是特定用户；min-fresh要求缓存服务器返回至少还未过指定时间的缓存资源；max-stale如果不设置值的话，那么多了多久都照常接收，如果设置了值，那么哪怕过期，只要在值的时间范围内，就接收；only-if-cached这个要求只有缓存服务器本地有缓存的时候才会要求返回，否则返回状态码504；must-revalidate要求代理向源服务器验证时间，会忽略max-stale；no-transform规定在请求还是响应中，缓存不能改变主题的媒体类型，可以防止压缩图片等类似操作；他还可以扩展字段，比如community，不过这些个扩展只对能理解他的缓存服务器来说才是有意义的。</li>
+<li>Connection：控制不再转发给代理的字段；管理持久化连接。就是说他能通知代理把一些头部删掉然后发给服务器。然后为了旧版本的HTTP也持久化连接，设置Connection:keep-alive，当想断开连接的时候，就返回close就好了。</li>
+<li>Date：表示创建报文的日期和时间。</li>
+<li>Pragma：no-cache这个字段主要是历史遗留字段，和Cache-Control：no-cache一样。为了兼容HTTP1.0.</li>
+<li>Trailer：</li>
+</ul>
+
+      <div id="disqus_thread"></div>
+<script>
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = '//panyifei.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
+
+      <!-- <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">前端技术</a> is maintained by <a href="https://github.com/panyifei">逸飞</a>.</span>
+</footer> -->
+
+<footer>
+	<div class="span-inline">
+		
+			<span>
+				<a target="_blank" href="https://github.com/panyifei">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-github fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="https://www.zhihu.com/people/pan-yi-fei-52">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">知</i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="http://www.jianshu.com/users/3b9067fb7edf">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">简</i>
+					</span>
+				</a>
+			</span>
+		
+	</div>
+	<p class="copyright">
+		Copyright &copy; 前端技术 2016
+		<br>
+		Owned by <a href="https://github.com/panyifei">潘逸飞</a>
+	</p>
+</footer>
+
+    </section>
+  </body>
+</html>
