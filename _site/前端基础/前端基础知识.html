@@ -98,7 +98,25 @@
 <p>因为很有可能第三方的没有按照规范来定义版本号，npm shinkwrap可以根据当前的package.json中稳定的版本进行构建一个文件，写死了版本，以后npm install的时候，拿取的就是老版本的了</p>
 
 <h2>克隆一个对象</h2>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">obj</span><span class="p">){</span>
+
+<p>有奇葩的方法：</p>
+
+<ul>
+<li>eval(uneval(o))//firefox才支持非标准的uneval</li>
+<li>JSON.parse(JSON.stringify(o))//还行，深度复制的速度是最快的(和extends其实差不多)，浅度复制的话还是assign吧，但是函数对象，date对象等等json不支持的都没戏咧</li>
+<li>Object.create(o)//虽然是加了层原型链，但是我感觉还是不错的，不过前者的对象变化会影响到后面，基本不算是复制了</li>
+<li>Object.assign(就是一个浅复制呗，writable特性无法复制)</li>
+<li>$.extends(第一个参数为true的话是支持深度复制的)</li>
+<li>replaceState(奇葩啊，这也行..)</li>
+</ul>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"> <span class="kr">const</span> <span class="nx">structuredClone</span> <span class="o">=</span> <span class="nx">obj</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">oldState</span> <span class="o">=</span> <span class="nx">history</span><span class="p">.</span><span class="nx">state</span><span class="p">;</span>
+  <span class="nx">history</span><span class="p">.</span><span class="nx">replaceState</span><span class="p">(</span><span class="nx">obj</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+  <span class="kr">const</span> <span class="nx">clonedObj</span> <span class="o">=</span> <span class="nx">history</span><span class="p">.</span><span class="nx">state</span><span class="p">;</span>
+  <span class="nx">history</span><span class="p">.</span><span class="nx">replaceState</span><span class="p">(</span><span class="nx">oldState</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+  <span class="k">return</span> <span class="nx">clonedObj</span><span class="p">;</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">obj</span><span class="p">){</span>
   <span class="kd">var</span> <span class="nx">newObj</span><span class="p">;</span>
   <span class="k">if</span><span class="p">(</span><span class="nx">obj</span> <span class="k">instanceof</span> <span class="nb">Array</span><span class="p">){</span>
     <span class="nx">newObj</span> <span class="o">=</span> <span class="p">[];</span>
@@ -216,6 +234,40 @@ float不是none，position是absolute或者fixed，或者overflow不是visible�
 <span class="nx">b</span> <span class="o">^=</span> <span class="nx">a</span><span class="p">;</span>
 <span class="nx">a</span> <span class="o">^=</span> <span class="nx">b</span><span class="p">;</span><span class="c1">//异或是位操作，速度肯定是最快的啦，相同为1，不同为0，因为异或的反操作还是本身</span>
 </code></pre></div>
+<h2>webpack与gulp，grunt的区别</h2>
+
+<p>webpack带有一套loader机制，gulp，grunt没有这种机制。</p>
+
+<h2>yarn与npm的比较</h2>
+
+<p>yarn自动缓存了他下载过的模块，就是说他只要下载过，即使你删去了，他也能够离线下载下来。(其实也就是保存在了本地的目录)而且是并行资源管理，速度很快。</p>
+
+<p>yarn号称自己非常可依赖，如果在一个机器上能够运行，在另外的机器上也能运行。(npm的下载可能是杂乱无章的，yarn根据他的lockfile和安装算法保证了位置，顺序都是一样的)</p>
+
+<p>yarn非常安全，会校验模块的完整性。</p>
+
+<p>yarn自动shrinkwrap。</p>
+
+<h2>纯函数</h2>
+
+<p>纯函数其实就是你输入什么东西，得到的结果是必定的，不会更改的就叫做纯函数。</p>
+
+<h2>模块跟闭包的区别</h2>
+
+<p>模块的表现很像闭包。但是模块是比闭包更高级的东西。就是说他其实是有他自己的上下文环境的。</p>
+
+<h2>迭代器</h2>
+
+<p>generator函数返回了一个可迭代的迭代器，比如为c的话。<code>c[Symbol.iterator]() === c</code>，其实就形成了一个循环了。
+<code>
+Iterable -- object
+    [Symbol.iterator] -- function
+        return -- Iterator --object
+            [next] -- function
+Generator Function
+    Generator &lt;Iterable, Iterator&gt;
+</code>  </p>
+
       <div id="disqus_thread"></div>
 <script>
   (function() { // DON'T EDIT BELOW THIS LINE

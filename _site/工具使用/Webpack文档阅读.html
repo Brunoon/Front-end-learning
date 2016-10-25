@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta charset="UTF-8">
+  <title>前端技术</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/highlight.css">
+</head>
+
+  <body>
+    <section class="page-header">
+    <h1 class="project-name"><a href="/Front-end-learning/README">前端技术</a></h1>
+    <h2 class="project-tagline">逸飞的前端打怪日常，主要是javascript</h2>
+    <a href="https://github.com/panyifei/Front-end-learning" class="btn">View on GitHub</a>
+    <a href="https://github.com/panyifei/Front-end-learning/archive/master.zip" class="btn">Download .zip</a>
+</section>
+
+    <section class="main-content">
+      <h1>Webpack文档阅读</h1>
+
+<p>虽然webpack已经用了蛮久了，这次系统的看一下他的文档。</p>
+
+<ul>
+<li>插件：它具有丰富的插件接口，可以让外部做一些插件。这让webpack可扩展性。</li>
+<li>加载器：通过loader来对文件进行预编译，这就意味着可以对任意的静态资源进行打包。可以很容易的写自己的loader</li>
+<li>代码分割：允许将代码库分割成大块，这样就可以减少最初的加载时间</li>
+<li>开发工具：支持sourceUrl和sourceMap，他可以监视你的文件，通过一个开发中间件或者开发server来自动重新渲染</li>
+<li>表现：webpack使用了异步的IO，并且有多层的缓存等级，让webpack很快并且在增量编译的时候很快</li>
+<li>支持：支持AMD和Commonjs，能在分析你的代码的AST的时候表现的很聪明，甚至有一个分析的引擎</li>
+<li>优化：做了很多优化来减少打包的最后的大小，通过hash来关心请求被缓存</li>
+<li>多种目标：webpack的主要目标是web，也提供了bundle为了webworker和nodejs。</li>
+</ul>
+
+<h2>动机</h2>
+
+<p>页面上的code越来越多，需要被组织。文件系统提供了把你代码分成模块。</p>
+
+<h3>模块系统风格</h3>
+
+<p>定义依赖，输出结果又多种标准的：</p>
+
+<ul>
+<li>直接script，没有模块系统(自己管理好加载顺序，全局可能会冲突，用户自己处理依赖，大项目很难维护)</li>
+<li>Commonjs(同步依赖，然而网络请求都是异步的)</li>
+<li>AMD等等(编码要求比较高，看上去像是某种修补)</li>
+<li>ES6的模块系统(本地浏览器实现需要时间，这种分格的js很少)</li>
+</ul>
+
+<h3>传输</h3>
+
+<p>现在每个模块一次request，或者所有的module合为一个请求都是存在的，webpack把代码分割成块状，提高第一次渲染的速度，然后按需引其他剩下的js。</p>
+
+<h3>为什么只是JS呢</h3>
+
+<p>就是说不只是js，其他的静态资源都是需要处理的，最明显的就是css，可能存在less变成css的过程。而且图片啥的，jade模板啥的都需要一个处理的过程。</p>
+
+<h2>webpack是个啥</h2>
+
+<p>webpack是个文件打包器，就是把一坨相互依赖的静态资源模块，包括各种语言的写法。打包成js，css，png这种浏览器直接能使用的资源。</p>
+
+<p>出现这个新的模块打包器的主要原因是代码分割以及静态资源必须模块化的无缝的连接在一起。</p>
+
+<h3>目标：</h3>
+
+<ul>
+<li>分离依赖树成块状的，然后按需加载</li>
+<li>让loading时间尽可能短</li>
+<li>每个静态资源都能成为模块</li>
+<li>能够整合第三方的库作为模块</li>
+<li>能够定制模块加载器的每一个部分</li>
+<li>适合于大项目</li>
+</ul>
+
+<h3>webpack为什么不同</h3>
+
+<h4>文件分割</h4>
+
+<p>webpack有在他的依赖树种有两种依赖：同步的和异步的。异步的依赖生成了一个新的代码块。在新的代码块被优化后，一个文件被发散出去。</p>
+
+<h2>Code Splitting</h2>
+
+<p>对于大的web app项目来说，将所有的代码推入一个文件是效率不高的。尤其是一些代码块只在特定的场景才需要被引用。webpack拥有把你的代码分成块状并且按需要加载的能力。别的打包器把这个叫做layer，rollups，fragments。这个功能叫做代码分割。</p>
+
+<p>这是一个可选的功能，可以在代码库中定义分离的点。webpack来负责处理依赖，输出文件以及运行时的材料。</p>
+
+<p>来声明一个经常的误解：代码分割不仅仅是把普通的代码变成可共享的代码块。更值得关注的功能是代码分割可以把代码分成按需加载的代码块。这就让首次的下载尽可能小。并且可以在需要的时候按需加载。</p>
+
+<h3>定一个分隔的点</h3>
+
+<p>AMD和Commonjs定义了不同的方法来按需加载代码，都是支持的。</p>
+
+<p>Commonjs：require.ensure</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">    <span class="nx">require</span><span class="p">.</span><span class="nx">ensure</span><span class="p">([</span><span class="s1">&#39;moduleA&#39;</span><span class="p">,</span><span class="s1">&#39;moduleB&#39;</span><span class="p">],</span><span class="kd">function</span><span class="p">(</span><span class="nx">require</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;moduleA&#39;</span><span class="p">);</span>
+    <span class="p">})</span>
+</code></pre></div>
+<p>AMD的话就是本身的require就是支持的。</p>
+
+<p>ES6的模块的话，webpack1.x.x是没有原生支持的，2.0.0支持。所以只能通过babel将ES6的模块转化成Commonjs或者AMD的模块。这个方法有效果但是对于动态加载有一些警告。</p>
+
+<p>模块语法import x from &#39;foo&#39;是故意设计来静态分析的，这就意味着没法做动态的引用。</p>
+
+<p>幸运的是，有一个js的api“loader”专门是写来处理动态使用的例子的。“System.load”。这个API将会native地等价于上面的require方法。但是，大多数编译器都没法处理这个变成require。所以如果我们想要动态的代码分割，我们就得直接来写。</p>
+
+<h3>代码块内容</h3>
+
+<p>所有的在分割点的依赖都会打进一个新的代码块中，递归的依赖也会被打进chunk中。</p>
+
+<p>如果你在分割点传入一个callback，webpack也会自动将这个callback的所有依赖打进chunk。   </p>
+
+<h3>代码块优化</h3>
+
+<p>如果两个代码块包含同一个模块，他们会被和到一个里面，这会导致代码块拥有多个父辈。</p>
+
+<p>如果一个模块在代码块的所有父辈中都可以访问到，他会被从代码块中移出。</p>
+
+<p>如果一个代码块包含另一个代码块的所有模块，他会被存储。他实现了多重的代码块。</p>
+
+<h3>代码块加载</h3>
+
+<p>取决于配置项target，一个为了代码块加载的运行时的逻辑会被添加进bundle中。例如，web目标的代码块会被通过jsonp加载。一个代码块只被load一次，平行的请求会被合进一个里面。运行时会检测加载的代码块来看他们是否导致了多重的代码块。</p>
+
+<h3>代码块的种类</h3>
+
+<h4>入口代码块</h4>
+
+<p>入口代码块含有一个运行时加上一系列的模块。如果代码块包含模块0，运行时就会执行他。如果不包含，就等待包含了模块0的代码块，然后执行他。（每次包含模块0）</p>
+
+<h4>一般模块</h4>
+
+<p>一般模块不包含运行时，他只包含了一些模块，他的结构取决于模块加载算法。比如，jsonp的模块就会包含在jsonp的回调中。这个代码块也包含他需要的一系列的代码块的id。</p>
+
+<h4>初始模块</h4>
+
+<p>初始模块是一个一般模块，唯一的区别在于优化把他看的更重要，因为他意味着初始加载时间。代码块种类可以在CommonsChunkPlugin融合的过程中发生。</p>
+
+<h4>分离代码和供应代码</h4>
+
+<p>把你的app分成2个文件，比如叫做app.js和vendor.js。然后把名字传给CommonsChunkPlugin这个插件。</p>
+
+<p>这样子的话就会将所有的vendor中的模块从app中删去，这样，得到的bundle.js就会只含有你的app的code。不会包含他的依赖。当然引入的时候得先引入那个vendor包。</p>
+
+<h4>多个入口代码块</h4>
+
+<p>可能需要配置多个入口点会导致多个入口代码块。入口代码块包含着运行态，并且每个单页面都只能包含一个运行态。</p>
+
+<h4>运行多个入口点</h4>
+
+<p>由于CommonsChunkPlugin，运行时其实已经进入了commons的代码块中了。入口点现在在初始化代码块中。尽管只有一个初始代码块可以被加载，但是多个入口代码块可以被加载。这样在一个页面就可以有多个入口点了。</p>
+
+<h4>Commons代码块</h4>
+
+<p>CommonsChunkPlugin把依赖的代码移到了一个新的入口代码块，运行时也进了代码块。这意味着老的入口代码块现在是初始化代码块了。</p>
+
+<h4>优化</h4>
+
+<p>有些优化的插件可以取决于一些特殊的标准来合并代码块。</p>
+
+<h4>命名代码块</h4>
+
+<p>require.ensure方法接收一个增加的额外的第三个参数，如果两个分离点传同一个string，意味着他们使用同一个模块。</p>
+
+<h4>require.include</h4>
+
+<p>require.include是一个webpack的特性的函数。他能添加一个模块进当前的代码块中。但是不评估他。(申明会从bundle中删去)</p>
+
+<p>当一个模块存在于多个子代码块的时候，require.include是挺好用的。在父代码块中，require.include将会包含这个模块，而子代码块中的模块实例将会消失。</p>
+
+      <div id="disqus_thread"></div>
+<script>
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = '//panyifei.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
+
+      <!-- <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">前端技术</a> is maintained by <a href="https://github.com/panyifei">逸飞</a>.</span>
+</footer> -->
+
+<footer>
+	<div class="span-inline">
+		
+			<span>
+				<a target="_blank" href="https://github.com/panyifei">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-github fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="https://www.zhihu.com/people/pan-yi-fei-52">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">知</i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="http://www.jianshu.com/users/3b9067fb7edf">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">简</i>
+					</span>
+				</a>
+			</span>
+		
+	</div>
+	<p class="copyright">
+		Copyright &copy; 前端技术 2016
+		<br>
+		Owned by <a href="https://github.com/panyifei">潘逸飞</a>
+	</p>
+</footer>
+
+    </section>
+  </body>
+</html>

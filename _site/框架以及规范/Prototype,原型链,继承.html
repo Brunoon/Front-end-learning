@@ -25,10 +25,30 @@
 
 <ul>
 <li>function都是由prototype的，指向一个对象，注意全局函数并没有prototype。</li>
-<li>object指向原型对像的只有<strong>proto</strong>这个属性，并且并不规范，之后chrome，ff等几个实现了，这个东西可以用来向上层遍历。原型对象会有一个contructor，指向构造函数。</li>
+<li>object指向原型对像的只有<strong>proto</strong>这个属性(es5就有一个getPrototypeOf来拿到<strong>proto</strong>)，并且并不规范，之后chrome，ff等几个实现了，这个东西可以用来向上层遍历。原型对象会有一个contructor，指向构造函数(所以当我们重写了prototype对象的时候，我们得要重写一下constractor对象)。</li>
 <li>Object.getPrototypeOf可以拿来向上查找原型链，但这是ES6的特性。</li>
 <li>Object.prototype的原型是null，这个本身是个特殊的对象，是个原型对象指向null的特殊对象。</li>
 </ul>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">    <span class="kd">function</span> <span class="nx">A</span><span class="p">(){</span>
+    <span class="p">}</span>
+    <span class="kd">function</span> <span class="nx">B</span><span class="p">(){</span>
+    <span class="p">}</span>
+    <span class="nx">B</span><span class="p">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">A</span><span class="p">();</span>
+    <span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">B</span><span class="p">();</span>
+    <span class="nx">b</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">==</span> <span class="nx">A</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span>
+    <span class="c1">//class等于就是加上了一层__proto__指向继承的class</span>
+    <span class="kr">class</span> <span class="nx">A</span> <span class="p">{</span>
+    <span class="p">}</span>
+    <span class="kr">class</span> <span class="nx">B</span> <span class="kr">extends</span> <span class="nx">A</span> <span class="p">{</span>
+    <span class="p">}</span>
+    <span class="nx">B</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">===</span> <span class="nx">A</span> <span class="c1">// true</span>
+    <span class="nx">B</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">===</span> <span class="nx">A</span><span class="p">.</span><span class="nx">prototype</span> <span class="c1">// true</span>
+</code></pre></div>
+<h2>Object.create</h2>
+
+<p>这个方法很神奇，与new Foo()的效果差不多。这里的区别我再去高程看看清楚。</p>
+
+<p>ES6还提供了Object.setProtypeOf(Bar.prototype, Foo.prototype);</p>
 
       <div id="disqus_thread"></div>
 <script>

@@ -21,77 +21,19 @@
 </section>
 
     <section class="main-content">
-      <h1>Npm模块</h1>
+      <h1>React源码阅读</h1>
 
-<p>npm是node的模块网站，模块太多，自己也能使用了一个记录一个</p>
+<p>用了React也有一段时间了，文档什么的也算挺熟悉了，但是内部还是一个黑盒，于是想花点时间尝试看一看里面的世界。</p>
 
-<h2>forever</h2>
+<p>React的代码很庞大，刚打开时简直崩了，仔细看了看发现只需要看一个src文件夹就好了。</p>
 
-<p>这个是用来永久运行nodejs项目的，类似的还有pm2，pm2的展示做的更好一些</p>
+<p>一句句的看肯定可能性不大，先把自己在意的几处的代码研究一下。</p>
 
-<h2>colors</h2>
+<h2>React的component是如何创建并渲染的</h2>
 
-<p>这个是用来在命令行中打个有颜色的log用的。语法不少，挺好玩的</p>
+<p>首先React本身返回了一个React对象。这个对象拥有着createElement方法。</p>
 
-<h2>cliff</h2>
-
-<p>这个是用来将数据进行格式化的，提供了输出到命令行中的接口，本身依赖了<code>colors</code>。</p>
-
-<h2>path-is-absolute</h2>
-
-<p>这个是用来判断传入的路径是不是绝对地址的，用来判断当前环境是windows还是linux</p>
-
-<h2>flatiron</h2>
-
-<p>这个是用来配置并且创建app的，包括浏览器端的app，包括命令行端的app，用来作为命令行的app生成很好用。</p>
-
-<h2>shush</h2>
-
-<p>这个是用来引入包含了注释的json的，这样引入的json可以包含<code>//</code>。</p>
-
-<h2>prettyjson</h2>
-
-<p>这个是用来在命令行中输出比较好看的json的</p>
-
-<h2>clone</h2>
-
-<p>这个是用来复制对象的，实现方式得抽空看一下</p>
-
-<h2>object-assign</h2>
-
-<p>这个是用来赋值的，可以将对象的相同属性替换掉，现在作为es6的pollfill了。</p>
-
-<h2>koa</h2>
-
-<p>一个用来搭建nodejs项目的框架，拥有众多的中间件。是express原班人马编写。升级在于ES6，以及自由的中间件管理。</p>
-
-<h2>koa-static</h2>
-
-<p>koa中间件，能够将项目的文件作为静态资源放出去，使用的时候要小心，将需要的静态资源放置出去。</p>
-
-<p>我写analyse(个人模块)的时候，因为将server配置在了其他的文件夹下，所以设置的时候得加上__dirname这种绝对路径。</p>
-
-<h2>koa-router</h2>
-
-<p>koa中间件，是用来进行路由设置的。koa-route的替代品</p>
-
-<h2>koa-route</h2>
-
-<p>koa中间件，用来管理路由</p>
-
-<h2>knex</h2>
-
-<p>nodejs用来连接数据库的工具，支持的语法很全。</p>
-
-<h2>bookshelf</h2>
-
-<p>是基于knex开发的连接器，在knex之上包装了一层对象的概念，并且在对象之间关联较大时使用起来更方便</p>
-
-<h2>express</h2>
-
-<p>一个搭建nodejs项目的框架。</p>
-
-<p>todu:clone的代码看一下</p>
+<h2>React的事件系统听说用了享元模式？</h2>
 
       <div id="disqus_thread"></div>
 <script>

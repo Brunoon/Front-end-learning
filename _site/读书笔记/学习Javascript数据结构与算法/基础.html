@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta charset="UTF-8">
+  <title>前端技术</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/highlight.css">
+</head>
+
+  <body>
+    <section class="page-header">
+    <h1 class="project-name"><a href="/Front-end-learning/README">前端技术</a></h1>
+    <h2 class="project-tagline">逸飞的前端打怪日常，主要是javascript</h2>
+    <a href="https://github.com/panyifei/Front-end-learning" class="btn">View on GitHub</a>
+    <a href="https://github.com/panyifei/Front-end-learning/archive/master.zip" class="btn">Download .zip</a>
+</section>
+
+    <section class="main-content">
+      <h1>基础</h1>
+
+<p>这本书前面几章太基础了，没啥好记的，就是很简单的介绍了js的基础语法。</p>
+
+<h2>栈</h2>
+
+<p>栈就是个后进先出的模型呗。这个模型完全可以通过数组来构建的。这里想记录的是使用数组构建的栈来写个十进制转二进制的小函数。</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript">    <span class="kd">function</span> <span class="nx">transfer</span><span class="p">(</span><span class="nx">input</span><span class="p">,</span><span class="nx">NUM</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">res</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="k">while</span><span class="p">(</span><span class="nx">input</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">){</span>
+            <span class="kd">var</span> <span class="nx">rem</span> <span class="o">=</span> <span class="nx">input</span><span class="o">%</span><span class="nx">NUM</span><span class="p">;</span>
+            <span class="nx">input</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">input</span><span class="o">/</span><span class="nx">NUM</span><span class="p">);</span>
+            <span class="nx">res</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">rem</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">while</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">length</span><span class="o">!=</span><span class="mi">0</span><span class="p">){</span>
+            <span class="nx">result</span> <span class="o">+=</span> <span class="nx">res</span><span class="p">.</span><span class="nx">pop</span><span class="p">().</span><span class="nx">toString</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div>
+<p>其实蛮简单的。</p>
+
+<h2>队列</h2>
+
+<p>其实与栈相反，就是先来先服务呗，使用push和shift方法使用数组来模拟，还是蛮容易的。</p>
+
+<h3>优先队列</h3>
+
+<p>就是重写了enqueue方法(其实就是push呗)，在这个方法里面加入了权限的比较就是优先队列的写法了。</p>
+
+<h3>循环队列</h3>
+
+<p>其实循环队列就是循环起来就是push进自己刚shift的值，这样子来进行循环而已。</p>
+
+<h2>链表</h2>
+
+<p>链表意味着我们可以任意的添加或移除项。但是如果想要访问链表中的某个元素，必须从起点开始迭代列表直到找到。</p>
+
+<h3>双向列表</h3>
+
+<p>很简单，就是每一项都拥有前后的元素</p>
+
+<h3>循环列表</h3>
+
+<p>就是很简单的，最后一个的next接到了列表的第一个</p>
+
+<h2>集合</h2>
+
+<p>集合是一组<code>无序且唯一</code>的项组成的。这个用js实现，按照ES6的话，其实就是一个对象。<code>{1:1，2:2，3:3}</code></p>
+
+<p>正好使用了对象属性的唯一性。</p>
+
+<p>但是真的ES6的集合是什么类型都可以加入的，而且NaN在集合中会被认为是相等的。</p>
+
+<h2>字典和散列表</h2>
+
+<p>字典其实就是Map，存键值对的。</p>
+
+      <div id="disqus_thread"></div>
+<script>
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = '//panyifei.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
+
+      <!-- <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">前端技术</a> is maintained by <a href="https://github.com/panyifei">逸飞</a>.</span>
+</footer> -->
+
+<footer>
+	<div class="span-inline">
+		
+			<span>
+				<a target="_blank" href="https://github.com/panyifei">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-github fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="https://www.zhihu.com/people/pan-yi-fei-52">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">知</i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="http://www.jianshu.com/users/3b9067fb7edf">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">简</i>
+					</span>
+				</a>
+			</span>
+		
+	</div>
+	<p class="copyright">
+		Copyright &copy; 前端技术 2016
+		<br>
+		Owned by <a href="https://github.com/panyifei">潘逸飞</a>
+	</p>
+</footer>
+
+    </section>
+  </body>
+</html>
