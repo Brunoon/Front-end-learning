@@ -70,7 +70,6 @@ title: {{ site.name }}
 - [CSS性能][52]
 - [页面渲染过程][53]
 - [CSS布局][54]
-- [关于this][69]
 - [Web-Components][73]
 - [动态CDN加速][88]
 
@@ -105,6 +104,7 @@ title: {{ site.name }}
 - [Webpack文档阅读][86]
 - [photoshop简单使用][12]
 
+<<<<<<< HEAD
 [1]:./框架以及规范/模块引入/Commonjs,CMD,AMD和cortex介绍
 [3]:./框架以及规范/ECMAScript6/Promise以及各种异步的学习
 [4]:./框架以及规范/HTML5/history相关
@@ -171,7 +171,6 @@ title: {{ site.name }}
 [66]:./框架以及规范/TypeScript
 [67]:./读书笔记/高性能Javascript/5章字符串和正则表达式
 [68]:./读书笔记/高性能Javascript/6章快速响应的用户界面
-[69]:./前端基础/关于this
 [70]:./读书笔记/高性能Javascript/7,8章Ajax与编程实践
 [71]:./框架以及规范/React/React文档阅读
 [72]:./读书笔记/图解HTTP
