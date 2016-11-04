@@ -314,6 +314,45 @@ window.changeFrameHeight = function (ext) {
     <span class="k">outline</span><span class="o">:</span> <span class="m">1px</span> <span class="k">solid</span> <span class="k">rgb</span><span class="p">(</span><span class="m">204</span><span class="o">,</span><span class="m">204</span><span class="o">,</span><span class="m">204</span><span class="p">);</span>    
 <span class="p">}</span>
 </code></pre></div>
+<h3>函数式编程</h3>
+
+<p>要求使用函数，把运算的过程都定义为函数。</p>
+
+<p>5个特点：</p>
+
+<ul>
+<li>函数是第一等公民</li>
+<li>只用表达式(单纯的运算，都有返回值)</li>
+<li>没有副作用</li>
+<li>不修改状态</li>
+<li>引用透明，就是不依赖外部变量或者状态，只依赖输入的参数，参数相同，返回值就是相同的</li>
+<li>尾递归优化(每次递归都会重用stack)</li>
+</ul>
+
+<p>函数式编程的好处：</p>
+
+<ul>
+<li>代码简洁，因为全是函数</li>
+<li>接近自然语言</li>
+<li>方便代码管理(因为是独立单元，同样的输入同样结果，利于单元测试)</li>
+<li>易于并发编程(不修改变量，所以工作可以分摊到多个线程)</li>
+</ul>
+
+<p>几个技术：</p>
+
+<ul>
+<li>柯里化</li>
+<li>递归</li>
+<li>map/reduce</li>
+<li>高阶函数(就是把函数当做参数，传来传去的)</li>
+</ul>
+
+<p>以上其实都不算是函数式编程，看看schema，然后学个haskshell。然后差不多能理解了。</p>
+
+<h3>webassembly</h3>
+
+<p>其实就是web层的汇编器，就是说有可能会出现一种新语言，或者说直接一种高级语言来支持编译到这个汇编器。</p>
+
       <div id="disqus_thread"></div>
 <script>
   (function() { // DON'T EDIT BELOW THIS LINE

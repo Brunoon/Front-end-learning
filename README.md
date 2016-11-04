@@ -104,7 +104,6 @@ title: {{ site.name }}
 - [Webpack文档阅读][86]
 - [photoshop简单使用][12]
 
-<<<<<<< HEAD
 [1]:./框架以及规范/模块引入/Commonjs,CMD,AMD和cortex介绍
 [3]:./框架以及规范/ECMAScript6/Promise以及各种异步的学习
 [4]:./框架以及规范/HTML5/history相关

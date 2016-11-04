@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta charset="UTF-8">
+  <title>前端技术</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/highlight.css">
+</head>
+
+  <body>
+    <section class="page-header">
+    <h1 class="project-name"><a href="/Front-end-learning/README">前端技术</a></h1>
+    <h2 class="project-tagline">逸飞的前端打怪日常，主要是javascript</h2>
+    <a href="https://github.com/panyifei/Front-end-learning" class="btn">View on GitHub</a>
+    <a href="https://github.com/panyifei/Front-end-learning/archive/master.zip" class="btn">Download .zip</a>
+</section>
+
+    <section class="main-content">
+      <h1>Redux文档阅读</h1>
+
+<p>Redux是js的一个可预测的状态的管理者。</p>
+
+<h2>要旨</h2>
+
+<ul>
+<li>你的App的所有的状态存在一个单一store的对象树中。</li>
+<li>唯一的改变状态树的方法是发出一个action(一个对象描述发生了什么)</li>
+<li>通过写纯函数reducer来指定action是如何更改状态树的。</li>
+</ul>
+
+<p>就这么多..</p>
+
+<p>Redux没有一个dispather，并且不支持many stores。</p>
+
+<p>他只拥有一个store和一个单一的reducer方法。</p>
+
+<p>当项目不断演进的过程中，可以分割reducer成为更小的reducer来独立地操作状态树的不同部分。这点很像React app只对外一个根节点，但是它由很多小的部分组成的。</p>
+
+<h2>动机</h2>
+
+<p>随着单页应用的需求变得越来越复杂，我们的代码比起以前而言需要管理更多的状态。这下状态包括服务器的返回，缓存的数据，还有本地的一些数据。UI的状态也变得越来越复杂。</p>
+
+<p>管理这个不断改变的状态是困难的，当我们失去了state的控制之后，我们基本也不懂程序发生了什么了。当一个程序是不透明的和不确定的，很难重现bug或者添加新特性。</p>
+
+<p>问题变得难处理是因为我们把两个人脑很难区分的概念混在了一起，就是异变和异步。</p>
+
+<p>Redux尝试着来让状态突变变得可预测。</p>
+
+<h2>3个原则</h2>
+
+<p>React可以用3个基本原则描述</p>
+
+<h3>单一来源的真理</h3>
+
+<p>你的整个app的状态存在一个单一store的对象树中。</p>
+
+<p>这使得能够创建通用的app，你服务器的状态可以通过序列化传递给客户端，并且没有额外的代码。一个简单的状态树使得调试和反省整个项目变得容易，</p>
+
+<h3>状态是只读的</h3>
+
+<p>唯一的改变状态树的方法是发出一个action(一个对象描述发生了什么)</p>
+
+<p>这点保证了无论是view还是网络的回调都不可能直接修改state。相替代的，他们表示了一个去转换state的意图，因为所有的改变都是按照一个严格顺序一步步执行的，他就没有一个竞态的顺序需要去注意。行动是简单的对象，他们是很容易被统计，存储，以及序列化的。</p>
+
+<h3>改变是通过纯函数执行的。</h3>
+
+<p>通过写纯函数reducer来指定action是如何更改状态树的。</p>
+
+<p>recuder是纯函数，输入原来的状态和action，得到了新的状态。记住我们是返回新的状态对象，而不是在原来的state上进行改变。我们可以从一个单一的reducer开始，然后随着app grow，将它细分成更小的reducer。因为reducer仅仅只是函数，我们可以控制他们执行的顺序，传入外地的数据，甚至在分页这种普遍的任务中使用可重用的reducer。</p>
+
+<h2>现有技术</h2>
+
+<p>Redux是一个混合的遗产。他和一些模式和技术很像，但是也在一些重要的部分与他们是不同的。</p>
+
+<h3>Flux</h3>
+
+<p>Flux可以被以为是一个Flux的实现吗？是也不是。Flux的创造者承认了这点。</p>
+
+<p>Redux的灵感来源于Flux的几个重要特性。像Flux一样，Redux让你把model的更新逻辑放到了你的app的一个层去解决。(在Flux中为stores，在Redux中为reducers)。都让你通过一个叫做action的空对象来描述每次突变。</p>
+
+<p>与Flux不同的是，Redux没有一个dispatcher的概念。这是因为他依赖于纯函数，而不是事件发射器。纯函数很容易管理，不需要一个额外的实体来管理他。你可以把它当做一个偏差或者一个实现细节。从(state,action) =&gt; state这个方面来看，Redux确实是Flux的架构，但是由于是纯函数，这个就更简单了。</p>
+
+<p>另一个重要的区别是Redux假设你从不突变你的数据。就是说在reducer里面修改这个数据是很不被推荐的，我们应该返回新的数据，类似于Immutable。</p>
+
+<p>我们从技术上是可以写非纯函数来变异数据的，但是我们劝你不要这么做。</p>
+
+<h3>Elm</h3>
+
+<p>这是一门语言，被Haskell影响的。他的更新机制updater很像Redux的reducer。他最后会被编译为js。因为他是语言，所以我们可以强制他纯函数。</p>
+
+<h3>Immutable</h3>
+
+<p>Immutable是一个js库，实现持久化数据结构。他有比较惯用的js api。</p>
+
+<p>Redux不关心你如何存储一个对象，可以是个简单的对象，可以是个Immutable对象。</p>
+
+<h3>Baobab</h3>
+
+<p>另一个为更新简单的JS对象实现了immutable api的库。与Redux一起用的好处不大。因为他的更新是给数据提供了游标修改的，而Redux希望的是只在dispatch一个action来修改数据。</p>
+
+<h3>Rx</h3>
+
+<p>只能说他能配合RX做一些事情，毕竟RX是流式管理事件流顺序的，可以用RX管理多个异步事件流，然后再把他们交给store.dispatch。</p>
+
+<h2>生态系统</h2>
+
+<p>Redux是个小的库，但是他的概念和API都是很精心挑选来扩展成工具和扩展的生态系统。</p>
+
+<h2>数据流</h2>
+
+<p>严格的单向数据流</p>
+
+      <div id="disqus_thread"></div>
+<script>
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = '//panyifei.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
+
+      <!-- <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">前端技术</a> is maintained by <a href="https://github.com/panyifei">逸飞</a>.</span>
+</footer> -->
+
+<footer>
+	<div class="span-inline">
+		
+			<span>
+				<a target="_blank" href="https://github.com/panyifei">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-github fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="https://www.zhihu.com/people/pan-yi-fei-52">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">知</i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="http://www.jianshu.com/users/3b9067fb7edf">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">简</i>
+					</span>
+				</a>
+			</span>
+		
+	</div>
+	<p class="copyright">
+		Copyright &copy; 前端技术 2016
+		<br>
+		Owned by <a href="https://github.com/panyifei">潘逸飞</a>
+	</p>
+</footer>
+
+    </section>
+  </body>
+</html>
