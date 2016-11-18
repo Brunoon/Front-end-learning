@@ -17,6 +17,9 @@ title: {{ site.name }}
  - [React文档阅读][71]
  - [React源码阅读][91]
  - [React][20]
+- Angular
+ - [Angular文档阅读][92]
+ - [Angular][30]
 - HTML5
  - [history相关][4]
  - [hashchange事件][7]
@@ -29,7 +32,6 @@ title: {{ site.name }}
  - [Commonjs,CMD,AMD和cortex介绍][1]
  - [Requirejs学习以及实现][64]
  - [Requirejs源码阅读][65]
-- [Angular][30]
 - [Polyfill源码阅读][33]
 - [Prototype,原型,继承][35]
 - [Promise规范以及写一个Promise][46]
@@ -64,7 +66,7 @@ title: {{ site.name }}
 
 ## 前端基础
 - [前端基础知识][44]
-- [Macro-task与Micro-task][48]
+- [MVC的思考][93]
 - [setTimeout][49]
 - [throttle和debounce][56]
 - [JS性能][59]
@@ -73,6 +75,7 @@ title: {{ site.name }}
 - [CSS布局][54]
 - [Web-Components][73]
 - [动态CDN加速][88]
+- [Macro-task与Micro-task][48]
 
 ## 读书笔记
 - Javascript高级程序设计 `绝对是要深读的好书，5星` (23章还没看，直接先看24章了)
@@ -104,6 +107,8 @@ title: {{ site.name }}
 ## 工具使用
 - [Webpack文档阅读][86]
 - [photoshop简单使用][12]
+
+使用github来管理也是希望与大家分享并得到纠正。欢迎感兴趣的同学star~
 
 [1]:./框架以及规范/模块引入/Commonjs,CMD,AMD和cortex介绍
 [3]:./框架以及规范/ECMAScript6/Promise以及各种异步的学习
@@ -192,5 +197,5 @@ title: {{ site.name }}
 [89]:./读书笔记/敏捷软件开发/1部分敏捷开发
 [90]:./读书笔记/你不知道的Javascript上卷/this和对象原型
 [91]:./框架以及规范/React/React源码阅读
-
-使用github来管理也是希望与大家分享并得到纠正。欢迎感兴趣的同学star~
+[92]:./框架以及规范/Angular/Angular文档阅读
+[93]:./前端基础/MVC的思考
