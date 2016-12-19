@@ -357,6 +357,34 @@ window.changeFrameHeight = function (ext) {
 
 <p>这个参数表示告诉git只拉最新的16次commit。用于git clone。</p>
 
+<h3>同构</h3>
+
+<p>同构其实主要是前后端运行一套代码，后端提前进行页面的渲染。但是要在后端加一层node层。后端用node写的话，前端其实是没有这个能力的，因为整个的思维方式需要改变。如果让java层调用node的服务。因为目前公司都是java7。java7自带的js运行器性能太差。等到升级到java8之后再看这个问题。</p>
+
+<h3>命令行输出没有颜色</h3>
+
+<p>首先，命令行输出的颜色是标记式语言，webpack的输出有颜色肯定是使用了那些标记。而热部署的时候没有颜色肯定是他把标记去掉了，至于为什么要去掉，可能是考虑到会输出到文件，然后去掉了标记。</p>
+
+<h3>react的this.props和nextProps一直是一样的</h3>
+
+<p>就是父组件内部的state是一个超过两层的对象，然后子组件调用父类的方法改了这个state。然后父组件把state传给了子组件作为props。就会导致子组件的this.props和nextProps的结果是一样的。因为他们指向了同一个引用。这个引用的对象被父组件修改过了。</p>
+
+<p>这个bug遇到了感觉疯了啊~~~</p>
+
+<h3>在编写webpack插件的时候如何debug</h3>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+<span class="nx">require</span><span class="p">(</span><span class="s1">&#39;child_process&#39;</span><span class="p">).</span><span class="nx">exec</span><span class="p">(</span><span class="s2">&quot;npm config get prefix&quot;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">nixLib</span> <span class="o">=</span> <span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">platform</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;win&quot;</span><span class="p">)</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="o">?</span> <span class="s2">&quot;&quot;</span> <span class="o">:</span> <span class="s2">&quot;lib&quot;</span><span class="p">;</span> <span class="c1">// win/*nix support</span>
+    <span class="kd">var</span> <span class="nx">webpackPath</span> <span class="o">=</span> <span class="nx">path</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">stdout</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="nx">nixLib</span><span class="p">,</span> <span class="s1">&#39;node_modules&#39;</span><span class="p">,</span> <span class="s1">&#39;webpack&#39;</span><span class="p">,</span> <span class="s1">&#39;bin&#39;</span><span class="p">,</span> <span class="s1">&#39;webpack.js&#39;</span><span class="p">));</span>
+    <span class="nx">require</span><span class="p">(</span><span class="nx">webpackPath</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>其实并不用这么来，只要保证这个命令式webstorm运行的就行了。只需要配置debug的运行脚本为<code>node_modules/.bin/webpack</code>就行了。</p>
+
+<h3>子域名的cookie没法共享</h3>
+
+<p>后端设置cookie的时候没有设置好domain。默认写在了全部的domain之下，这样切换子域的时候，cookie就不能互相共享了。重要的一些cookie还是设置在主域名下比较好。</p>
+
       <div id="disqus_thread"></div>
 <script>
   (function() { // DON'T EDIT BELOW THIS LINE

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta charset="UTF-8">
+  <title>前端技术</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/highlight.css">
+</head>
+
+  <body>
+    <section class="page-header">
+    <h1 class="project-name"><a href="/Front-end-learning/README">前端技术</a></h1>
+    <h2 class="project-tagline">逸飞的前端打怪日常，主要是javascript</h2>
+    <a href="https://github.com/panyifei/Front-end-learning" class="btn">View on GitHub</a>
+    <a href="https://github.com/panyifei/Front-end-learning/archive/master.zip" class="btn">Download .zip</a>
+</section>
+
+    <section class="main-content">
+      <h1>Webpack插件编写</h1>
+
+<p>之前的项目因为使用了cortex的包(一种类似于npm的仓库，但是结构不同，有自己的cortex.json以及导出结构)，之前的构建流是使用了cortex的工具cortex build。但是现在项目迁为react+webpack。这个环境不支持cortex的包。于是张强同学写了个gulp的插件来将cortex的包转换成npm的模块。于是项目里面就出现了既有webpack，又有gulp，以及cortex的局面，所以我想要将gulp去除掉。</p>
+
+<h2>思考</h2>
+
+<p>想要让webpack识别cortex的包结构，得改变webpack的resolver。这个可以用webpack的插件来做。然后webpack读取到了资源之后，可以在loader里面对资源进行一定的处理，对于内部require的进行识别。</p>
+
+<h2>webpack plugin</h2>
+
+<p>其实就是很简单，让他识别cortex的目录，然后doResolve
+<code>javascript
+var path = require(&#39;path&#39;);
+//里面有一个方法来读取semver的版本的
+var util = require(&#39;./util&#39;);
+var fs = require(&#39;fs&#39;);
+var MyConventionResolver = {
+    apply: function(compiler) {
+        compiler.plugin(&#39;module&#39;, function(request, callback) {
+            if (request.request.indexOf(&#39;@cortex&#39;) === 0) {
+                var pkg_name = request.request.substr(8);
+                var cortex_json_file = path.resolve(__dirname, &#39;../cortex.json&#39;);
+                var cortex_config=JSON.parse(fs.readFileSync(cortex_json_file));
+                var pkg_path = path.resolve(__dirname, &#39;../neurons/&#39;, request.request.substr(8));
+                var versions = fs.readdirSync(pkg_path);
+                var ver = util.chooseCorrectVersion(cortex_config, versions, pkg_name, false , pkg_path);
+                var newRequest = {
+                    path: path.resolve(__dirname, &#39;..&#39; ),
+                    request: &#39;neurons/&#39; + pkg_name + &#39;/&#39; + ver + &#39;/&#39;+ pkg_name +&#39;.js&#39;,
+                    query: request.query,
+                    directory: request.directory
+                };
+                this.doResolve([&#39;file&#39;], newRequest, callback);
+            } else {
+                callback();
+            }
+        });
+    }
+};
+module.exports = MyConventionResolver;
+</code>
+webpack里面的配置
+<code>
+new webpack.ResolverPlugin([CortexPlugin])
+</code></p>
+
+<h2>loader</h2>
+
+<p>其实就是对source进行处理，将包装过的结构进行还原
+<code>javascript
+module.exports = function (source) {
+    if(source.indexOf(&#39;define(_&#39;) != -1){
+        //处理js
+        var newSource = util.processJS(source);
+        return newSource;
+    }else{
+        return source;
+    }
+}
+</code>
+webpack里面的配置
+<code>
+resolveLoader: {
+   alias: {
+       &quot;cortex-loader&quot;: path.join(__dirname, &#39;lib&#39;, &quot;./cortex-loader&quot;)
+   }
+}
+</code></p>
+
+<h2>另一种实现</h2>
+
+<p>勐喆之前也做过一版，他做的是babel的插件，他会先通过babel解析的语法树得到这个js所有的引入，得到一个依赖的列表。然后他写了一个轻量的neuron解析器来接住这个依赖列表，在每个cortex的包的头部传入进去。这样完成资源的识别。最后我没有选择这种方式，是因为这样子所有的neuron资源都会走一遍babel的编译，这是个极其耗时的过程。应该避免。而且我的尝试里面如果想要使用他的方法也必须进行一次语法分析的。也会耗费大量的时间，而且打包出来的webpack会有冗余代码。</p>
+
+<h2>总结</h2>
+
+<p>我的虽然摒弃了gulp，但是我在neuron里面生成了一些新的目录结构。还是有一些问题的，这里只是记载了问题的整体解决过程，具体代码可以看我的两个模块<a href="https://github.com/panyifei/webpack-cortex-loader">webpack-cortex-loader</a>和<a href="https://github.com/panyifei/webpack-cortex-resolve-plugin">webpack-cortex-resolve-plugin</a>。</p>
+
+<h2>意外发现已经被包装成插件了</h2>
+
+<p>...好吧，张强同学已经把gulp的这个执行任务包装成过webpack插件了，在webpack run之前会先把neuron里面的结构转化到node_modules里面。我得比较一下我和他的利弊。</p>
+
+<h2>tip</h2>
+
+<p>这里开发webpack的插件以及loader的时候，发现了一种好用的debug的方法，因为这个命令是命令行webpack执行的。用下面的nodejs以及webstorm的断点可以进行debug。
+```javascript
+var path = require(&#39;path&#39;);
+require(&#39;child_process&#39;).exec(&quot;npm config get prefix&quot;, function(err, stdout, stderr) {
+    var nixLib = (process.platform.indexOf(&quot;win&quot;) === 0) ? &quot;&quot; : &quot;lib&quot;; // win/*nix support</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">var webpackPath = path.resolve(path.join(stdout.replace(&quot;\n&quot;, &quot;&quot;), nixLib, &#39;node_modules&#39;, &#39;webpack&#39;, &#39;bin&#39;, &#39;webpack.js&#39;));
+require(webpackPath);
+</code></pre></div>
+<p>});
+```</p>
+
+      <div id="disqus_thread"></div>
+<script>
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = '//panyifei.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
+
+      <!-- <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">前端技术</a> is maintained by <a href="https://github.com/panyifei">逸飞</a>.</span>
+</footer> -->
+
+<footer>
+	<div class="span-inline">
+		
+			<span>
+				<a target="_blank" href="https://github.com/panyifei">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-github fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="https://www.zhihu.com/people/pan-yi-fei-52">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">知</i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="http://www.jianshu.com/users/3b9067fb7edf">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">简</i>
+					</span>
+				</a>
+			</span>
+		
+	</div>
+	<p class="copyright">
+		Copyright &copy; 前端技术 2016
+		<br>
+		Owned by <a href="https://github.com/panyifei">潘逸飞</a>
+	</p>
+</footer>
+
+    </section>
+  </body>
+</html>

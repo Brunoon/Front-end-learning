@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta charset="UTF-8">
+  <title>前端技术</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/highlight.css">
+</head>
+
+  <body>
+    <section class="page-header">
+    <h1 class="project-name"><a href="/Front-end-learning/README">前端技术</a></h1>
+    <h2 class="project-tagline">逸飞的前端打怪日常，主要是javascript</h2>
+    <a href="https://github.com/panyifei/Front-end-learning" class="btn">View on GitHub</a>
+    <a href="https://github.com/panyifei/Front-end-learning/archive/master.zip" class="btn">Download .zip</a>
+</section>
+
+    <section class="main-content">
+      <h1>sourcemap</h1>
+
+<p>知道sourcemap是用来debug用的，但是对于他的文件结构一直没有去熟悉下。js脚本出于以下3个原因会进行源码的转换。</p>
+
+<ul>
+<li>压缩，减小体积，</li>
+<li>多个文件的合并，减少HTTP请求数</li>
+<li>其他的语言编译为js，比如coffee，比如jsx</li>
+</ul>
+
+<h2>sourcemap是什么</h2>
+
+<p>就是一个信息文件，里面储存着位置信息。转换后的代码的每一个位置，所对应到的转换前的位置。</p>
+
+<h3>启用sourcemap</h3>
+
+<p>在转化后的代码尾部，加上一行</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">//@  sourceMappingURL=/path/to/file.js.map
+</code></pre></div>
+<h3>如何生成source map</h3>
+
+<p>比较常用的就是Google的Closure编译器。其实大部分工具都是提供了生成方式的</p>
+
+<h3>source map格式</h3>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="p">{</span>
+<span class="err">　　</span><span class="nx">version</span> <span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+<span class="err">　　</span><span class="nx">file</span><span class="o">:</span> <span class="s2">&quot;out.js&quot;</span><span class="p">,</span>
+<span class="err">　　</span><span class="nx">sourceRoot</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="err">　　</span><span class="nx">sources</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;foo.js&quot;</span><span class="p">,</span> <span class="s2">&quot;bar.js&quot;</span><span class="p">],</span>
+<span class="err">　　</span><span class="nx">names</span><span class="o">:</span> <span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">,</span> <span class="s2">&quot;maps&quot;</span><span class="p">,</span> <span class="s2">&quot;are&quot;</span><span class="p">,</span> <span class="s2">&quot;fun&quot;</span><span class="p">],</span>
+<span class="err">　　</span><span class="nx">mappings</span><span class="o">:</span> <span class="s2">&quot;AAgBC,SAAQ,CAAEA&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>version:source map的版本，目前是3</li>
+<li>file：转换后的文件名</li>
+<li>sourceRoot：转换前的文件所在的目录，如果与转换前文件在同一目录，该项为空</li>
+<li>sources：转换前的文件，是一个数组，表示可能存在多个文件合并</li>
+<li>names：转换前的所有变量以及属性名</li>
+<li>mappings：记录位置信息的字符串</li>
+<li>sourcesContent：资源的真实内容</li>
+</ul>
+
+<h3>mappings</h3>
+
+<p>就是两个文件的各个位置是如何一一对应的。</p>
+
+      <div id="disqus_thread"></div>
+<script>
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = '//panyifei.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
+
+      <!-- <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">前端技术</a> is maintained by <a href="https://github.com/panyifei">逸飞</a>.</span>
+</footer> -->
+
+<footer>
+	<div class="span-inline">
+		
+			<span>
+				<a target="_blank" href="https://github.com/panyifei">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-github fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="https://www.zhihu.com/people/pan-yi-fei-52">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">知</i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="http://www.jianshu.com/users/3b9067fb7edf">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">简</i>
+					</span>
+				</a>
+			</span>
+		
+	</div>
+	<p class="copyright">
+		Copyright &copy; 前端技术 2016
+		<br>
+		Owned by <a href="https://github.com/panyifei">潘逸飞</a>
+	</p>
+</footer>
+
+    </section>
+  </body>
+</html>
