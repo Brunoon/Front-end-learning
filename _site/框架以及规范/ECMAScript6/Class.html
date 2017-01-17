@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta charset="UTF-8">
+  <title>前端技术</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/highlight.css">
+</head>
+
+  <body>
+    <section class="page-header">
+    <h1 class="project-name"><a href="/Front-end-learning/README">前端技术</a></h1>
+    <h2 class="project-tagline">逸飞的前端打怪日常，主要是javascript</h2>
+    <a href="https://github.com/panyifei/Front-end-learning" class="btn">View on GitHub</a>
+    <a href="https://github.com/panyifei/Front-end-learning/archive/master.zip" class="btn">Download .zip</a>
+</section>
+
+    <section class="main-content">
+      <h1>Class</h1>
+
+<h2>基础</h2>
+
+<p>主要是传统的方法是通过构造函数，定义并生成新的对象。类似于</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">Point</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">x</span><span class="p">;</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">y</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">Point</span><span class="p">.</span><span class="nx">prototyoe</span><span class="p">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(){}</span>
+<span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Point</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+</code></pre></div>
+<p>ES6提供了更接近传统语言的写法，引入了class的概念，其实就是个语法糖。</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">methodName</span> <span class="o">=</span> <span class="s1">&#39;getArea&#39;</span><span class="p">;</span>
+<span class="kr">class</span> <span class="nx">Point</span><span class="p">{</span>
+    <span class="nx">constructor</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">){</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="nx">x</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="nx">y</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="nx">toString</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="p">[</span><span class="nx">methodName</span><span class="p">](){}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>上面的类里面有一个constructor方法，也就是构造方法了。注意定义类的方法的时候，前面不用加上function关键字，另外方法之间不需要逗号分隔，加了会报错。</p>
+
+<p>其实完全就可以看成是prototype的另一种写法，就是说内部的实现其实还是prototype的。</p>
+
+<p>类的内部所有定义的方法都是不可枚举的。</p>
+
+<p>类的属性名居然可以使用表达式得到~~这个挺酷的</p>
+
+<p>类的构造函数不适用new是没法调用的，这是他跟普通构造函数的区别。</p>
+
+<p>Class不存在变量提升。</p>
+
+<h3>私有方法</h3>
+
+<p>其实ES6不支持私有方法这种常见的需求，一般使用下划线来模拟私有方法。</p>
+
+<p>或者使用Sympol配合表达式的方式来做，这样外部根本不可能获取的到。</p>
+
+<h2>Class的继承</h2>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">class</span> <span class="nx">ColorPoint</span> <span class="kr">extends</span> <span class="nx">Point</span><span class="p">{</span>
+    <span class="nx">constructor</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">,</span><span class="nx">color</span><span class="p">){</span>
+        <span class="kr">super</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">color</span> <span class="o">=</span> <span class="nx">color</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>注意子类必须在constructor方法中调用super方法，否则创建实例会报错，因为子类没有自己的this，必须继承父类的this对象。</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">class</span> <span class="nx">A</span><span class="p">{}</span>
+<span class="kr">class</span> <span class="nx">B</span> <span class="kr">extends</span> <span class="nx">A</span><span class="p">{}</span>
+<span class="nx">B</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">===</span> <span class="nx">A</span><span class="p">;</span><span class="c1">//true</span>
+<span class="nx">B</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">__proto__</span> <span class="o">===</span> <span class="nx">A</span><span class="p">.</span><span class="nx">prototype</span><span class="p">;</span><span class="c1">//true</span>
+</code></pre></div>
+<p>继承其实加了一道继承链，就是加了<strong>proto</strong>对象，表示构造函数的继承，总是指向父类。</p>
+
+<p>ES5里面没法继承原生构造函数，因为ES5是先构建子类的实例对象，再将父类的属性添加到子类上，但是由于父类的内部属性没法获取，导致无法继承原生的构造函数。但是ES6可以，因为ES6是先生成父类的实例对象this，然后用子类的构造函数修饰this，所以父类的所有行为都是可以继承的。继承object的时候会有点问题，会忽略参数，小的注意点吧。</p>
+
+<h2>Class的generator方法</h2>
+
+<p>某个方法前面如果加上了星号，该方法就是一个generator函数。如果对这个实例执行for of的话就会自动调用这个遍历器。</p>
+
+<h2>Class的静态方法</h2>
+
+<p>就是在申明方法的时候加上<code>static</code>关键字，该方法就不会被实例继承，而是直接通过类来调用。</p>
+
+<p>ES6只有静态方法，没有静态属性，ES7倒是有个静态属性方案，就是正常的实例属性就像方法那么写，静态的类属性加上<code>static</code>。</p>
+
+<h2>new.target</h2>
+
+<p>之前判断构造函数是不是被new调用的，只能通过判断this是不是instanceof这个构造函数，现在可以直接判断new.target === undefined来得到结果。注意，子类继承父类的时候，new.target会返回子类。用这个特性可以构造出不能实例化只能用于继承的类。</p>
+
+<h2>Mixin模式的实现</h2>
+
+<p>有点类似于多重继承，其实就是将多个类的接口混入另一个类。</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kr">class</span> <span class="nx">A</span> <span class="kr">extends</span> <span class="nx">mix</span><span class="p">(</span><span class="nx">B</span><span class="p">,</span> <span class="nx">C</span><span class="p">)</span> <span class="p">{</span>    
+<span class="p">}</span>
+</code></pre></div>
+      <div id="disqus_thread"></div>
+<script>
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = '//panyifei.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
+
+      <!-- <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">前端技术</a> is maintained by <a href="https://github.com/panyifei">逸飞</a>.</span>
+</footer> -->
+
+<footer>
+	<div class="span-inline">
+		
+			<span>
+				<a target="_blank" href="https://github.com/panyifei">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-github fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="https://www.zhihu.com/people/pan-yi-fei-52">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">知</i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="http://www.jianshu.com/users/3b9067fb7edf">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">简</i>
+					</span>
+				</a>
+			</span>
+		
+	</div>
+	<p class="copyright">
+		Copyright &copy; 前端技术 2017
+		<br>
+		Owned by <a href="https://github.com/panyifei">潘逸飞</a>
+	</p>
+</footer>
+
+    </section>
+  </body>
+</html>

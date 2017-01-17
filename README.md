@@ -25,6 +25,7 @@ title: {{ site.name }}
  - [hashchange事件][7]
  - [Web-Workers][63]
 - ES6
+ - [Class][98]
  - [正则表达式][14]
  - [Generator函数][19]
  - [Promise以及各种异步的学习][3]
@@ -208,3 +209,4 @@ title: {{ site.name }}
 [95]:./工具使用/webpack/webpack热部署
 [96]:./工具使用/webpack/webpack深入探索
 [97]:./前端分享/2016届D2分享
+[98]:./框架以及规范/ECMAScript6/Class
