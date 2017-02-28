@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta charset="UTF-8">
+  <title>前端技术</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/highlight.css">
+</head>
+
+  <body>
+    <section class="page-header">
+    <h1 class="project-name"><a href="/Front-end-learning/README">前端技术</a></h1>
+    <h2 class="project-tagline">逸飞的前端打怪日常，主要是javascript</h2>
+    <a href="https://github.com/panyifei/Front-end-learning" class="btn">View on GitHub</a>
+    <a href="https://github.com/panyifei/Front-end-learning/archive/master.zip" class="btn">Download .zip</a>
+</section>
+
+    <section class="main-content">
+      <h1>类型和语法</h1>
+
+<p>读这本书之前已经阅读过很多的javascript书籍了，所以自己会选择性的进行摘要</p>
+
+<h2>内置类型</h2>
+
+<p>很简单，就是变成了7种了呗，undefined，null，string，number，boolean，object，symbol。除了object其实都是基本类型。</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">typeof</span> <span class="nx">Symbol</span><span class="p">()</span> <span class="o">===</span> <span class="s1">&#39;symbol&#39;</span>
+<span class="k">typeof</span> <span class="kd">function</span><span class="p">(){}</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span>
+<span class="k">typeof</span> <span class="kc">null</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span>
+</code></pre></div>
+<p>注意函数不仅是对象，还可以拥有属性，length属性就是他声明的参数的个数。</p>
+
+<p><code>变量是没有类型的，只有值才有类型</code></p>
+
+<p>typeof一个没有申明过的值的结果是<code>undefined</code>，但是直接访问就会报错。这个其实是一个typeof的<code>安全机制</code>，我们可以用它来进行安全的防范，因为他不会报错。当然，除了使用typeof，我们还可以使用window点的方式来访问，也不会报错。</p>
+
+<p>如果数组的字符串键值能够被强制类型转换成十进制数字，他就会被当做数字索引来处理。</p>
+
+<h3>类数组</h3>
+
+<p>有时为了将类数组的变成真正的数组，可能会用slice或者ES6的Array.from来做。</p>
+
+<h3>字符串与数组的区别</h3>
+
+<p>字符串是不可变的，数组是可变的。</p>
+
+<p>字符串没有数组的很多方法，比如join，比如map等等。但是这些我们可以借数组的方法来处理。就直接Array.prototype.join.call(&#39;aa&#39;,&#39;&#39;)就好了。</p>
+
+<p>除了reverse方法，字符串没法借用的，因为字符串没法改变，所以只有先转化为真正的数组才能调用reverse方法。</p>
+
+<h3>数字</h3>
+
+<p>下面这种写法居然是可以的，因为第一个点会被当做是小数点，第二个才会当做是操作符。再下面的也是可以的，那个空格分隔开了。</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="mi">42</span><span class="p">..</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+<span class="mi">42</span> <span class="p">.</span><span class="nx">toFixed</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</code></pre></div>
+<p>二级制浮点数最大的问题就是不精确，但是从ES6开始，会有一个误差值来进行判断。Number.EPSILON</p>
+
+<p>能够显示的最大整数是2^53-1，所以如果需要处理比较大的数字，最好保存为字符串。虽然可以显示的是53位，但是有很多数字操作的方法只支持32位的。</p>
+
+<p>void运算符的功能就是让表达式不返回值。</p>
+
+<h4>NaN</h4>
+
+<p>NaN是一个不是数字的数字。</p>
+
+<p>isNaN这个方法是有bug的，他只识别不是NaN，也不是数字。这个错误很多年了。</p>
+
+<p>使用ES6的Number.isNaN就OK了。</p>
+
+<h4>有穷，无穷</h4>
+
+<p>可以从有穷走向无穷，不能从无穷走回有穷。无穷除以无穷的结果是NaN。</p>
+
+<h4>Object.is</h4>
+
+<p>和===很像，除了-0不等于+0以及NaN等于自身之外。但是能用==和===的时候还是应该用这两个，因为效率更高，更为通用。</p>
+
+<h3>值和引用</h3>
+
+<p>就是除了对象之外，其他都是简单的值咯。</p>
+
+      <div id="disqus_thread"></div>
+<script>
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = '//panyifei.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
+
+      <!-- <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">前端技术</a> is maintained by <a href="https://github.com/panyifei">逸飞</a>.</span>
+</footer> -->
+
+<footer>
+	<div class="span-inline">
+		
+			<span>
+				<a target="_blank" href="https://github.com/panyifei">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-github fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="https://www.zhihu.com/people/pan-yi-fei-52">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">知</i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="http://www.jianshu.com/users/3b9067fb7edf">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">简</i>
+					</span>
+				</a>
+			</span>
+		
+	</div>
+	<p class="copyright">
+		Copyright &copy; 前端技术 2017
+		<br>
+		Owned by <a href="https://github.com/panyifei">潘逸飞</a>
+	</p>
+</footer>
+
+    </section>
+  </body>
+</html>

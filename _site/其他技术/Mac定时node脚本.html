@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta charset="UTF-8">
+  <title>前端技术</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/highlight.css">
+</head>
+
+  <body>
+    <section class="page-header">
+    <h1 class="project-name"><a href="/Front-end-learning/README">前端技术</a></h1>
+    <h2 class="project-tagline">逸飞的前端打怪日常，主要是javascript</h2>
+    <a href="https://github.com/panyifei/Front-end-learning" class="btn">View on GitHub</a>
+    <a href="https://github.com/panyifei/Front-end-learning/archive/master.zip" class="btn">Download .zip</a>
+</section>
+
+    <section class="main-content">
+      <h1>Mac定时node脚本</h1>
+
+<h2>定时</h2>
+
+<p>其实就是用launchctl来做定时。在/Users/pyf/Library/LaunchAgents里面新建一个自己的文件，我取名为了com.pyf.bookMeeting.plist。</p>
+<div class="highlight"><pre><code class="language-java" data-lang="java"><span class="o">&lt;?</span><span class="n">xml</span> <span class="n">version</span><span class="o">=</span><span class="s">&quot;1.0&quot;</span> <span class="n">encoding</span><span class="o">=</span><span class="s">&quot;UTF-8&quot;</span><span class="o">?&gt;</span>
+<span class="o">&lt;!</span><span class="n">DOCTYPE</span> <span class="n">plist</span> <span class="n">PUBLIC</span> <span class="s">&quot;-//Apple//DTD PLIST 1.0//EN&quot;</span> <span class="s">&quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">plist</span> <span class="n">version</span><span class="o">=</span><span class="s">&quot;1.0&quot;</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">dict</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">Label</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;</span><span class="n">com</span><span class="o">.</span><span class="na">pyf</span><span class="o">.</span><span class="na">bookMeeting</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">ProgramArguments</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">array</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;/</span><span class="n">Users</span><span class="o">/</span><span class="n">pyf</span><span class="o">/</span><span class="n">code</span><span class="o">/</span><span class="n">panyifei</span><span class="o">/</span><span class="n">launchctl</span><span class="o">/</span><span class="n">run</span><span class="o">.</span><span class="na">sh</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
+  <span class="o">&lt;/</span><span class="n">array</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">StartCalendarInterval</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">dict</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">Minute</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">integer</span><span class="o">&gt;</span><span class="mi">31</span><span class="o">&lt;/</span><span class="n">integer</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">Hour</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">integer</span><span class="o">&gt;</span><span class="mi">17</span><span class="o">&lt;/</span><span class="n">integer</span><span class="o">&gt;</span>
+  <span class="o">&lt;/</span><span class="n">dict</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">StandardOutPath</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;/</span><span class="n">Users</span><span class="o">/</span><span class="n">pyf</span><span class="o">/</span><span class="n">code</span><span class="o">/</span><span class="n">panyifei</span><span class="o">/</span><span class="n">launchctl</span><span class="o">/</span><span class="n">abc</span><span class="o">.</span><span class="na">log</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="n">StandardErrorPath</span><span class="o">&lt;/</span><span class="n">key</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">string</span><span class="o">&gt;/</span><span class="n">Users</span><span class="o">/</span><span class="n">pyf</span><span class="o">/</span><span class="n">code</span><span class="o">/</span><span class="n">panyifei</span><span class="o">/</span><span class="n">launchctl</span><span class="o">/</span><span class="n">abcerror</span><span class="o">.</span><span class="na">log</span><span class="o">&lt;/</span><span class="n">string</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">dict</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">plist</span><span class="o">&gt;</span>
+</code></pre></div>
+<p>上面的这段代码就是设置定时</p>
+
+      <div id="disqus_thread"></div>
+<script>
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = '//panyifei.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
+
+      <!-- <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">前端技术</a> is maintained by <a href="https://github.com/panyifei">逸飞</a>.</span>
+</footer> -->
+
+<footer>
+	<div class="span-inline">
+		
+			<span>
+				<a target="_blank" href="https://github.com/panyifei">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-github fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="https://www.zhihu.com/people/pan-yi-fei-52">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">知</i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="http://www.jianshu.com/users/3b9067fb7edf">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">简</i>
+					</span>
+				</a>
+			</span>
+		
+	</div>
+	<p class="copyright">
+		Copyright &copy; 前端技术 2017
+		<br>
+		Owned by <a href="https://github.com/panyifei">潘逸飞</a>
+	</p>
+</footer>
+
+    </section>
+  </body>
+</html>

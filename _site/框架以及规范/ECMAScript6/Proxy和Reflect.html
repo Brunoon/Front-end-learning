@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+  <meta charset="UTF-8">
+  <title>前端技术</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/Front-end-learning/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/Front-end-learning/css/cayman.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/Front-end-learning/css/highlight.css">
+</head>
+
+  <body>
+    <section class="page-header">
+    <h1 class="project-name"><a href="/Front-end-learning/README">前端技术</a></h1>
+    <h2 class="project-tagline">逸飞的前端打怪日常，主要是javascript</h2>
+    <a href="https://github.com/panyifei/Front-end-learning" class="btn">View on GitHub</a>
+    <a href="https://github.com/panyifei/Front-end-learning/archive/master.zip" class="btn">Download .zip</a>
+</section>
+
+    <section class="main-content">
+      <h1>Proxy和Reflect</h1>
+
+<h2>Proxy</h2>
+
+<p>用于改变某些操作的默认行为，在语言层面做出的修改，属于&quot;元编程&quot;。对变成语言进行编程。</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">proxy</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Proxy</span><span class="p">({},{</span>
+    <span class="nx">get</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">property</span><span class="p">){</span>
+    <span class="p">},</span>
+    <span class="nx">set</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">target</span><span class="p">,</span> <span class="nx">key</span><span class="p">,</span> <span class="nx">value</span><span class="p">){</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>Proxy作为构造函数，接受两个参数，第一个是要代理的目标对象，第二个是一个配置对象。注意如果要使得Proxy起作用，必须针对Proxy对象进行操作。如果配置对象没有设置任何拦截，那就等同于直接通向原对象。</p>
+
+<h3>拦截的操作</h3>
+
+<ul>
+<li>get：拦截对象属性的获取</li>
+<li>set：拦截对象属性的设置</li>
+<li>has：拦截propKey in proxy的操作，返回一个布尔值</li>
+<li>deleteProperty：拦截delete操作</li>
+<li>ownKeys：拦截返回所有的可遍历的属性数组的操作</li>
+<li>getOwnPropertyDescriptor：返回属性的描述对象</li>
+<li>defineProperty：就是拦截defineProperty</li>
+<li>apply</li>
+<li>...</li>
+</ul>
+
+<p>也就是基本都是可以拦截的了</p>
+
+<h3>收回代理</h3>
+
+<p>Proxy.revocable其实就是返回一个可以被取消的Proxy实例。</p>
+<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="p">{</span><span class="nx">proxy</span><span class="p">,</span> <span class="nx">revoke</span><span class="p">}</span> <span class="o">=</span> <span class="nx">Proxy</span><span class="p">.</span><span class="nx">revocable</span><span class="p">({},</span> <span class="p">{});</span>
+<span class="nx">revoke</span><span class="p">();</span>
+</code></pre></div>
+<p>就是在目标不允许直接访问的时候，可以通过代理访问，一旦访问结束，就可以收回代理权，不允许再次访问。</p>
+
+<h3>this问题</h3>
+
+<p>Proxy不是目标对象的透明代理，因为在设置了Proxy代理的情况下，目标对象的this关键字会被指向Proxy代理。这个的问题很大啊。</p>
+
+<h3>用处</h3>
+
+<p>就是拦截目标对象的任意属性，可以来做很多的事情，访问某个属性的时候可以拦截下来，做其他的事情。</p>
+
+<h2>Reflect</h2>
+
+      <div id="disqus_thread"></div>
+<script>
+  (function() { // DON'T EDIT BELOW THIS LINE
+  var d = document, s = d.createElement('script');
+  s.src = '//panyifei.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+  })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+<script id="dsq-count-scr" src="//panyifei.disqus.com/count.js" async></script>
+
+      <!-- <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">前端技术</a> is maintained by <a href="https://github.com/panyifei">逸飞</a>.</span>
+</footer> -->
+
+<footer>
+	<div class="span-inline">
+		
+			<span>
+				<a target="_blank" href="https://github.com/panyifei">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa fa-github fa-stack-1x fa-inverse"></i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="https://www.zhihu.com/people/pan-yi-fei-52">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">知</i>
+					</span>
+				</a>
+			</span>
+		
+		
+			<span>
+				<a target="_blank" href="http://www.jianshu.com/users/3b9067fb7edf">
+					<span class="fa-stack fa-lg">
+						<i class="fa fa-circle fa-stack-2x"></i>
+						<i class="fa  fa-stack-1x fa-inverse">简</i>
+					</span>
+				</a>
+			</span>
+		
+	</div>
+	<p class="copyright">
+		Copyright &copy; 前端技术 2017
+		<br>
+		Owned by <a href="https://github.com/panyifei">潘逸飞</a>
+	</p>
+</footer>
+
+    </section>
+  </body>
+</html>

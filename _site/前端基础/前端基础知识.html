@@ -27,11 +27,11 @@
 
 <p>基本数据类型：</p>
 
-<p>null，undefined，string，boolean，number，还有一种复杂的object</p>
+<p>null，undefined，string，boolean，number，symbol，还有一种复杂的object</p>
 
 <p>typeof的结果：</p>
 
-<p>undefined，number，string，boolean，object，function</p>
+<p>undefined，number，string，boolean，object，function，symbol</p>
 
 <h3>querySelectorAll和getElementByClassName的区别</h3>
 
@@ -95,7 +95,7 @@
 
 <h3>shrinkwrap怎么管理项目依赖的</h3>
 
-<p>因为很有可能第三方的没有按照规范来定义版本号，npm shinkwrap可以根据当前的package.json中稳定的版本进行构建一个文件，写死了版本，以后npm install的时候，拿取的就是老版本的了</p>
+<p>因为很有可能第三方的没有按照规范来定义版本号，npm shinkwrap可以根据当前的package.json中稳定的版本进行构建一个文件，写死了版本，以后npm install的时候，拿取的就是老版本的了。最新的包管理yarn其实是默认锁住版本号的</p>
 
 <h2>克隆一个对象</h2>
 
@@ -273,6 +273,10 @@ Iterable -- object
 Generator Function
     Generator &lt;Iterable, Iterator&gt;
 </code>  </p>
+
+<h2>HTTPS如何实现</h2>
+
+<p>客户端发起一个请求。服务器端有一个公钥和一个私钥，服务器端将公钥传过来；客户端校验公钥是否失效，如果合格，就生成一串随机值，然后用公钥加密传给后端；后端根据私钥进行解密，得到这串随机值，然后用随机值将内容加密传给前端；客户端拿到值后使用随机值解密，得到具体的内容。</p>
 
       <div id="disqus_thread"></div>
 <script>
